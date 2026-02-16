@@ -73,7 +73,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
       // Force le rafraîchissement si les données sont anciennes ou si on veut forcer une mise à jour structurelle
       const hasNewData = currentOpps.some((o: any) => o.id.startsWith('opp-benin-') || o.id.length > 15);
       const lastUpdate = localStorage.getItem('shads_opps_last_sync');
-      const currentSyncVersion = '1.6'; // Version fixe pour éviter le reset automatique
+      const currentSyncVersion = '1.7'; // Version incrémentée pour forcer le refresh des données (Fix IA)
 
       if (!saved || lastUpdate !== currentSyncVersion) {
         currentOpps = OPPORTUNITIES_DATA;
