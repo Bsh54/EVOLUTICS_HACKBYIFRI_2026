@@ -375,9 +375,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                         )}
                         <div className="bg-[var(--theme-bg-tertiary)] p-4 rounded-2xl border border-[var(--theme-border-primary)] col-span-2 md:col-span-1">
                           <span className="text-[10px] font-black text-[var(--theme-text-tertiary)] uppercase block mb-1">Spécialités</span>
-                          <div className="flex gap-1 flex-wrap">
-                            {selectedOpp.tags?.slice(0, 2).map(tag => (
-                              <span key={tag} className="text-[8px] font-bold px-1.5 py-0.5 bg-[var(--theme-bg-accent)]/10 text-[var(--theme-bg-accent)] rounded border border-[var(--theme-bg-accent)]/20">#{tag}</span>
+                          <div className="flex gap-2 flex-wrap">
+                            {selectedOpp.tags?.slice(0, 3).map(tag => (
+                              <span key={tag} className="text-sm font-bold px-3 py-1.5 bg-[var(--theme-bg-accent)]/10 text-[var(--theme-bg-accent)] rounded-lg border border-[var(--theme-bg-accent)]/20">#{tag}</span>
                             ))}
                           </div>
                         </div>
