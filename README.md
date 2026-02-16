@@ -1,58 +1,98 @@
-# 🤖 EVOLUTICS (HACKBYIFRI 2026 Edition)
+# 🚀 EVOLUTICS — HACKBYIFRI 2026
 
 <div align="center">
+  <img src="https://img.shields.io/badge/HACKBYIFRI-2026-FF6600?style=for-the-badge&logo=target&logoColor=white" alt="Hackathon">
+  <img src="https://img.shields.io/badge/Thème-Insertion_Pro-blue?style=for-the-badge" alt="Thème">
+  <br/>
+  <p><strong>La plateforme intelligente qui connecte les étudiants aux opportunités et les prépare à réussir grâce à l'IA.</strong></p>
 
   <p>
-    <strong>Interface de Chat IA haute performance et Hub d'Opportunités Premium</strong>
+    <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black" alt="React">
+    <img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+    <img src="https://img.shields.io/badge/Gemini-Flash_2.5-8E75B2?logo=google-gemini&logoColor=white" alt="Gemini AI">
+    <img src="https://img.shields.io/badge/Vite-Fast-646CFF?logo=vite&logoColor=white" alt="Vite">
   </p>
-
-  <p>
-    <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React">
-    <img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
-    <img src="https://img.shields.io/badge/Tailwind-3.4-38BDB8?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind">
-    <img src="https://img.shields.io/badge/Admin-Portal-FF6600?style=flat-square&logo=speedtest&logoColor=white" alt="Admin Portal">
-  </p>
-
 </div>
 
 ---
 
-## 📖 Présentation
+## 💡 Le Problème & La Solution
 
-**My AI Front** est une plateforme évoluée combinant un moteur de chat IA ultra-rapide (Gemini 2.5 Flash) et un écosystème de gestion d'opportunités (Bourses, Concours, Stages).
+Dans le cadre du thème **"Intégration efficace du numérique dans l'apprentissage"**, EVOLUTICS répond aux défis de l'**Orientation académique & insertion professionnelle** (Axe 6) et de l'**Inclusion financière** (Axe 3).
 
-Cette version intègre désormais un **CMS complet** (Content Management System) permettant d'administrer du contenu riche en temps réel sans configuration technique complexe.
-
----
-
-## ✨ Nouvelles Caractéristiques (Édition Hub & Admin)
-
-*   🧭 **Explorer Hub** : Un dashboard élégant pour découvrir des opportunités avec recherche instantanée et filtrage par catégories.
-*   👑 **Opportunités Élite** : Système de mise en avant (Featured) avec badges animés et tri prioritaire.
-*   🛠️ **Portail Admin (`/admin-portal`)** : Interface de gestion isolée permettant d'ajouter, modifier ou supprimer des annonces.
-*   📝 **Éditeur Markdown** : Support du texte riche pour des descriptions professionnelles et structurées.
-*   🚀 **Redirection Directe** : Système de redirection robuste vers les liens de candidature officiels.
-*   🧠 **Assistant IA Contextuel** : Bouton de préparation assistée par IA qui injecte automatiquement les détails de l'annonce dans le chat.
+Les étudiants manquent souvent d'accès centralisé aux opportunités (stages, bourses) et d'accompagnement personnalisé pour y postuler. **EVOLUTICS** comble ce fossé en combinant :
+1.  Un **Hub d'Opportunités** centralisé.
+2.  Un **Assistant IA Contextuel** qui connaît le contenu de chaque offre pour coacher l'étudiant.
 
 ---
 
-## 🚀 Routes de l'Application
+## ✨ Fonctionnalités Clés
 
-*   🏠 **Accueil / Hub** : `http://localhost:5173/` - Exploration et Chat IA.
-*   ⚙️ **Portail Admin** : `http://localhost:5173/admin-portal` - Gestion du contenu.
+### 🎓 Hub d'Opportunités (Étudiants)
+*   **Centralisation** : Accès unique aux offres d'emploi, stages, bourses d'études et concours (Hackathons, CTF).
+*   **Filtrage Intelligent** : Recherche instantanée et tri par catégories ou favoris.
+*   **Vue Immersive** : Détails complets des offres avec rendu Markdown riche.
+
+### 🤖 Assistant IA "Coach Carrière"
+*   **Préparation Contextuelle** : En un clic sur "PRÉPARER AVEC L'IA", l'assistant reçoit tout le contexte de l'offre.
+*   **Rédaction Assistée** : Aide à la rédaction de CV et lettres de motivation sur-mesure pour l'offre sélectionnée.
+*   **Simulation d'Entretien** : L'IA génère des questions techniques spécifiques à l'entreprise et au poste.
+
+### 🛠️ Portail Administrateur
+*   **Gestion Simplifiée** : Interface dédiée (`/admin-portal`) pour publier de nouvelles opportunités sans toucher au code.
+*   **Mises à jour en Temps Réel** : Les nouvelles offres sont instantanément visibles par tous les utilisateurs.
 
 ---
 
-## 🛠️ Stack Technique
+## 💻 Guide d'Exécution
 
-*   **Frontend :** React 18 + Vite
-*   **Style :** Tailwind CSS + Lucide Icons
-*   **Rendu :** React-Markdown + Remark-GFM (Formatage riche)
-*   **Persistance :** LocalStorage (Master List) + IndexedDB (Historique Chat)
-*   **Réseau :** Fetch API avec streaming SSE via Cloudflare Workers.
+Suivez ces étapes pour lancer le projet localement.
+
+### Prérequis
+*   **Node.js** (version 18 ou supérieure recommandée)
+*   **npm** (inclus avec Node.js)
+*   **Git**
+
+### Installation
+
+1.  **Cloner le dépôt :**
+    ```bash
+    git clone https://github.com/Bsh54/EVOLUTICS_HACKBYIFRI_2026.git
+    cd EVOLUTICS_HACKBYIFRI_2026
+    ```
+
+2.  **Installer les dépendances :**
+    Accédez au dossier du code source (ici `all-model-chat` ou la racine selon la structure) et installez les paquets :
+    ```bash
+    npm install
+    ```
+
+### Lancement
+
+1.  **Démarrer le serveur de développement :**
+    ```bash
+    npm run dev
+    ```
+
+2.  **Accéder à l'application :**
+    Ouvrez votre navigateur sur `http://localhost:5173/`
+
+### Accès Admin
+Pour tester l'ajout d'opportunités, accédez à : `http://localhost:5173/admin-portal`
+
+---
+
+## 🏗️ Architecture Technique
+
+*   **Frontend** : React 18 + Vite pour une performance optimale.
+*   **Design** : Tailwind CSS avec une approche "Mobile First".
+*   **IA** : Intégration de Google Gemini via un proxy Cloudflare sécurisé (Architecture Serverless).
+*   **Données** :
+    *   *Opportunités* : Synchronisation LocalStorage/JSON pour la démo (simule une BDD NoSQL).
+    *   *Chat* : IndexedDB pour la persistance locale des conversations (confidentialité).
 
 ---
 
 <div align="center">
-  <p>Propulsé par <strong>Gemini 2.5 Flash</strong> & <strong>ShadsAI Infrastructure</strong></p>
+  <p>Développé pour <strong>HACKBYIFRI 2026</strong></p>
 </div>
