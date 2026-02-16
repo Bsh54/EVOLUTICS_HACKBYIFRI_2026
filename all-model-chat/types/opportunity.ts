@@ -24,4 +24,6 @@ export interface Opportunity {
   prizes?: string;
   speakers?: string;
   schedule?: string;
+  // Champs IA Pré-générés
+  aiGreeting?: string;
 }
