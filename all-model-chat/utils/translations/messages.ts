@@ -55,7 +55,7 @@ export const messagesTranslations = {
     },
     suggestion_html_short: { en: 'Créer un tableau HTML interactif.', zh: '创建交互式 HTML 看板。' },
 
-    welcome_title: { en: 'Bienvenue sur My AI Front', zh: '欢迎使用 My AI Front' },
+    welcome_title: { en: 'Bienvenue sur EVOLUTICS', zh: '欢迎使用 EVOLUTICS' },
     welcome_p1: { en: 'Commencez une conversation en tapant ci-dessous. Vous pouvez également joindre des fichiers, charger des scénarios via le bouton', zh: '在下方输入文字开始对话。您也可以附加文件，或通过' },
     welcome_p2: { en: 'Gérer les scénarios', zh: '管理场景' },
     welcome_p3: { en: 'ou configurer les paramètres.', zh: '按钮加载场景，或进行设置。' },

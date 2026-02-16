@@ -133,7 +133,7 @@ export const ApiConfigSection: React.FC<ApiConfigSectionProps> = ({
 
       <div className="p-4 rounded-xl bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-secondary)]">
           <p className="text-sm text-[var(--theme-text-secondary)]">
-              Le modèle <strong>Gemini 2.5 Flash</strong> est configuré via votre point d'accès Cloudflare ShadsAI.
+              Le modèle <strong>Gemini 2.5 Flash</strong> est configuré via votre point d'accès Cloudflare EVOLUTICS.
           </p>
           <div className="mt-2 text-[10px] font-mono text-[var(--theme-text-tertiary)] opacity-50">
               Endpoint: shadsai1api.shadobsh.workers.dev

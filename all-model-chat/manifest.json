@@ -1,7 +1,7 @@
 {
-  "name": "My AI Front",
-  "short_name": "My AI Front",
-  "description": "A React-based chatbot interface that interacts with the Gemini API, featuring system message configuration, streaming responses, context management, and model selection.",
+  "name": "EVOLUTICS",
+  "short_name": "EVOLUTICS",
+  "description": "Plateforme d'intégration numérique et d'assistance IA pour les étudiants.",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",

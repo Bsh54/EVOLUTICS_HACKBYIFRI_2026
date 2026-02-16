@@ -50,7 +50,7 @@ export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: Use
             }
             
             // If the title is generic or empty, append app name for context
-            const suffix = sessionTitle === 'My AI Front' ? '' : ' • My AI Front';
+            const suffix = sessionTitle === 'EVOLUTICS' ? '' : ' • EVOLUTICS';
             const cleanTitle = sessionTitle || 'New Chat';
 
             document.title = `${statusPrefix}${cleanTitle}${suffix}`;

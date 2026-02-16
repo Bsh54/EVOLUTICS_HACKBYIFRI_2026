@@ -7,7 +7,7 @@ export const AppLogo: React.FC<{ className?: string; style?: React.CSSProperties
   const maskId = `cut-lines-${idPrefix.replace(/:/g, '')}`;
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 18 195 75" className={className} style={style} aria-label="My AI Front Logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 18 195 75" className={className} style={style} aria-label="EVOLUTICS Logo">
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" style={{ stopColor: '#00ffff', stopOpacity: 1 }} />

@@ -120,7 +120,7 @@ export const CreateFileBody: React.FC<CreateFileBodyProps> = ({
                                   />
                               </div>
                               <div className="mt-8 pt-4 border-t border-[var(--theme-border-secondary)] text-center text-xs text-[var(--theme-text-tertiary)] hidden print:block">
-                                 Generated with My AI Front
+                                 Generated with EVOLUTICS
                               </div>
                           </div>
                       </div>

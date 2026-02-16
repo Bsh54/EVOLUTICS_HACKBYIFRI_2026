@@ -158,7 +158,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
       <header className="flex md:hidden items-center justify-between px-4 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100]">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
-          <span className="font-black text-sm uppercase tracking-tighter">ShadsAI Hub</span>
+          <span className="font-black text-sm uppercase tracking-tighter">EVOLUTICS</span>
         </div>
       </header>
 
@@ -168,7 +168,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           <div className="w-9 h-9 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
           </div>
-          <span className="font-black text-lg tracking-tighter uppercase">ShadsAI Hub</span>
+          <span className="font-black text-lg tracking-tighter uppercase">EVOLUTICS</span>
         </div>
 
         <nav className="flex bg-[var(--theme-bg-tertiary)] rounded-2xl p-1 border border-[var(--theme-border-primary)]">
