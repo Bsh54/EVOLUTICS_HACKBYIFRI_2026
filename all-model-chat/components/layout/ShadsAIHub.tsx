@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
@@ -11,7 +11,8 @@ import {
   Plus,
   Search,
   Heart,
-  Bookmark
+  Bookmark,
+  Loader2
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -23,7 +24,7 @@ import { AddOpportunityForm } from './AddOpportunityForm';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
-import { OPPORTUNITIES_DATA } from '../../constants/opportunities';
+import { opportunityService } from '../../services/opportunityService';
 
 interface ShadsAIHubProps {
   sidebarProps: any;
@@ -54,6 +55,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [filterType, setFilterType] = useState<string>('Tous');
   const [searchQuery, setSearchQuery] = useState('');
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem('shads_opps_favorites');
     return saved ? JSON.parse(saved) : [];
@@ -64,33 +67,33 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
     localStorage.setItem('shads_opps_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  // Chargement initial et synchronisation temps réel
+  // Chargement des données depuis Supabase
+  const loadOpportunities = async () => {
+    try {
+      const data = await opportunityService.getAll();
+      setOpportunities(data);
+    } catch (error) {
+      console.error("Erreur de chargement des opportunités:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   React.useEffect(() => {
-    const updateList = () => {
-      const saved = localStorage.getItem('shads_opps_master');
-      let currentOpps = saved ? JSON.parse(saved) : OPPORTUNITIES_DATA;
+    loadOpportunities();
 
-      // Force le rafraîchissement si les données sont anciennes ou si on veut forcer une mise à jour structurelle
-      const hasNewData = currentOpps.some((o: any) => o.id.startsWith('opp-benin-') || o.id.length > 15);
-      const lastUpdate = localStorage.getItem('shads_opps_last_sync');
-      const currentSyncVersion = '1.7'; // Version incrémentée pour forcer le refresh des données (Fix IA)
-
-      if (!saved || lastUpdate !== currentSyncVersion) {
-        currentOpps = OPPORTUNITIES_DATA;
-        localStorage.setItem('shads_opps_master', JSON.stringify(OPPORTUNITIES_DATA));
-        localStorage.setItem('shads_opps_last_sync', currentSyncVersion);
-      }
-
-      setOpportunities(currentOpps);
+    // Écouter les changements (depuis l'admin ou autre onglet)
+    const handleStorageChange = () => {
+      // Un petit délai pour laisser le temps à Supabase de propager
+      setTimeout(loadOpportunities, 500);
     };
 
-    updateList();
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('focus', loadOpportunities);
 
-    window.addEventListener('storage', updateList);
-    window.addEventListener('focus', updateList);
     return () => {
-      window.removeEventListener('storage', updateList);
-      window.removeEventListener('focus', updateList);
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', loadOpportunities);
     };
   }, []);
 
