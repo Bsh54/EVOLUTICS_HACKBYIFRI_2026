@@ -14,9 +14,10 @@ import { useChatState } from './useChatState';
 import { useChatActions } from './useChatActions';
 import { useChatEffects } from './useChatEffects';
 import { useBackgroundKeepAlive } from '../core/useBackgroundKeepAlive';
+import { DEFAULT_CHAT_SETTINGS } from '../../constants/appConstants';
 
 export const useChat = (appSettings: AppSettings, setAppSettings: React.Dispatch<React.SetStateAction<AppSettings>>, language: 'en' | 'zh') => {
-    
+
     const chatState = useChatState(appSettings);
     const {
         savedSessions, setSavedSessions, savedGroups, setSavedGroups,
@@ -233,5 +234,6 @@ export const useChat = (appSettings: AppSettings, setAppSettings: React.Dispatch
         handleUpdateMessageFile: chatActions.handleUpdateMessageFile,
         handleAddUserMessage: chatActions.handleAddUserMessage,
         handleLiveTranscript: chatActions.handleLiveTranscript,
+        handleStartContextualChat: historyHandler.startNewChat
     };
 };
