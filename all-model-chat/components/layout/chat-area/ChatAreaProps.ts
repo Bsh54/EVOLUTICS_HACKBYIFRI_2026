@@ -18,6 +18,7 @@ export interface ChatAreaProps {
 
   // Header Props
   onNewChat: () => void;
+  onStartContextualChat: (systemInstruction: string, initialMessages: any[]) => void;
   onOpenSettingsModal: () => void;
   onOpenScenariosModal: () => void;
   onToggleHistorySidebar: () => void;
