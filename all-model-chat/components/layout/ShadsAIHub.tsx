@@ -459,7 +459,60 @@ RÈGLES DE COMPORTEMENT :
                           };
 
                           const getInitialGreeting = (opp: Opportunity) => {
-                            return `Bonjour ! 👋\n\nJe suis ton assistant dédié pour l'opportunité **"${opp.title}"** chez *${opp.organization}*.\n\nJ'ai analysé l'offre et je suis prêt à t'aider. Par quoi souhaites-tu commencer ?\n\n*   🎯 **Optimiser mon CV** pour ce poste\n*   ✍️ **Rédiger une lettre de motivation** percutante\n*   🎤 **Simuler un entretien** avec les questions probables\n*   🔍 **En savoir plus** sur les compétences requises`;
+                            // 1. Analyse rapide des mots-clés pour la personnalisation
+                            const contentLower = opp.fullContent.toLowerCase();
+                            const isTech = contentLower.includes('python') || contentLower.includes('javascript') || contentLower.includes('react') || contentLower.includes('dev');
+                            const isManagement = contentLower.includes('gestion') || contentLower.includes('équipe') || contentLower.includes('projet');
+
+                            // 2. Construction des suggestions dynamiques selon le type
+                            let specificSuggestions = "";
+                            let contextIntro = "";
+
+                            switch(opp.type) {
+                              case 'Concours':
+                              case 'Hackathon': // Cas géré si le type est Hackathon
+                                contextIntro = "J'ai analysé le règlement et les critères de ce concours.";
+                                specificSuggestions = `*   💡 **Brainstormer des idées** innovantes pour le thème
+*   🚀 **Structurer le Pitch** pour convaincre le jury
+*   📋 **Planifier la roadmap** du projet
+*   ⚖️ **Analyser les critères** de notation`;
+                                break;
+
+                              case 'Emploi':
+                                contextIntro = isTech
+                                  ? "J'ai repéré les compétences techniques demandées (Stack technique)."
+                                  : "J'ai analysé les responsabilités du poste et le profil recherché.";
+
+                                specificSuggestions = `*   🎯 **Adapter mon CV** aux mots-clés de l'annonce
+*   ✍️ **Rédiger une lettre** qui prouve ma valeur
+*   🏰 **Simuler l'entretien** ${isTech ? 'technique et ' : ''}culturel
+*   💰 **Conseils pour la négociation** de salaire`;
+                                break;
+
+                              case 'Stage':
+                                contextIntro = "C'est une excellente opportunité pour apprendre.";
+                                specificSuggestions = `*   🎓 **Valoriser mes projets** académiques pour ce stage
+*   ✉️ **Écrire une candidature** spontanée et motivée
+*   🗣️ **Préparer ma présentation** pour l'entretien
+*   ❓ **Quelles questions poser** au recruteur ?`;
+                                break;
+
+                              case 'Bourse':
+                                contextIntro = "L'obtention de cette bourse dépend beaucoup de la clarté de ton projet.";
+                                specificSuggestions = `*   📝 **Rédiger mon projet d'étude** de façon convaincante
+*   🆘 **Justifier ma situation** sociale/financière
+*   📂 **Vérifier la complétude** de mon dossier
+*   🎙️ **Préparer l'oral** de motivation`;
+                                break;
+
+                              default:
+                                contextIntro = "Je suis prêt à t'accompagner sur cette opportunité.";
+                                specificSuggestions = `*   🔍 **Analyser les points clés** de l'offre
+*   📝 **M'aider à rédiger** ma candidature
+*   🗣️ **M'entraîner** pour l'entretien`;
+                            }
+
+                            return `Bonjour ! 👋\n\nJe suis ton coach dédié pour **"${opp.title}"** chez *${opp.organization}*.\n\n${contextIntro}\n\nVoici comment je peux t'aider concrètement :\n\n${specificSuggestions}`;
                           };
 
                           const systemInstruction = getSystemInstruction(selectedOpp);
