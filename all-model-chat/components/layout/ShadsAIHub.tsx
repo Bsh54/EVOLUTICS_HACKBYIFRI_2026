@@ -459,7 +459,12 @@ RÈGLES DE COMPORTEMENT :
                           };
 
                           const getInitialGreeting = (opp: Opportunity) => {
-                            // 1. Analyse rapide des mots-clés pour la personnalisation
+                            // 0. Priorité absolue : Message pré-généré par l'IA Admin
+                            if (opp.aiGreeting) {
+                              return opp.aiGreeting;
+                            }
+
+                            // 1. Analyse rapide des mots-clés pour la personnalisation (Fallback)
                             const contentLower = opp.fullContent.toLowerCase();
                             const isTech = contentLower.includes('python') || contentLower.includes('javascript') || contentLower.includes('react') || contentLower.includes('dev');
                             const isManagement = contentLower.includes('gestion') || contentLower.includes('équipe') || contentLower.includes('projet');
