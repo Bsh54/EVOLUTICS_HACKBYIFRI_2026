@@ -62,14 +62,16 @@ Suivez ces étapes pour lancer le projet localement.
     ```
 
 2.  **Installer les dépendances :**
-    Accédez au dossier du code source (ici `all-model-chat` ou la racine selon la structure) et installez les paquets :
+    Accédez au dossier du code source (`all-model-chat`) et installez les paquets :
     ```bash
+    cd all-model-chat
     npm install
     ```
 
 ### Lancement
 
 1.  **Démarrer le serveur de développement :**
+    Assurez-vous d'être dans le dossier `all-model-chat` :
     ```bash
     npm run dev
     ```
