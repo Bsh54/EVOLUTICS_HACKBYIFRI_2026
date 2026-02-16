@@ -86,6 +86,61 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
 
   const [isPreview, setIsPreview] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+
+  const handleGenerateAiGreeting = async () => {
+    if (!formData.title || !formData.organization) {
+      alert("Veuillez d'abord remplir le Titre et l'Organisation pour donner du contexte à l'IA.");
+      return;
+    }
+
+    setIsGeneratingAi(true);
+    try {
+      const prompt = `Tu es un Coach Carrière Expert pour la plateforme étudiante EVOLUTICS.
+
+      TÂCHE : Rédige un message d'accueil court, chaleureux et professionnel pour l'Assistant IA qui va aider un étudiant sur cette opportunité précise.
+
+      DÉTAILS DE L'OPPORTUNITÉ :
+      - Type : ${formData.type}
+      - Titre : ${formData.title}
+      - Organisation : ${formData.organization}
+      - Description : ${formData.description || "Non spécifiée"}
+
+      CONTENU DU MESSAGE D'ACCUEIL :
+      1. Salue l'étudiant (ex: "Bonjour ! 👋").
+      2. Montre que tu connais déjà l'offre (cite le poste/titre).
+      3. Propose 3 pistes d'aide concrètes adaptées à ce type d'offre (ex: pour un stage -> CV/Lettre; pour un concours -> Idées/Pitch).
+      4. Sois encourageant.
+
+      Format : Markdown, avec emojis, concis (max 100 mots).`;
+
+      const parts = [{ text: prompt }];
+
+      // Utilisation d'une clé dummy car l'API proxy gère l'auth
+      await geminiServiceInstance.sendMessageNonStream(
+        "dummy-key",
+        "gemini-2.0-flash-exp",
+        [], // Historique vide
+        parts,
+        { temperature: 0.7 },
+        new AbortController().signal,
+        (error) => {
+          console.error("Erreur génération IA:", error);
+          alert("Erreur lors de la génération. Vérifiez votre connexion.");
+          setIsGeneratingAi(false);
+        },
+        (responseParts) => {
+          if (responseParts && responseParts.length > 0 && responseParts[0].text) {
+             setFormData(prev => ({ ...prev, aiGreeting: responseParts[0].text }));
+          }
+          setIsGeneratingAi(false);
+        }
+      );
+    } catch (e) {
+      console.error(e);
+      setIsGeneratingAi(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
