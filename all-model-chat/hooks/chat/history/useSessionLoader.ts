@@ -43,9 +43,9 @@ export const useSessionLoader = ({
 
     const startNewChat = useCallback((explicitTemplateSession?: SavedChatSession) => {
         // If we are already on an empty chat, just focus input and don't create a duplicate
-        if (activeChat && activeChat.messages.length === 0 && !activeChat.systemInstruction) {
+        if (activeChat && activeChat.messages.length === 0 && !activeChat.systemInstruction && !explicitTemplateSession) {
             logService.info('Already on an empty chat, reusing session.');
-            
+
             // Clear input text, files, and editing state to ensure a "fresh" start visual
             setCommandedInput({ text: '', id: Date.now(), mode: 'replace' });
             setSelectedFiles([]);
@@ -59,7 +59,7 @@ export const useSessionLoader = ({
 
         logService.info('Starting new chat session.');
         userScrolledUp.current = false;
-        
+
         // Save current files to draft before switching
         if (activeSessionId) {
             fileDraftsRef.current[activeSessionId] = selectedFiles;
@@ -67,10 +67,10 @@ export const useSessionLoader = ({
 
         // Determine settings for new chat
         let settingsForNewChat: ChatSettings = { ...DEFAULT_CHAT_SETTINGS, ...appSettings };
-        
+
         // Inherit from explicit template (initial load) or top of sidebar (user action)
         const templateSession = explicitTemplateSession || (savedSessions.length > 0 ? savedSessions[0] : undefined);
-        
+
         if (templateSession) {
             settingsForNewChat = {
                 ...settingsForNewChat,
@@ -83,21 +83,30 @@ export const useSessionLoader = ({
                 thinkingLevel: templateSession.settings.thinkingLevel,
                 ttsVoice: templateSession.settings.ttsVoice,
             };
+
+            // If template has system instruction (e.g. from startContextualChat), use it
+            if (templateSession.settings.systemInstruction) {
+                settingsForNewChat.systemInstruction = templateSession.settings.systemInstruction;
+            }
         }
 
-        const newSession = createNewSession(settingsForNewChat);
+        const newSession = createNewSession(
+            settingsForNewChat,
+            templateSession?.messages || [], // Use messages if provided (e.g. greeting)
+            templateSession?.title || "New Chat"
+        );
 
-        // Update state: Set Active Messages to empty, Add new session metadata to list
-        setActiveMessages([]);
+        // Update state: Set Active Messages, Add new session metadata to list
+        setActiveMessages(newSession.messages);
         setActiveSessionId(newSession.id);
-        
+
         updateAndPersistSessions(prev => [newSession, ...prev]);
 
         // Clear files for new chat
         setSelectedFiles([]);
-        
+
         setEditingMessageId(null);
-        
+
         setTimeout(() => {
             document.querySelector<HTMLTextAreaElement>('textarea[aria-label="Chat message input"]')?.focus();
         }, 0);

@@ -34,6 +34,28 @@ export const useChatAreaProps = (logic: ReturnType<typeof useAppLogic>) => {
     handleAppDragLeave: chatState.handleAppDragLeave,
     handleAppDrop: chatState.handleAppDrop,
     onNewChat: () => chatState.startNewChat(),
+    onStartContextualChat: (systemInstruction: string, initialGreeting: string) => {
+      // 1. Create a dummy session object to pass as a template
+      const templateSession = {
+        id: 'temp',
+        title: 'New Contextual Chat',
+        timestamp: Date.now(),
+        messages: [{
+          id: 'greeting',
+          role: 'model',
+          content: initialGreeting,
+          timestamp: new Date()
+        }],
+        settings: {
+          ...chatState.currentChatSettings,
+          systemInstruction: systemInstruction
+        }
+      };
+
+      // 2. Start new chat using this template
+      // The updated startNewChat logic will handle setting the system instruction and initial messages
+      chatState.handleStartContextualChat(templateSession as any);
+    },
     onOpenSettingsModal: () => uiState.setIsSettingsModalOpen(true),
     onOpenScenariosModal: () => uiState.setIsPreloadedMessagesModalOpen(true),
     onToggleHistorySidebar: () => uiState.setIsHistorySidebarOpen(prev => !prev),

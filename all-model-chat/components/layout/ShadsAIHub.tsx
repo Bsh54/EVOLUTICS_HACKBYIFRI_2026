@@ -430,33 +430,44 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                       </button>
                       <button
                         onClick={() => {
-                          const getDynamicPrompt = (opp: Opportunity) => {
-                            const base = `Bonjour ! Je souhaite préparer ma candidature pour l'opportunité suivante :\n\n📌 **${opp.title}** (${opp.organization})\n📅 Date limite : ${opp.deadline}\n\nVoici les détails :\n---\n${opp.fullContent}\n---\n\n`;
+                          const getSystemInstruction = (opp: Opportunity) => {
+                            const base = `Tu es un Coach Carrière Expert pour la plateforme EVOLUTICS. Ton rôle est d'accompagner l'étudiant pour maximiser ses chances d'obtenir l'opportunité suivante :
 
-                            switch(opp.type) {
-                              case 'Emploi':
-                                return base + `Peux-tu m'aider à :\n1. Rédiger un CV optimisé pour ce poste ?\n2. Écrire une lettre de motivation percutante ?\n3. Lister 5 questions techniques probables pour l'entretien chez ${opp.organization} ?`;
-                              case 'Stage':
-                                return base + `C'est pour un stage. Peux-tu m'aider à :\n1. Adapter mon CV d'étudiant pour cette offre ?\n2. Rédiger une lettre qui montre ma motivation à apprendre ?\n3. Me donner 3 conseils pour transformer ce stage en futur emploi ?`;
-                              case 'Bourse':
-                                return base + `C'est une demande de bourse. Peux-tu m'aider à :\n1. Rédiger mon "Projet d'étude" de manière convaincante ?\n2. Écrire la lettre de motivation pour la fondation ?\n3. Préparer les arguments clés pour l'entretien de sélection ?`;
-                              case 'Concours':
-                                return base + `Je participe à ce concours/hackathon. Peux-tu m'aider à :\n1. Établir une roadmap pour mon projet ?\n2. Structurer mon "Pitch" de 5 minutes pour le jury ?\n3. Identifier les points critiques à ne pas rater ?`;
-                              case 'Conférences':
-                                return base + `Je vais assister à cet événement. Peux-tu m'aider à :\n1. Préparer un "Elevator Pitch" pour me présenter aux recruteurs sur place ?\n2. Me donner 5 questions intelligentes à poser aux conférenciers ?\n3. Optimiser mon profil LinkedIn pour le networking après l'événement ?`;
-                              default:
-                                return base + `Peux-tu m'aider à préparer ma candidature et me donner des conseils pour réussir ?`;
-                            }
+Titre: ${opp.title}
+Organisation: ${opp.organization}
+Type: ${opp.type}
+Date limite: ${opp.deadline || 'Non spécifiée'}
+Lieu: ${opp.location || 'Non spécifié'}
+
+DÉTAILS COMPLETS DE L'OFFRE :
+---
+${opp.fullContent}
+---
+
+TES OBJECTIFS :
+1. Analyser le profil de l'étudiant (pose des questions si besoin).
+2. Proposer des conseils stratégiques personnalisés (CV, Lettre de motivation, Entretien).
+3. Être encourageant, précis et orienté résultat.
+4. Si l'étudiant te demande de rédiger quelque chose, base-toi STRICTEMENT sur les détails de l'offre ci-dessus.
+
+RÈGLES DE COMPORTEMENT :
+- Sois proactif : ne te contente pas de répondre, propose la prochaine étape logique.
+- Adopte un ton professionnel mais bienveillant.
+- Utilise le format Markdown pour structurer tes réponses (listes à puces, gras pour les mots-clés).`;
+
+                            return base;
                           };
 
-                          const detailedPrompt = getDynamicPrompt(selectedOpp);
+                          const getInitialGreeting = (opp: Opportunity) => {
+                            return `Bonjour ! 👋\n\nJe suis ton assistant dédié pour l'opportunité **"${opp.title}"** chez *${opp.organization}*.\n\nJ'ai analysé l'offre et je suis prêt à t'aider. Par quoi souhaites-tu commencer ?\n\n*   🎯 **Optimiser mon CV** pour ce poste\n*   ✍️ **Rédiger une lettre de motivation** percutante\n*   🎤 **Simuler un entretien** avec les questions probables\n*   🔍 **En savoir plus** sur les compétences requises`;
+                          };
 
-                          if (chatAreaProps.onSendMessage) {
-                            if (chatAreaProps.onNewChat) chatAreaProps.onNewChat();
-                            setTimeout(() => {
-                              chatAreaProps.onSendMessage(detailedPrompt);
-                              setActiveTab('chat');
-                            }, 100);
+                          const systemInstruction = getSystemInstruction(selectedOpp);
+                          const greeting = getInitialGreeting(selectedOpp);
+
+                          if (chatAreaProps.onStartContextualChat) {
+                            chatAreaProps.onStartContextualChat(systemInstruction, greeting);
+                            setActiveTab('chat');
                           }
                         }}
                         className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
