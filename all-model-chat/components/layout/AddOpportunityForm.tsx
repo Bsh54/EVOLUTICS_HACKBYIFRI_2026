@@ -16,12 +16,17 @@ import {
   Settings2,
   LayoutGrid,
   Search,
-  Lock
+  Lock,
+  Bot,
+  RefreshCw,
+  MessageSquare
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { OPPORTUNITIES_DATA } from '../../constants/opportunities';
 import { Opportunity } from '../../types/opportunity';
+import { geminiServiceInstance } from '../../services/geminiService';
+import { DEFAULT_CHAT_SETTINGS } from '../../constants/appConstants';
 
 interface AddOpportunityFormProps {
   onClose: () => void;
@@ -434,15 +439,55 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                     </div>
                   )}
 
-                <div className="md:col-span-2 space-y-4">
-                  <label className={labelClass}>Contenu Markdown</label>
-                  <textarea className={`${inputClass} min-h-[300px] font-mono text-sm`} placeholder="Détails de l'opportunité..." value={formData.fullContent} onChange={e => setFormData({...formData, fullContent: e.target.value})} />
+                  <div className="md:col-span-2 space-y-4">
+                    <label className={labelClass}>Contenu Markdown</label>
+                    <textarea className={`${inputClass} min-h-[300px] font-mono text-sm`} placeholder="Détails de l'opportunité..." value={formData.fullContent} onChange={e => setFormData({...formData, fullContent: e.target.value})} />
+                  </div>
+
+                  {/* Section IA Générative */}
+                  <div className="md:col-span-2 bg-[var(--theme-bg-tertiary)]/30 border border-[var(--theme-border-primary)] rounded-2xl p-6 space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                          <Bot className="w-4 h-4 text-[var(--theme-bg-accent)]" />
+                          Assistant IA - Message d'Accueil
+                        </h4>
+                        <p className="text-[10px] text-[var(--theme-text-tertiary)] mt-1">Générez un message d'accueil personnalisé pour le chat.</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleGenerateAiGreeting}
+                        disabled={isGeneratingAi}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isGeneratingAi ? 'bg-gray-400 cursor-not-allowed' : 'bg-[var(--theme-bg-accent)] text-white hover:scale-105 shadow-lg'}`}
+                      >
+                        {isGeneratingAi ? (
+                          <><RefreshCw className="w-3 h-3 animate-spin" /> Génération...</>
+                        ) : (
+                          <><Sparkles className="w-3 h-3" /> Générer avec l'IA</>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="relative">
+                      <textarea
+                        className={`${inputClass} min-h-[150px] text-xs leading-relaxed`}
+                        placeholder="Le message d'accueil généré par l'IA apparaîtra ici..."
+                        value={formData.aiGreeting}
+                        onChange={e => setFormData({...formData, aiGreeting: e.target.value})}
+                      />
+                      {!formData.aiGreeting && !isGeneratingAi && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+                          <MessageSquare className="w-12 h-12 text-[var(--theme-text-tertiary)]" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <button type="submit" className="md:col-span-2 w-full bg-[var(--theme-bg-accent)] text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-all uppercase tracking-widest active:scale-95">
+                    {editingId ? 'Sauvegarder les modifications' : 'Publier l\'opportunité'}
+                  </button>
                 </div>
-                <button type="submit" className="md:col-span-2 w-full bg-[var(--theme-bg-accent)] text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-all uppercase tracking-widest active:scale-95">
-                  {editingId ? 'Sauvegarder les modifications' : 'Publier l\'opportunité'}
-                </button>
-              </div>
-            </form>
+              </form>
             ) : (
               <div className="max-w-4xl mx-auto space-y-12">
                 <div className="bg-[var(--theme-bg-secondary)] p-8 rounded-3xl border border-[var(--theme-border-primary)] shadow-2xl">
