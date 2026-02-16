@@ -119,7 +119,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
       // Utilisation d'une clé dummy car l'API proxy gère l'auth
       await geminiServiceInstance.sendMessageNonStream(
         "dummy-key",
-        "gemini-2.0-flash-exp",
+        "gemini-2.5-flash",
         [], // Historique vide
         parts,
         { temperature: 0.7 },
