@@ -10,6 +10,7 @@
     <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black" alt="React">
     <img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
     <img src="https://img.shields.io/badge/Gemini-Flash_2.5-8E75B2?logo=google-gemini&logoColor=white" alt="Gemini AI">
+    <img src="https://img.shields.io/badge/Supabase-Database-3ECF8E?logo=supabase&logoColor=white" alt="Supabase">
     <img src="https://img.shields.io/badge/Vite-Fast-646CFF?logo=vite&logoColor=white" alt="Vite">
   </p>
 </div>
@@ -21,7 +22,7 @@
 Dans le cadre du thème **"Intégration efficace du numérique dans l'apprentissage"**, EVOLUTICS répond aux défis de l'**Orientation académique & insertion professionnelle** (Axe 6) et de l'**Inclusion financière** (Axe 3).
 
 Les étudiants manquent souvent d'accès centralisé aux opportunités (stages, bourses) et d'accompagnement personnalisé pour y postuler. **EVOLUTICS** comble ce fossé en combinant :
-1.  Un **Hub d'Opportunités** centralisé.
+1.  Un **Hub d'Opportunités** centralisé et collaboratif.
 2.  Un **Assistant IA Contextuel** qui connaît le contenu de chaque offre pour coacher l'étudiant.
 
 ---
@@ -39,8 +40,9 @@ Les étudiants manquent souvent d'accès centralisé aux opportunités (stages, 
 *   **Simulation d'Entretien** : L'IA génère des questions techniques spécifiques à l'entreprise et au poste.
 
 ### 🛠️ Portail Administrateur
-*   **Gestion Simplifiée** : Interface dédiée (`/admin-portal`) pour publier de nouvelles opportunités sans toucher au code.
-*   **Mises à jour en Temps Réel** : Les nouvelles offres sont instantanément visibles par tous les utilisateurs.
+*   **Gestion Cloud (CRUD)** : Interface dédiée (`/admin-portal`) connectée à **Supabase** pour gérer les opportunités en temps réel.
+*   **IA Générative Admin** : L'IA aide les administrateurs à rédiger des messages d'accueil engageants pour chaque offre.
+*   **Synchronisation Immédiate** : Les nouvelles offres sont instantanément visibles par tous les utilisateurs connectés.
 
 ---
 
@@ -68,6 +70,13 @@ Suivez ces étapes pour lancer le projet localement.
     npm install
     ```
 
+3.  **Configuration Environnement (.env) :**
+    Créez un fichier `.env` à la racine de `all-model-chat` avec vos clés Supabase :
+    ```env
+    VITE_SUPABASE_URL=votre_url_supabase
+    VITE_SUPABASE_ANON_KEY=votre_cle_anon
+    ```
+
 ### Lancement
 
 1.  **Démarrer le serveur de développement :**
@@ -80,7 +89,7 @@ Suivez ces étapes pour lancer le projet localement.
     Ouvrez votre navigateur sur `http://localhost:5173/`
 
 ### Accès Admin
-Pour tester l'ajout d'opportunités, accédez à : `http://localhost:5173/admin-portal`
+Pour gérer les offres, accédez à : `http://localhost:5173/admin-portal`
 
 ---
 
@@ -88,10 +97,10 @@ Pour tester l'ajout d'opportunités, accédez à : `http://localhost:5173/admin-
 
 *   **Frontend** : React 18 + Vite pour une performance optimale.
 *   **Design** : Tailwind CSS avec une approche "Mobile First".
-*   **IA** : Intégration de Google Gemini via un proxy Cloudflare sécurisé (Architecture Serverless).
+*   **IA** : Intégration de Google Gemini 2.5 Flash via un proxy sécurisé.
 *   **Données** :
-    *   *Opportunités* : Synchronisation LocalStorage/JSON pour la démo (simule une BDD NoSQL).
-    *   *Chat* : IndexedDB pour la persistance locale des conversations (confidentialité).
+    *   *Backend* : **Supabase (PostgreSQL)** pour le stockage et la diffusion temps réel des opportunités.
+    *   *Local* : **IndexedDB** pour la persistance locale des conversations privées (confidentialité totale).
 
 ---
 
