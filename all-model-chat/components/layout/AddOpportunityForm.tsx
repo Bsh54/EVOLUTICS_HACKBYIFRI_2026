@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   X,
   Upload,
@@ -26,6 +26,7 @@ import remarkGfm from 'remark-gfm';
 import { OPPORTUNITIES_DATA } from '../../constants/opportunities';
 import { Opportunity } from '../../types/opportunity';
 import { geminiServiceInstance } from '../../services/geminiService';
+import { opportunityService } from '../../services/opportunityService';
 import { DEFAULT_CHAT_SETTINGS } from '../../constants/appConstants';
 
 interface AddOpportunityFormProps {
@@ -41,6 +42,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
   const [adminTab, setAdminTab] = useState<'create' | 'manage'>('create');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     type: 'Stage' as const,
@@ -67,15 +69,29 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
     speakers: '',
     schedule: '09:00 - 18:00',
     startTime: '09:00',
-    endTime: '18:00'
+    endTime: '18:00',
+    aiGreeting: ''
   });
 
-  const [allOpps, setAllOpps] = useState<Opportunity[]>(() => {
-    const saved = localStorage.getItem('shads_opps_master');
-    return saved ? JSON.parse(saved) : OPPORTUNITIES_DATA;
-  });
+  const [allOpps, setAllOpps] = useState<Opportunity[]>([]);
 
-  // Liste complète filtrée
+  const loadOpportunities = async () => {
+    setIsLoading(true);
+    try {
+      const opps = await opportunityService.getAll();
+      setAllOpps(opps);
+    } catch (error) {
+      console.error("Erreur chargement:", error);
+      // alert("Erreur de connexion à la base de données."); // Optionnel, pour éviter le spam
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Chargement initial depuis Supabase
+  useEffect(() => {
+    loadOpportunities();
+  }, []);
   const filteredOpps = useMemo(() => {
     if (!searchQuery) return allOpps;
     return allOpps.filter(o =>
@@ -142,25 +158,33 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    let updated;
-    if (editingId) {
-      updated = allOpps.map(o => o.id === editingId ? { ...formData, id: editingId } : o);
-    } else {
-      const newOpp = { ...formData, id: Date.now().toString() };
-      updated = [newOpp, ...allOpps];
+    try {
+      if (editingId) {
+        await opportunityService.update({ ...formData, id: editingId });
+      } else {
+        const newOpp = { ...formData, id: Date.now().toString() };
+        await opportunityService.create(newOpp);
+      }
+
+      await loadOpportunities();
+      window.dispatchEvent(new Event('storage'));
+
+      if (onAdd) {
+        const updatedOpps = await opportunityService.getAll();
+        onAdd(updatedOpps);
+      }
+
+      setShowSuccess(true);
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde:", error);
+      alert("Une erreur est survenue lors de la sauvegarde. Veuillez réessayer.");
+    } finally {
+      setIsLoading(false);
     }
-
-    setAllOpps(updated);
-    localStorage.setItem('shads_opps_master', JSON.stringify(updated));
-
-    // Signaler le changement immédiatement au Hub
-    window.dispatchEvent(new Event('storage'));
-
-    onAdd(updated);
-    setShowSuccess(true);
   };
 
   const handleReset = () => {
