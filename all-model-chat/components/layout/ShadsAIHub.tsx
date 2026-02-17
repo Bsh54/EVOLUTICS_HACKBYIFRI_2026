@@ -57,6 +57,77 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // --- Gestion de l'historique du navigateur ---
+  useEffect(() => {
+    // 1. Initialisation de l'état en fonction de l'URL au chargement
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    const oppIdParam = params.get('oppId');
+
+    if (tabParam === 'chat') {
+      setActiveTab('chat');
+    } else {
+      setActiveTab('opportunities');
+    }
+
+    // Si on a un ID d'opportunité, on essaie de le charger (sera fait après le chargement des opps)
+    if (oppIdParam) {
+      // On stocke temporairement l'ID pour le sélectionner une fois les données chargées
+      // Note: On pourrait optimiser en chargeant juste cette opp, mais ici on a tout en mémoire
+    }
+
+    // 2. Écoute du bouton Précédent/Suivant
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+      if (state) {
+        if (state.view === 'chat') {
+          setActiveTab('chat');
+          setSelectedOpp(null);
+        } else if (state.view === 'opportunity' && state.oppId) {
+          setActiveTab('opportunities');
+          // On doit retrouver l'objet complet dans la liste actuelle
+          const found = opportunities.find(o => o.id === state.oppId);
+          if (found) setSelectedOpp(found);
+        } else {
+          // Défaut : liste des opportunités
+          setActiveTab('opportunities');
+          setSelectedOpp(null);
+        }
+      } else {
+        // Fallback si pas d'état (ex: chargement initial)
+        setActiveTab('opportunities');
+        setSelectedOpp(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [opportunities]); // Dépendance à opportunities pour retrouver l'objet lors du popstate
+
+  // Fonctions de navigation wrapper
+  const navigateToTab = (tab: 'chat' | 'opportunities') => {
+    setActiveTab(tab);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    url.searchParams.delete('oppId');
+    window.history.pushState({ view: tab }, '', url.toString());
+  };
+
+  const navigateToOpp = (opp: Opportunity | null) => {
+    setSelectedOpp(opp);
+    const url = new URL(window.location.href);
+    if (opp) {
+      url.searchParams.set('tab', 'opportunities'); // On reste dans l'onglet opps
+      url.searchParams.set('oppId', opp.id);
+      window.history.pushState({ view: 'opportunity', oppId: opp.id }, '', url.toString());
+    } else {
+      url.searchParams.set('tab', 'opportunities');
+      url.searchParams.delete('oppId');
+      window.history.pushState({ view: 'opportunities' }, '', url.toString());
+    }
+  };
+  // ---------------------------------------------
+
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem('shads_opps_favorites');
     return saved ? JSON.parse(saved) : [];
@@ -176,13 +247,13 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
         <nav className="flex bg-[var(--theme-bg-tertiary)] rounded-2xl p-1 border border-[var(--theme-border-primary)]">
           <button
-            onClick={() => setActiveTab('opportunities')}
+            onClick={() => navigateToTab('opportunities')}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'opportunities' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
             <Lightbulb className="w-4 h-4" /> EXPLORER
           </button>
           <button
-            onClick={() => setActiveTab('chat')}
+            onClick={() => navigateToTab('chat')}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'chat' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
             <MessageSquare className="w-4 h-4" /> ASSISTANT
@@ -241,7 +312,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                   {otherOpps.map(opp => (
-                    <div key={opp.id} onClick={() => setSelectedOpp(opp)} className="group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-[var(--theme-bg-accent)]/40 transition-all duration-500 relative">
+                    <div key={opp.id} onClick={() => navigateToOpp(opp)} className="group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-[var(--theme-bg-accent)]/40 transition-all duration-500 relative">
                       {/* Favorite Toggle */}
                       <button
                         onClick={(e) => toggleFavorite(e, opp.id)}
@@ -302,7 +373,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-primary)] via-transparent to-transparent opacity-60"></div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                   <div className="absolute top-8 left-8 z-10">
-                    <button onClick={() => setSelectedOpp(null)} className="group flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/10 px-5 py-2.5 rounded-2xl text-white hover:bg-[var(--theme-bg-accent)] transition-all font-bold uppercase text-[10px] tracking-[0.2em]">
+                    <button onClick={() => navigateToOpp(null)} className="group flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/10 px-5 py-2.5 rounded-2xl text-white hover:bg-[var(--theme-bg-accent)] transition-all font-bold uppercase text-[10px] tracking-[0.2em]">
                       <ChevronLeft className="w-4 h-4" /> RETOUR
                     </button>
                   </div>
@@ -528,7 +599,7 @@ RÈGLES DE COMPORTEMENT :
 
                           if (chatAreaProps.onStartContextualChat) {
                             chatAreaProps.onStartContextualChat(systemInstruction, greeting);
-                            setActiveTab('chat');
+                            navigateToTab('chat');
                           }
                         }}
                         className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
@@ -547,7 +618,7 @@ RÈGLES DE COMPORTEMENT :
       {/* MOBILE APP BAR - STYLE CLAIR ET ICÔNES NOIRES (CHARTE GRAPHIQUE) */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-2 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
         <button
-          onClick={() => setActiveTab('opportunities')}
+          onClick={() => navigateToTab('opportunities')}
           className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-black' : 'text-black/40'}`}
         >
           <Lightbulb className="w-6 h-6" />
@@ -555,7 +626,7 @@ RÈGLES DE COMPORTEMENT :
           {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
         </button>
         <button
-          onClick={() => setActiveTab('chat')}
+          onClick={() => navigateToTab('chat')}
           className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-black' : 'text-black/40'}`}
         >
           <MessageSquare className="w-6 h-6" />

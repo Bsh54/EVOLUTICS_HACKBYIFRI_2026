@@ -19,7 +19,7 @@ export const useSessionData = () => {
     useEffect(() => { activeMessagesRef.current = activeMessages; }, [activeMessages]);
     useEffect(() => { activeSessionIdRef.current = activeSessionId; }, [activeSessionId]);
 
-    // Sync active session ID to sessionStorage and URL history
+    // Sync active session ID to sessionStorage ONLY (URL is handled by ShadsAIHub)
     useEffect(() => {
         // CRITICAL: Do not intercept URL if we are on the admin portal
         if (window.location.pathname === '/admin-portal') return;
@@ -29,30 +29,12 @@ export const useSessionData = () => {
                 sessionStorage.setItem(ACTIVE_CHAT_SESSION_ID_KEY, activeSessionId);
             } catch (e) {}
 
-            const targetPath = `/chat/${activeSessionId}`;
-            try {
-                if (window.location.pathname !== targetPath) {
-                    if (window.location.pathname.startsWith('/chat/')) {
-                        window.history.replaceState({ sessionId: activeSessionId }, '', targetPath);
-                    } else {
-                        window.history.pushState({ sessionId: activeSessionId }, '', targetPath);
-                    }
-                }
-            } catch (e) {
-                console.warn('Unable to update URL history:', e);
-            }
+            // OLD URL LOGIC REMOVED TO PREVENT CONFLICTS WITH HUB NAVIGATION
+            // The URL state is now fully managed by ShadsAIHub.tsx using query params (?tab=chat)
         } else {
             try {
                 sessionStorage.removeItem(ACTIVE_CHAT_SESSION_ID_KEY);
             } catch (e) {}
-
-            try {
-                if (window.location.pathname !== '/' && !window.location.pathname.startsWith('/chat/')) {
-                     window.history.pushState({}, '', '/');
-                }
-            } catch (e) {
-                console.warn('Unable to update URL history:', e);
-            }
         }
     }, [activeSessionId]);
 
