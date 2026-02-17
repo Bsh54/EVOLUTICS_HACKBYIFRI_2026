@@ -373,7 +373,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                             </div>
                           </>
                         )}
-                        <div className="bg-[var(--theme-bg-tertiary)] p-4 rounded-2xl border border-[var(--theme-border-primary)] col-span-2 md:col-span-1">
+                        <div className="bg-[var(--theme-bg-tertiary)] p-4 rounded-2xl border border-[var(--theme-border-primary)] hidden">
                           <span className="text-[10px] font-black text-[var(--theme-text-tertiary)] uppercase block mb-1">Spécialités</span>
                           <div className="flex gap-2 flex-wrap">
                             {selectedOpp.tags?.slice(0, 3).map(tag => (

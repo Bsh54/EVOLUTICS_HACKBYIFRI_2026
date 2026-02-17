@@ -403,6 +403,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                       {['Ouvert', 'Bientôt fini', 'Fermé'].map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
+                  {/* Champ Tags masqué
                   <div className="md:col-span-2 space-y-4">
                     <label className={labelClass}>Tags / Spécialités (séparés par des virgules)</label>
                     <input
@@ -413,6 +414,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                       onChange={e => setFormData({...formData, tags: e.target.value.split(',').map(t => t.trim()).filter(t => t !== '')})}
                     />
                   </div>
+                  */}
 
                   {/* Champs dynamiques selon le type */}
                   {formData.type === 'Emploi' && (
