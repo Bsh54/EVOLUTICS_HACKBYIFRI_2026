@@ -74,7 +74,7 @@ Le projet repose sur une architecture moderne, performante et optimisée pour le
 | **Frontend** | React 18 + Vite (TypeScript) |
 | **Styling** | Tailwind CSS (Approche Mobile-First) |
 | **Intelligence Artificielle** | Google Gemini 2.5 Flash  |
-| **Persistance Données** | LocalStorage (Offres) + IndexedDB (Historique Chat) |
+| **Persistance Données** | Supabase (PostgreSQL) + IndexedDB (Historique Chat) |
 | **Déploiement** | Compatible Vercel / Netlify /  |
 
 ### 4.2 Flux de Données IA
