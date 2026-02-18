@@ -550,9 +550,9 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
         <div className="text-center">
           <button
             onClick={() => onComplete({ onboarding_completed: true })}
-            className="text-xs text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-secondary)] font-medium transition-colors"
+            className="text-sm text-[var(--theme-text-secondary)] hover:text-[var(--theme-bg-accent)] font-bold transition-all underline underline-offset-4 decoration-[var(--theme-border-primary)] hover:decoration-[var(--theme-bg-accent)] px-4 py-2 rounded-xl hover:bg-[var(--theme-bg-accent)]/5"
           >
-            Passer cette étape et compléter plus tard
+            Passer cette étape et compléter plus tard →
           </button>
         </div>
       </div>
