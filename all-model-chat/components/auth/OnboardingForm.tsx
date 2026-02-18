@@ -103,6 +103,19 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
     }
   };
 
+  const handleSkip = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      await onComplete({ onboarding_completed: true });
+    } catch (err: any) {
+      console.error('Erreur skip onboarding:', err);
+      setError(err?.message || 'Une erreur est survenue. Veuillez réessayer.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleFinish = async () => {
     setIsSubmitting(true);
     setError(null);
@@ -549,10 +562,11 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
         {/* Skip */}
         <div className="text-center">
           <button
-            onClick={() => onComplete({ onboarding_completed: true })}
-            className="text-sm text-[var(--theme-text-secondary)] hover:text-[var(--theme-bg-accent)] font-bold transition-all underline underline-offset-4 decoration-[var(--theme-border-primary)] hover:decoration-[var(--theme-bg-accent)] px-4 py-2 rounded-xl hover:bg-[var(--theme-bg-accent)]/5"
+            onClick={handleSkip}
+            disabled={isSubmitting}
+            className="text-sm text-[var(--theme-text-secondary)] hover:text-[var(--theme-bg-accent)] font-bold transition-all underline underline-offset-4 decoration-[var(--theme-border-primary)] hover:decoration-[var(--theme-bg-accent)] px-4 py-2 rounded-xl hover:bg-[var(--theme-bg-accent)]/5 disabled:opacity-50"
           >
-            Passer cette étape et compléter plus tard →
+            {isSubmitting ? 'Chargement...' : 'Passer cette étape et compléter plus tard →'}
           </button>
         </div>
       </div>
