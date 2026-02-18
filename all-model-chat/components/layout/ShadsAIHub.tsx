@@ -21,6 +21,8 @@ import { ChatArea } from './ChatArea';
 import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
 import { AddOpportunityForm } from './AddOpportunityForm';
+import ProfileDropdown from '../auth/ProfileDropdown';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -49,6 +51,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
     onCloseSidePanel,
     themeId,
   } = props;
+
+  const { profile, signOut } = useAuth();
 
   const [activeTab, setActiveTab] = useState<'chat' | 'opportunities'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
@@ -260,9 +264,12 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           </button>
         </nav>
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 rounded-full bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] overflow-hidden">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-full h-full object-cover" />
-          </div>
+          {profile && (
+            <ProfileDropdown
+              profile={profile}
+              onSignOut={signOut}
+            />
+          )}
         </div>
       </header>
 
