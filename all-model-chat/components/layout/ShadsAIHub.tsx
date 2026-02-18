@@ -12,7 +12,8 @@ import {
   Search,
   Heart,
   Bookmark,
-  Loader2
+  Loader2,
+  User
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -21,7 +22,7 @@ import { ChatArea } from './ChatArea';
 import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
 import { AddOpportunityForm } from './AddOpportunityForm';
-import ProfileDropdown from '../auth/ProfileDropdown';
+import ProfilePage from '../auth/ProfilePage';
 import { useAuth } from '../../contexts/AuthContext';
 
 // Types et Données externalisés
@@ -52,7 +53,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
     themeId,
   } = props;
 
-  const { profile, signOut } = useAuth();
+  const { profile, signOut, updateProfile } = useAuth();
+  const [showProfilePage, setShowProfilePage] = useState(false);
 
   const [activeTab, setActiveTab] = useState<'chat' | 'opportunities'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
@@ -238,6 +240,18 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
           <span className="font-black text-sm uppercase tracking-tighter">EVOLUTICS</span>
         </div>
+        {profile && (
+          <button
+            onClick={() => setShowProfilePage(true)}
+            className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-2 border-[var(--theme-border-primary)]"
+          >
+            {profile.avatar_url ? (
+              <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <User className="w-4 h-4 text-[var(--theme-text-accent)]" />
+            )}
+          </button>
+        )}
       </header>
 
       {/* HEADER DESKTOP */}
@@ -265,10 +279,21 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         </nav>
         <div className="flex items-center gap-4">
           {profile && (
-            <ProfileDropdown
-              profile={profile}
-              onSignOut={signOut}
-            />
+            <button
+              onClick={() => setShowProfilePage(true)}
+              className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-[var(--theme-bg-tertiary)] transition-all group"
+            >
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
+                {profile.avatar_url ? (
+                  <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-4.5 h-4.5 text-[var(--theme-text-accent)]" />
+                )}
+              </div>
+              <span className="text-sm font-bold text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-text-primary)] transition-colors hidden lg:inline">
+                {profile.display_name?.split(' ')[0] || 'Profil'}
+              </span>
+            </button>
           )}
         </div>
       </header>
@@ -623,24 +648,36 @@ RÈGLES DE COMPORTEMENT :
       </div>
 
       {/* MOBILE APP BAR - STYLE CLAIR ET ICÔNES NOIRES (CHARTE GRAPHIQUE) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-2 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-        <button
-          onClick={() => navigateToTab('opportunities')}
-          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-black' : 'text-black/40'}`}
-        >
-          <Lightbulb className="w-6 h-6" />
-          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
-          {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
-        </button>
-        <button
-          onClick={() => navigateToTab('chat')}
-          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-black' : 'text-black/40'}`}
-        >
-          <MessageSquare className="w-6 h-6" />
-          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
-          {activeTab === 'chat' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
-        </button>
-      </nav>
+      {!showProfilePage && (
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-2 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+          <button
+            onClick={() => navigateToTab('opportunities')}
+            className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-black' : 'text-black/40'}`}
+          >
+            <Lightbulb className="w-6 h-6" />
+            <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
+            {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
+          </button>
+          <button
+            onClick={() => navigateToTab('chat')}
+            className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-black' : 'text-black/40'}`}
+          >
+            <MessageSquare className="w-6 h-6" />
+            <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
+            {activeTab === 'chat' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
+          </button>
+        </nav>
+      )}
+
+      {/* PAGE PROFIL COMPLÈTE */}
+      {showProfilePage && profile && (
+        <ProfilePage
+          profile={profile}
+          onBack={() => setShowProfilePage(false)}
+          onSignOut={signOut}
+          onUpdateProfile={updateProfile}
+        />
+      )}
 
     </div>
   );
