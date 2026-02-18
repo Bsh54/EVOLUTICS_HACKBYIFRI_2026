@@ -30,6 +30,14 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+// Timeout helper : résout avec null après X ms si la promesse ne répond pas
+function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<any | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -38,22 +46,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const isAuthenticated = !!user;
   const needsOnboarding = isAuthenticated && profile !== null && !profile.onboarding_completed;
 
-  // Charger le profil
+  // Charger le profil (avec timeout de sécurité)
   const loadProfile = async (authUser: any) => {
     if (!authUser) {
       setProfile(null);
       return;
     }
 
-    const userProfile = await authService.ensureProfile(authUser);
-    setProfile(userProfile);
+    try {
+      const userProfile = await withTimeout(
+        authService.ensureProfile(authUser),
+        5000, // 5 secondes max
+        null
+      );
+      setProfile(userProfile);
+    } catch (error) {
+      console.error('Erreur chargement profil:', error);
+      setProfile(null);
+    }
   };
 
   // Initialisation : vérifier la session existante
   useEffect(() => {
+    let mounted = true;
+
     const initAuth = async () => {
       try {
-        const session = await authService.getSession();
+        const session = await withTimeout(
+          authService.getSession(),
+          5000,
+          null
+        );
+
+        if (!mounted) return;
+
         if (session?.user) {
           setUser(session.user);
           await loadProfile(session.user);
@@ -61,7 +87,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } catch (error) {
         console.error('Erreur initialisation auth:', error);
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -70,20 +98,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Écouter les changements d'état d'auth
     const { data: { subscription } } = authService.onAuthStateChange(
       async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
+        if (!mounted) return;
+
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
           setUser(session.user);
           await loadProfile(session.user);
+          setIsLoading(false);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setProfile(null);
+          setIsLoading(false);
         } else if (event === 'TOKEN_REFRESHED' && session?.user) {
           setUser(session.user);
         }
       }
     );
 
+    // Sécurité absolue : forcer la fin du loading après 8 secondes
+    const safetyTimer = setTimeout(() => {
+      if (mounted) {
+        setIsLoading(false);
+      }
+    }, 8000);
+
     return () => {
+      mounted = false;
       subscription.unsubscribe();
+      clearTimeout(safetyTimer);
     };
   }, []);
 
@@ -118,13 +159,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (updatedProfile) {
         setProfile(updatedProfile);
       } else {
-        // Fallback : recharger le profil complet si l'update ne renvoie rien
         const freshProfile = await authService.getProfile(user.id);
         if (freshProfile) setProfile(freshProfile);
       }
     } catch (err) {
       console.error('Erreur updateProfile:', err);
-      throw err; // Propager l'erreur vers le composant appelant
+      throw err;
     }
   };
 
