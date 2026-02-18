@@ -75,7 +75,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]">
+    <div className="h-screen w-full flex bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden">
       {/* Panneau gauche - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-[var(--theme-bg-accent)] via-[var(--theme-bg-accent-hover)] to-[var(--theme-bg-secondary)]">
         <div className="absolute inset-0 opacity-10">
@@ -115,8 +115,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
       </div>
 
       {/* Panneau droit - Formulaire */}
-      <div className="flex-1 flex items-center justify-center p-6 md:p-12">
-        <div className="w-full max-w-md space-y-8">
+      <div className="flex-1 overflow-y-auto">
+        <div className="min-h-full flex items-center justify-center p-6 md:p-12">
+        <div className="w-full max-w-md space-y-8 py-8">
           {/* Logo mobile */}
           <div className="lg:hidden flex items-center gap-3 justify-center mb-4">
             <div className="w-10 h-10 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center">
@@ -279,6 +280,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
               {mode === 'login' ? "S'inscrire" : 'Se connecter'}
             </button>
           </div>
+        </div>
         </div>
       </div>
     </div>
