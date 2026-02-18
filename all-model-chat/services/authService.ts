@@ -94,12 +94,21 @@ export const authService = {
     return data as UserProfile;
   },
 
-  // Mettre à jour le profil
+  // Mettre à jour le profil (upsert pour garantir la création si inexistant)
   async updateProfile(userId: string, updates: Partial<UserProfile>): Promise<UserProfile | null> {
+    // Toujours inclure l'id et l'email pour que l'upsert fonctionne
+    const session = await supabase.auth.getSession();
+    const email = session.data.session?.user?.email;
+
+    const payload = {
+      ...updates,
+      id: userId,
+      email: email || updates.email,
+    };
+
     const { data, error } = await supabase
       .from('profiles')
-      .update(updates)
-      .eq('id', userId)
+      .upsert(payload, { onConflict: 'id' })
       .select()
       .single();
 
@@ -163,21 +172,23 @@ export const authService = {
     return supabase.auth.onAuthStateChange(callback);
   },
 
-  // Vérifier si le profil existe (pour l'onboarding après OAuth)
+  // Vérifier si le profil existe, sinon le créer (upsert)
   async ensureProfile(user: any): Promise<UserProfile | null> {
     let profile = await this.getProfile(user.id);
 
     if (!profile) {
+      const payload = {
+        id: user.id,
+        email: user.email,
+        display_name: user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Utilisateur',
+        avatar_url: user.user_metadata?.avatar_url || null,
+        onboarding_completed: false,
+        created_at: new Date().toISOString(),
+      };
+
       const { error } = await supabase
         .from('profiles')
-        .insert([{
-          id: user.id,
-          email: user.email,
-          display_name: user.user_metadata?.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Utilisateur',
-          avatar_url: user.user_metadata?.avatar_url || null,
-          onboarding_completed: false,
-          created_at: new Date().toISOString(),
-        }]);
+        .upsert(payload, { onConflict: 'id' });
 
       if (error) {
         console.error('Erreur création profil auto:', error);
