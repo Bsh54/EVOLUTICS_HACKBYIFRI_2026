@@ -523,6 +523,14 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
           {renderStepContent()}
         </div>
 
+        {/* Erreur aussi près des boutons pour visibilité */}
+        {error && (
+          <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-medium">
+            <X className="w-5 h-5 shrink-0" />
+            {error}
+          </div>
+        )}
+
         {/* Boutons de navigation */}
         <div className="flex items-center justify-between">
           <button
