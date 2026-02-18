@@ -449,8 +449,8 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
   const isLastStep = currentStep === STEPS.length - 1;
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] p-4 md:p-8">
-      <div className="w-full max-w-2xl space-y-8">
+    <div className="h-full w-full overflow-y-auto bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] p-4 md:p-8">
+      <div className="w-full max-w-2xl mx-auto space-y-8 py-8">
 
         {/* Logo */}
         <div className="flex items-center gap-3 justify-center">
