@@ -36,6 +36,7 @@ const FIELDS_OF_STUDY = [
 const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Form state
   const [displayName, setDisplayName] = useState(profile.display_name || '');
@@ -104,28 +105,34 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
 
   const handleFinish = async () => {
     setIsSubmitting(true);
+    setError(null);
     try {
-      await onComplete({
+      // Construire le payload en excluant les valeurs vides
+      const updates: Record<string, any> = {
         display_name: displayName.trim() || profile.display_name,
-        phone: phone.trim() || undefined,
-        bio: bio.trim() || undefined,
-        university: university.trim() || undefined,
-        field_of_study: fieldOfStudy || undefined,
-        education_level: educationLevel || undefined,
-        graduation_year: graduationYear || undefined,
-        skills: skills.length > 0 ? skills : undefined,
-        experience_years: experienceYears !== '' ? experienceYears : undefined,
-        current_position: currentPosition.trim() || undefined,
-        linkedin_url: linkedinUrl.trim() || undefined,
-        portfolio_url: portfolioUrl.trim() || undefined,
-        preferred_types: preferredTypes.length > 0 ? preferredTypes : undefined,
-        preferred_locations: preferredLocations.length > 0 ? preferredLocations : undefined,
-        availability_date: availabilityDate || undefined,
-        salary_expectation: salaryExpectation.trim() || undefined,
         onboarding_completed: true,
-      });
-    } catch (err) {
+      };
+
+      if (phone.trim()) updates.phone = phone.trim();
+      if (bio.trim()) updates.bio = bio.trim();
+      if (university.trim()) updates.university = university.trim();
+      if (fieldOfStudy) updates.field_of_study = fieldOfStudy;
+      if (educationLevel) updates.education_level = educationLevel;
+      if (graduationYear !== '') updates.graduation_year = graduationYear;
+      if (skills.length > 0) updates.skills = skills;
+      if (experienceYears !== '') updates.experience_years = experienceYears;
+      if (currentPosition.trim()) updates.current_position = currentPosition.trim();
+      if (linkedinUrl.trim()) updates.linkedin_url = linkedinUrl.trim();
+      if (portfolioUrl.trim()) updates.portfolio_url = portfolioUrl.trim();
+      if (preferredTypes.length > 0) updates.preferred_types = preferredTypes;
+      if (preferredLocations.length > 0) updates.preferred_locations = preferredLocations;
+      if (availabilityDate) updates.availability_date = availabilityDate;
+      if (salaryExpectation.trim()) updates.salary_expectation = salaryExpectation.trim();
+
+      await onComplete(updates);
+    } catch (err: any) {
       console.error('Erreur onboarding:', err);
+      setError(err?.message || 'Une erreur est survenue lors de la sauvegarde. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -489,6 +496,14 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
             );
           })}
         </div>
+
+        {/* Message d'erreur */}
+        {error && (
+          <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-medium">
+            <X className="w-5 h-5 shrink-0" />
+            {error}
+          </div>
+        )}
 
         {/* Contenu du formulaire */}
         <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-[2rem] p-8 md:p-10 shadow-xl">

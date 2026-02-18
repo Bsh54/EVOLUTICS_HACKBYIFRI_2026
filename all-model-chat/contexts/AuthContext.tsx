@@ -113,9 +113,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user) return;
-    const updatedProfile = await authService.updateProfile(user.id, updates);
-    if (updatedProfile) {
-      setProfile(updatedProfile);
+    try {
+      const updatedProfile = await authService.updateProfile(user.id, updates);
+      if (updatedProfile) {
+        setProfile(updatedProfile);
+      } else {
+        // Fallback : recharger le profil complet si l'update ne renvoie rien
+        const freshProfile = await authService.getProfile(user.id);
+        if (freshProfile) setProfile(freshProfile);
+      }
+    } catch (err) {
+      console.error('Erreur updateProfile:', err);
+      throw err; // Propager l'erreur vers le composant appelant
     }
   };
 
