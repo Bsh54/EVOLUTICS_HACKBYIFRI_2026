@@ -622,6 +622,19 @@ RÈGLES DE COMPORTEMENT :
             )}
           </div>
         </div>
+
+        {/* PAGE PROFIL — rendu comme un onglet */}
+        <div className={`absolute inset-0 overflow-y-auto bg-[var(--theme-bg-primary)] pb-16 md:pb-0 ${activeTab === 'profile' ? 'block z-30' : 'hidden'}`}>
+          {profile && (
+            <ProfilePage
+              profile={profile}
+              onBack={() => navigateToTab('opportunities')}
+              onSignOut={signOut}
+              onUpdateProfile={updateProfile}
+              onNavigateToTab={(tab) => navigateToTab(tab)}
+            />
+          )}
+        </div>
       </div>
 
       {/* MOBILE APP BAR - 3 ONGLETS */}
@@ -651,19 +664,6 @@ RÈGLES DE COMPORTEMENT :
           {activeTab === 'profile' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
         </button>
       </nav>
-
-      {/* PAGE PROFIL — rendu comme un onglet */}
-      {activeTab === 'profile' && profile && (
-        <div className="absolute inset-0 z-30 overflow-y-auto bg-[var(--theme-bg-primary)] pb-16 md:pb-0" style={{ top: 'auto' }}>
-          <ProfilePage
-            profile={profile}
-            onBack={() => navigateToTab('opportunities')}
-            onSignOut={signOut}
-            onUpdateProfile={updateProfile}
-            onNavigateToTab={(tab) => navigateToTab(tab)}
-          />
-        </div>
-      )}
 
     </div>
   );
