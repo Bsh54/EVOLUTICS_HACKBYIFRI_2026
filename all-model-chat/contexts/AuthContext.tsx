@@ -135,11 +135,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const signUp = async (email: string, password: string, displayName: string) => {
-    await authService.signUp(email, password, displayName);
-    // Auto-login immédiat après inscription
-    const { user: authUser } = await authService.signIn(email, password);
-    setUser(authUser);
-    await loadProfile(authUser);
+    const data = await authService.signUp(email, password, displayName);
+    // Utiliser la session renvoyée par signUp directement (pas besoin de signIn)
+    if (data.session && data.user) {
+      // Confirmation email désactivée → session disponible → auto-login
+      setUser(data.user);
+      await loadProfile(data.user);
+    } else {
+      // Confirmation email activée mais pas de SMTP configuré
+      // Indiquer clairement le problème au lieu de planter
+      throw new Error('CONFIRM_EMAIL_DISABLED');
+    }
   };
 
   const signInWithGoogle = async () => {

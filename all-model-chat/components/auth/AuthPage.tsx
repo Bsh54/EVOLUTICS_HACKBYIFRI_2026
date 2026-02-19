@@ -50,7 +50,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
       }
     } catch (err: any) {
       const msg = err?.message || 'Une erreur est survenue.';
-      if (msg.includes('Invalid login')) {
+      if (msg.includes('CONFIRM_EMAIL_DISABLED')) {
+        setError('La confirmation par email est requise par le serveur mais aucun service d\'envoi n\'est configuré. Contactez l\'administrateur.');
+      } else if (msg.includes('Invalid login')) {
         setError('Email ou mot de passe incorrect.');
       } else if (msg.includes('User already registered')) {
         setError('Un compte avec cet email existe déjà.');
