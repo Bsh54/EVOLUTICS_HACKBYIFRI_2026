@@ -47,6 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const needsOnboarding = isAuthenticated && profile !== null && !profile.onboarding_completed;
 
   // Charger le profil (avec timeout de sécurité)
+  // IMPORTANT: ne jamais écraser un profil existant avec null
   const loadProfile = async (authUser: any) => {
     if (!authUser) {
       setProfile(null);
@@ -56,13 +57,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const userProfile = await withTimeout(
         authService.ensureProfile(authUser),
-        5000, // 5 secondes max
+        8000,
         null
       );
-      setProfile(userProfile);
+      // Ne mettre à jour que si on a reçu un profil valide
+      if (userProfile) {
+        setProfile(userProfile);
+      }
     } catch (error) {
       console.error('Erreur chargement profil:', error);
-      setProfile(null);
+      // Garder le profil existant — ne PAS écraser avec null
     }
   };
 
@@ -100,15 +104,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       async (event, session) => {
         if (!mounted) return;
 
-        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
+        if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
           await loadProfile(session.user);
+          setIsLoading(false);
+        } else if (event === 'INITIAL_SESSION' && session?.user) {
+          // Ne recharger que si on n'a pas déjà un user (évite d'écraser le profil)
+          setUser(prev => prev || session.user);
           setIsLoading(false);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setProfile(null);
           setIsLoading(false);
         } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          // Juste mettre à jour le user (token), ne PAS recharger le profil
           setUser(session.user);
         }
       }
