@@ -109,8 +109,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           await loadProfile(session.user);
           setIsLoading(false);
         } else if (event === 'INITIAL_SESSION' && session?.user) {
-          // Ne recharger que si on n'a pas déjà un user (évite d'écraser le profil)
-          setUser(prev => prev || session.user);
+          setUser(session.user);
+          // Charger le profil seulement s'il n'est pas déjà en mémoire
+          setProfile(prev => {
+            if (!prev) {
+              // Lancer le chargement en arrière-plan (ne bloque pas le setState)
+              loadProfile(session.user!);
+            }
+            return prev;
+          });
           setIsLoading(false);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
