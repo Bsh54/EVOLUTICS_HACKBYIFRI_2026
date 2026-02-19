@@ -59,12 +59,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // --- Gestion de l'historique du navigateur ---
+  // --- Initialisation du tab depuis l'URL (une seule fois) ---
   useEffect(() => {
-    // 1. Initialisation de l'état en fonction de l'URL au chargement
     const params = new URLSearchParams(window.location.search);
     const tabParam = params.get('tab');
-    const oppIdParam = params.get('oppId');
 
     if (tabParam === 'chat') {
       setActiveTab('chat');
@@ -73,14 +71,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
     } else {
       setActiveTab('opportunities');
     }
+  }, []); // Exécuté une seule fois au montage
 
-    // Si on a un ID d'opportunité, on essaie de le charger (sera fait après le chargement des opps)
-    if (oppIdParam) {
-      // On stocke temporairement l'ID pour le sélectionner une fois les données chargées
-      // Note: On pourrait optimiser en chargeant juste cette opp, mais ici on a tout en mémoire
-    }
-
-    // 2. Écoute du bouton Précédent/Suivant
+  // --- Gestion du bouton Précédent/Suivant ---
+  useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       const state = event.state;
       if (state) {
@@ -92,16 +86,13 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           setSelectedOpp(null);
         } else if (state.view === 'opportunity' && state.oppId) {
           setActiveTab('opportunities');
-          // On doit retrouver l'objet complet dans la liste actuelle
           const found = opportunities.find(o => o.id === state.oppId);
           if (found) setSelectedOpp(found);
         } else {
-          // Défaut : liste des opportunités
           setActiveTab('opportunities');
           setSelectedOpp(null);
         }
       } else {
-        // Fallback si pas d'état (ex: chargement initial)
         setActiveTab('opportunities');
         setSelectedOpp(null);
       }
@@ -109,7 +100,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [opportunities]); // Dépendance à opportunities pour retrouver l'objet lors du popstate
+  }, [opportunities]);
 
   // Fonctions de navigation wrapper
   const navigateToTab = (tab: 'chat' | 'opportunities' | 'profile') => {
