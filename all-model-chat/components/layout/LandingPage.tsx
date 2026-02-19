@@ -12,6 +12,7 @@ import {
   ChevronRight,
   TrendingUp,
 } from 'lucide-react';
+import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -25,15 +26,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
       {/* ═══════════ HERO SECTION ═══════════ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
         {/* Background photo — career/tech ambiance */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop"
-            alt=""
-            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+            alt="Background"
+            className="w-full h-full object-cover opacity-20 blur-[2px]"
           />
           {/* Multi-layer overlay for readability */}
-          <div className="absolute inset-0 bg-[var(--theme-bg-primary)]/80" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-bg-primary)] via-transparent to-[var(--theme-bg-primary)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-bg-primary)] via-[var(--theme-bg-primary)]/80 to-[var(--theme-bg-primary)]" />
         </div>
 
         {/* Decorative blurs */}
@@ -181,9 +181,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-10 landing-fade-in">
-            <div className="w-14 h-14 bg-[var(--theme-bg-accent)] rounded-2xl flex items-center justify-center shadow-lg shadow-[var(--theme-bg-accent)]/25">
-              <Sparkles className="w-7 h-7 text-[var(--theme-text-accent)]" />
-            </div>
+            <EvoluticsLogo className="w-14 h-14" />
             <span className="font-black text-3xl tracking-tighter uppercase">EVOLUTICS</span>
           </div>
 
