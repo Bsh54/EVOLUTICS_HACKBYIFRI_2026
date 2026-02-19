@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppLogic } from './hooks/app/useAppLogic';
 import { useAppProps } from './hooks/app/useAppProps';
 import { WindowProvider } from './contexts/WindowContext';
@@ -8,6 +8,7 @@ import ShadsAIHub from './components/layout/ShadsAIHub';
 import { AddOpportunityForm } from './components/layout/AddOpportunityForm';
 import AuthPage from './components/auth/AuthPage';
 import OnboardingForm from './components/auth/OnboardingForm';
+import LandingPage from './components/layout/LandingPage';
 import { Loader2, Sparkles } from 'lucide-react';
 
 // Composant interne qui utilise le contexte Auth
@@ -23,6 +24,9 @@ const AppContent: React.FC = () => {
     signOut,
     updateProfile,
   } = useAuth();
+
+  // Landing page s'affiche par défaut pour les visiteurs non connectés
+  const [showLanding, setShowLanding] = useState(true);
 
   const logic = useAppLogic();
   const {
@@ -50,8 +54,16 @@ const AppContent: React.FC = () => {
     );
   }
 
-  // Page de connexion / inscription
+  // Visiteur non connecté : Landing Page ou AuthPage
   if (!isAuthenticated) {
+    if (showLanding) {
+      return (
+        <LandingPage
+          onGetStarted={() => setShowLanding(false)}
+          onSignIn={() => setShowLanding(false)}
+        />
+      );
+    }
     return (
       <AuthPage
         onAuthSuccess={() => {}}
