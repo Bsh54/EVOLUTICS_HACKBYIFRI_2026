@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  User, LogOut, ArrowLeft, Mail, Phone, GraduationCap, Briefcase,
+  User, LogOut, ArrowLeft, Mail, GraduationCap, Briefcase,
   MapPin, Calendar, Heart, Sparkles, ExternalLink, Edit3, Check,
   X, Plus, Loader2, ChevronRight
 } from 'lucide-react';
@@ -38,7 +38,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
 
   // Form state
   const [displayName, setDisplayName] = useState(profile.display_name || '');
-  const [phone, setPhone] = useState(profile.phone || '');
   const [bio, setBio] = useState(profile.bio || '');
   const [university, setUniversity] = useState(profile.university || '');
   const [fieldOfStudy, setFieldOfStudy] = useState(profile.field_of_study || '');
@@ -95,7 +94,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
       const updates: Record<string, any> = {
         display_name: displayName.trim() || profile.display_name,
       };
-      if (phone.trim()) updates.phone = phone.trim(); else updates.phone = null;
       if (bio.trim()) updates.bio = bio.trim(); else updates.bio = null;
       if (university.trim()) updates.university = university.trim(); else updates.university = null;
       if (fieldOfStudy) updates.field_of_study = fieldOfStudy; else updates.field_of_study = null;
@@ -136,7 +134,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
   const cancelEdit = () => {
     setIsEditing(false);
     setDisplayName(profile.display_name || '');
-    setPhone(profile.phone || '');
     setBio(profile.bio || '');
     setUniversity(profile.university || '');
     setFieldOfStudy(profile.field_of_study || '');
@@ -212,11 +209,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
         {/* En-tête profil */}
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-4 border-[var(--theme-bg-accent)]/20 shadow-2xl shrink-0">
-            {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-            ) : (
-              <User className="w-12 h-12 text-[var(--theme-text-accent)] opacity-80" />
-            )}
+            <span className="text-4xl font-black text-[var(--theme-text-accent)] select-none">{initials}</span>
           </div>
           <div className="text-center md:text-left space-y-2 flex-1">
             {isEditing ? (
@@ -234,26 +227,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
             )}
           </div>
         </div>
-
-        {/* Section Identité */}
-        <section className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[var(--theme-bg-accent)]/10 flex items-center justify-center">
-              <User className="w-5 h-5 text-[var(--theme-bg-accent)]" />
-            </div>
-            <h2 className="text-lg font-black uppercase tracking-tight">Identité</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-text-tertiary)]">Téléphone</label>
-              {isEditing ? (
-                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+229 XX XX XX XX" className={inputClass} />
-              ) : (
-                <div className="flex items-center gap-2 text-sm"><Phone className="w-4 h-4 text-[var(--theme-text-tertiary)]" /> {displayValue(profile.phone)}</div>
-              )}
-            </div>
-          </div>
-        </section>
 
         {/* Section Formation */}
         <section className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-6">

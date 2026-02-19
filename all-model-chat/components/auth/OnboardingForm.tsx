@@ -40,7 +40,6 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
 
   // Form state
   const [displayName, setDisplayName] = useState(profile.display_name || '');
-  const [phone, setPhone] = useState(profile.phone || '');
   const [bio, setBio] = useState(profile.bio || '');
 
   const [university, setUniversity] = useState(profile.university || '');
@@ -126,7 +125,6 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
         onboarding_completed: true,
       };
 
-      if (phone.trim()) updates.phone = phone.trim();
       if (bio.trim()) updates.bio = bio.trim();
       if (university.trim()) updates.university = university.trim();
       if (fieldOfStudy) updates.field_of_study = fieldOfStudy;
@@ -175,17 +173,6 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
                   className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-11 pr-4 py-3.5 text-sm text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/30 focus:border-[var(--theme-bg-accent)] transition-all"
                 />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-text-tertiary)]">Téléphone</label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+229 XX XX XX XX"
-                className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl px-4 py-3.5 text-sm text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/30 focus:border-[var(--theme-bg-accent)] transition-all"
-              />
             </div>
 
             <div className="space-y-2">

@@ -245,11 +245,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             onClick={() => setShowProfilePage(true)}
             className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-2 border-[var(--theme-border-primary)]"
           >
-            {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-            ) : (
-              <User className="w-4 h-4 text-[var(--theme-text-accent)]" />
-            )}
+            <span className="text-xs font-black text-[var(--theme-text-accent)] select-none">
+              {profile.display_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'}
+            </span>
           </button>
         )}
       </header>
@@ -283,12 +281,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
               onClick={() => setShowProfilePage(true)}
               className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-[var(--theme-bg-tertiary)] transition-all group"
             >
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
-                {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-                ) : (
-                  <User className="w-4.5 h-4.5 text-[var(--theme-text-accent)]" />
-                )}
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
+                <span className="text-sm font-black text-[var(--theme-text-accent)] select-none">
+                  {profile.display_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'}
+                </span>
               </div>
               <span className="text-sm font-bold text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-text-primary)] transition-colors hidden lg:inline">
                 {profile.display_name?.split(' ')[0] || 'Profil'}
