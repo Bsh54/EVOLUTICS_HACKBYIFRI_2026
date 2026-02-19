@@ -28,12 +28,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         {/* Background photo — career/tech ambiance */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop"
             alt="Background"
-            className="w-full h-full object-cover opacity-20 blur-[2px]"
+            className="w-full h-full object-cover opacity-20 blur-[1px]"
           />
           {/* Multi-layer overlay for readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-bg-primary)] via-[var(--theme-bg-primary)]/80 to-[var(--theme-bg-primary)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-bg-primary)] via-[var(--theme-bg-primary)]/90 to-[var(--theme-bg-primary)]" />
         </div>
 
         {/* Decorative blurs */}
