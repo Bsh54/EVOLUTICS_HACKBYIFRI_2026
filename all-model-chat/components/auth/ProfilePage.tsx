@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   User, LogOut, ArrowLeft, Mail, GraduationCap, Briefcase,
   MapPin, Calendar, Heart, Sparkles, ExternalLink, Edit3, Check,
-  X, Plus, Loader2, ChevronRight, Lightbulb, MessageSquare
+  X, Plus, Loader2, ChevronRight
 } from 'lucide-react';
 import { UserProfile, EducationLevel } from '../../types/user';
 import { OpportunityType } from '../../types/opportunity';
@@ -451,30 +451,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
         </div>
       </div>
 
-      {/* MOBILE NAV BAR */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-3 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-        <button
-          onClick={() => { onBack(); onNavigateToTab?.('opportunities'); }}
-          className="h-full flex flex-col items-center justify-center transition-all active:scale-95 text-black/40"
-        >
-          <Lightbulb className="w-6 h-6" />
-          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
-        </button>
-        <button
-          className="h-full flex flex-col items-center justify-center transition-all relative text-black"
-        >
-          <User className="w-6 h-6" />
-          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Profil</span>
-          <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />
-        </button>
-        <button
-          onClick={() => { onBack(); onNavigateToTab?.('chat'); }}
-          className="h-full flex flex-col items-center justify-center transition-all active:scale-95 text-black/40"
-        >
-          <MessageSquare className="w-6 h-6" />
-          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
-        </button>
-      </nav>
     </div>
   );
 };

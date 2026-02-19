@@ -11,7 +11,6 @@ import {
   Plus,
   Search,
   Heart,
-  Bookmark,
   Loader2,
   User
 } from 'lucide-react';
@@ -21,10 +20,8 @@ import { HistorySidebar } from '../sidebar/HistorySidebar';
 import { ChatArea } from './ChatArea';
 import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
-import { AddOpportunityForm } from './AddOpportunityForm';
 import ProfilePage from '../auth/ProfilePage';
 import { useAuth } from '../../contexts/AuthContext';
-import { getDefaultAvatar } from '../../utils/defaultAvatars';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -55,9 +52,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   } = props;
 
   const { profile, signOut, updateProfile } = useAuth();
-  const [showProfilePage, setShowProfilePage] = useState(false);
-
-  const [activeTab, setActiveTab] = useState<'chat' | 'opportunities'>('opportunities');
+  const [activeTab, setActiveTab] = useState<'chat' | 'opportunities' | 'profile'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
   const [filterType, setFilterType] = useState<string>('Tous');
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,6 +68,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
     if (tabParam === 'chat') {
       setActiveTab('chat');
+    } else if (tabParam === 'profile') {
+      setActiveTab('profile');
     } else {
       setActiveTab('opportunities');
     }
@@ -89,6 +86,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
       if (state) {
         if (state.view === 'chat') {
           setActiveTab('chat');
+          setSelectedOpp(null);
+        } else if (state.view === 'profile') {
+          setActiveTab('profile');
           setSelectedOpp(null);
         } else if (state.view === 'opportunity' && state.oppId) {
           setActiveTab('opportunities');
@@ -112,7 +112,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   }, [opportunities]); // Dépendance à opportunities pour retrouver l'objet lors du popstate
 
   // Fonctions de navigation wrapper
-  const navigateToTab = (tab: 'chat' | 'opportunities') => {
+  const navigateToTab = (tab: 'chat' | 'opportunities' | 'profile') => {
     setActiveTab(tab);
     const url = new URL(window.location.href);
     url.searchParams.set('tab', tab);
@@ -241,14 +241,6 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
           <span className="font-black text-sm uppercase tracking-tighter">EVOLUTICS</span>
         </div>
-        {profile && (
-          <button
-            onClick={() => setShowProfilePage(true)}
-            className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--theme-border-primary)]"
-          >
-            <img src={getDefaultAvatar(profile.id || profile.email || 'user')} alt="Avatar" className="w-full h-full object-cover" />
-          </button>
-        )}
       </header>
 
       {/* HEADER DESKTOP */}
@@ -273,22 +265,14 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           >
             <MessageSquare className="w-4 h-4" /> ASSISTANT
           </button>
+          <button
+            onClick={() => navigateToTab('profile')}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'profile' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
+          >
+            <User className="w-4 h-4" /> PROFIL
+          </button>
         </nav>
-        <div className="flex items-center gap-4">
-          {profile && (
-            <button
-              onClick={() => setShowProfilePage(true)}
-              className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-[var(--theme-bg-tertiary)] transition-all group"
-            >
-              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
-                <img src={getDefaultAvatar(profile.id || profile.email || 'user')} alt="Avatar" className="w-full h-full object-cover" />
-              </div>
-              <span className="text-sm font-bold text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-text-primary)] transition-colors hidden lg:inline">
-                {profile.display_name?.split(' ')[0] || 'Profil'}
-              </span>
-            </button>
-          )}
-        </div>
+        <div className="w-9" />
       </header>
 
       <div className="flex-1 relative overflow-hidden">
@@ -640,37 +624,45 @@ RÈGLES DE COMPORTEMENT :
         </div>
       </div>
 
-      {/* MOBILE APP BAR - STYLE CLAIR ET ICÔNES NOIRES (CHARTE GRAPHIQUE) */}
-      {!showProfilePage && (
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-2 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-          <button
-            onClick={() => navigateToTab('opportunities')}
-            className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-black' : 'text-black/40'}`}
-          >
-            <Lightbulb className="w-6 h-6" />
-            <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
-            {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
-          </button>
-          <button
-            onClick={() => navigateToTab('chat')}
-            className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-black' : 'text-black/40'}`}
-          >
-            <MessageSquare className="w-6 h-6" />
-            <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
-            {activeTab === 'chat' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
-          </button>
-        </nav>
-      )}
+      {/* MOBILE APP BAR - 3 ONGLETS */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-3 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+        <button
+          onClick={() => navigateToTab('opportunities')}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-black' : 'text-black/40'}`}
+        >
+          <Lightbulb className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
+          {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
+        </button>
+        <button
+          onClick={() => navigateToTab('chat')}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-black' : 'text-black/40'}`}
+        >
+          <MessageSquare className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
+          {activeTab === 'chat' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
+        </button>
+        <button
+          onClick={() => navigateToTab('profile')}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'profile' ? 'text-black' : 'text-black/40'}`}
+        >
+          <User className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Profil</span>
+          {activeTab === 'profile' && <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />}
+        </button>
+      </nav>
 
-      {/* PAGE PROFIL COMPLÈTE */}
-      {showProfilePage && profile && (
-        <ProfilePage
-          profile={profile}
-          onBack={() => setShowProfilePage(false)}
-          onSignOut={signOut}
-          onUpdateProfile={updateProfile}
-          onNavigateToTab={(tab) => { setShowProfilePage(false); navigateToTab(tab); }}
-        />
+      {/* PAGE PROFIL — rendu comme un onglet */}
+      {activeTab === 'profile' && profile && (
+        <div className="absolute inset-0 z-30 overflow-y-auto bg-[var(--theme-bg-primary)] pb-16 md:pb-0" style={{ top: 'auto' }}>
+          <ProfilePage
+            profile={profile}
+            onBack={() => navigateToTab('opportunities')}
+            onSignOut={signOut}
+            onUpdateProfile={updateProfile}
+            onNavigateToTab={(tab) => navigateToTab(tab)}
+          />
+        </div>
       )}
 
     </div>
