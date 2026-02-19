@@ -135,11 +135,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const signUp = async (email: string, password: string, displayName: string) => {
-    const result = await authService.signUp(email, password, displayName);
-    // Ne PAS connecter l'utilisateur après inscription
-    // Il doit d'abord confirmer son email
-    // Supabase renvoie un user même sans confirmation, mais sans session valide
-    // On laisse le flux de confirmation email se dérouler
+    await authService.signUp(email, password, displayName);
+    // Auto-login immédiat après inscription
+    const { user: authUser } = await authService.signIn(email, password);
+    setUser(authUser);
+    await loadProfile(authUser);
   };
 
   const signInWithGoogle = async () => {

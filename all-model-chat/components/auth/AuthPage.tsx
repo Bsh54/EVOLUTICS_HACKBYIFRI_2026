@@ -46,8 +46,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
         onAuthSuccess();
       } else {
         await signUp(email, password, displayName.trim());
-        setSuccessMessage('Compte créé avec succès ! Vérifiez votre email pour confirmer votre inscription.');
-        setMode('login');
+        onAuthSuccess();
       }
     } catch (err: any) {
       const msg = err?.message || 'Une erreur est survenue.';
@@ -55,8 +54,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
         setError('Email ou mot de passe incorrect.');
       } else if (msg.includes('User already registered')) {
         setError('Un compte avec cet email existe déjà.');
-      } else if (msg.includes('Email not confirmed')) {
-        setError('Veuillez confirmer votre email avant de vous connecter.');
       } else {
         setError(msg);
       }
