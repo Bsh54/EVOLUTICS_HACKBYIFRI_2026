@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import {
   User, LogOut, ArrowLeft, Mail, GraduationCap, Briefcase,
   MapPin, Calendar, Heart, Sparkles, ExternalLink, Edit3, Check,
-  X, Plus, Loader2, ChevronRight
+  X, Plus, Loader2, ChevronRight, Lightbulb, MessageSquare
 } from 'lucide-react';
 import { UserProfile, EducationLevel } from '../../types/user';
 import { OpportunityType } from '../../types/opportunity';
+import { getDefaultAvatar } from '../../utils/defaultAvatars';
 
 interface ProfilePageProps {
   profile: UserProfile;
   onBack: () => void;
   onSignOut: () => Promise<void>;
   onUpdateProfile: (updates: Partial<UserProfile>) => Promise<void>;
+  onNavigateToTab?: (tab: 'chat' | 'opportunities') => void;
 }
 
 const EDUCATION_LEVELS: EducationLevel[] = [
@@ -29,7 +31,7 @@ const FIELDS_OF_STUDY = [
   'Sociologie', 'Psychologie', 'Philosophie', 'Arts', 'Agriculture', 'Autre'
 ];
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, onUpdateProfile }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, onUpdateProfile, onNavigateToTab }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -93,6 +95,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
     try {
       const updates: Record<string, any> = {
         display_name: displayName.trim() || profile.display_name,
+        onboarding_completed: true,
       };
       if (bio.trim()) updates.bio = bio.trim(); else updates.bio = null;
       if (university.trim()) updates.university = university.trim(); else updates.university = null;
@@ -208,8 +211,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
 
         {/* En-tête profil */}
         <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-4 border-[var(--theme-bg-accent)]/20 shadow-2xl shrink-0">
-            <span className="text-4xl font-black text-[var(--theme-text-accent)] select-none">{initials}</span>
+          <div className="w-28 h-28 rounded-3xl overflow-hidden border-4 border-[var(--theme-bg-accent)]/20 shadow-2xl shrink-0">
+            <img src={getDefaultAvatar(profile.id || profile.email || 'user')} alt="Avatar" className="w-full h-full object-cover" />
           </div>
           <div className="text-center md:text-left space-y-2 flex-1">
             {isEditing ? (
@@ -436,7 +439,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
         </section>
 
         {/* Bouton déconnexion */}
-        <div className="flex justify-center pt-4 pb-8">
+        <div className="flex justify-center pt-4 pb-24 md:pb-8">
           <button
             onClick={handleSignOut}
             disabled={isSigningOut}
@@ -447,6 +450,31 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
           </button>
         </div>
       </div>
+
+      {/* MOBILE NAV BAR */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 z-[999] grid grid-cols-3 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+        <button
+          onClick={() => { onBack(); onNavigateToTab?.('opportunities'); }}
+          className="h-full flex flex-col items-center justify-center transition-all active:scale-95 text-black/40"
+        >
+          <Lightbulb className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
+        </button>
+        <button
+          className="h-full flex flex-col items-center justify-center transition-all relative text-black"
+        >
+          <User className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Profil</span>
+          <div className="absolute bottom-1 w-12 h-0.5 bg-black rounded-full" />
+        </button>
+        <button
+          onClick={() => { onBack(); onNavigateToTab?.('chat'); }}
+          className="h-full flex flex-col items-center justify-center transition-all active:scale-95 text-black/40"
+        >
+          <MessageSquare className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
+        </button>
+      </nav>
     </div>
   );
 };

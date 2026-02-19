@@ -24,6 +24,7 @@ import { SidePanel } from './SidePanel';
 import { AddOpportunityForm } from './AddOpportunityForm';
 import ProfilePage from '../auth/ProfilePage';
 import { useAuth } from '../../contexts/AuthContext';
+import { getDefaultAvatar } from '../../utils/defaultAvatars';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -243,11 +244,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         {profile && (
           <button
             onClick={() => setShowProfilePage(true)}
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center overflow-hidden border-2 border-[var(--theme-border-primary)]"
+            className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--theme-border-primary)]"
           >
-            <span className="text-xs font-black text-[var(--theme-text-accent)] select-none">
-              {profile.display_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'}
-            </span>
+            <img src={getDefaultAvatar(profile.id || profile.email || 'user')} alt="Avatar" className="w-full h-full object-cover" />
           </button>
         )}
       </header>
@@ -281,10 +280,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
               onClick={() => setShowProfilePage(true)}
               className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-[var(--theme-bg-tertiary)] transition-all group"
             >
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
-                <span className="text-sm font-black text-[var(--theme-text-accent)] select-none">
-                  {profile.display_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'}
-                </span>
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
+                <img src={getDefaultAvatar(profile.id || profile.email || 'user')} alt="Avatar" className="w-full h-full object-cover" />
               </div>
               <span className="text-sm font-bold text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-text-primary)] transition-colors hidden lg:inline">
                 {profile.display_name?.split(' ')[0] || 'Profil'}
@@ -672,6 +669,7 @@ RÈGLES DE COMPORTEMENT :
           onBack={() => setShowProfilePage(false)}
           onSignOut={signOut}
           onUpdateProfile={updateProfile}
+          onNavigateToTab={(tab) => { setShowProfilePage(false); navigateToTab(tab); }}
         />
       )}
 
