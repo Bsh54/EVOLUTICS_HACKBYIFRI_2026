@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -49,15 +50,25 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
         onAuthSuccess();
       }
     } catch (err: any) {
+      // Gestion propre des erreurs pour l'utilisateur
       const msg = err?.message || 'Une erreur est survenue.';
-      if (msg.includes('CONFIRM_EMAIL_DISABLED')) {
-        setError('La confirmation par email est requise par le serveur mais aucun service d\'envoi n\'est configuré. Contactez l\'administrateur.');
-      } else if (msg.includes('Invalid login')) {
+
+      // Erreurs connues et reformulées
+      if (msg.includes('Invalid login') || msg.includes('Invalid credentials')) {
         setError('Email ou mot de passe incorrect.');
       } else if (msg.includes('User already registered')) {
-        setError('Un compte avec cet email existe déjà.');
+        setError('Un compte avec cet email existe déjà. Connectez-vous.');
+      } else if (msg.includes('Email not confirmed')) {
+        setError('Veuillez confirmer votre email avant de vous connecter.');
+      } else if (msg.includes('Too many requests') || msg.includes('rate limit')) {
+        setError('Trop de tentatives. Veuillez patienter quelques minutes.');
+      } else if (msg.includes('Password should be')) {
+        setError('Le mot de passe est trop faible (min 6 caractères).');
       } else {
-        setError(msg);
+        // Erreur générique pour tout le reste (problème serveur, config, etc.)
+        // On ne montre JAMAIS l'erreur technique brute à l'utilisateur
+        console.error('Erreur technique:', msg); // Log pour le débug
+        setError('Impossible de se connecter. Veuillez réessayer plus tard.');
       }
     } finally {
       setIsLoading(false);
@@ -85,10 +96,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
 
         <div className="relative z-10 flex flex-col justify-center px-16 space-y-10">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/20">
-              <Sparkles className="w-7 h-7 text-white" />
-            </div>
-            <span className="font-black text-3xl tracking-tighter uppercase text-white">EVOLUTICS</span>
+            <EvoluticsLogo className="h-10" />
           </div>
           <div className="space-y-6">
             <h1 className="text-5xl font-black text-white tracking-tight leading-tight">
@@ -119,10 +127,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
         <div className="w-full max-w-md space-y-8 py-8">
           {/* Logo mobile */}
           <div className="lg:hidden flex items-center gap-3 justify-center mb-4">
-            <div className="w-10 h-10 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
-            </div>
-            <span className="font-black text-xl tracking-tighter uppercase">EVOLUTICS</span>
+            <EvoluticsLogo className="h-8" />
           </div>
 
           <div className="space-y-3">
@@ -145,7 +150,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
           )}
           {successMessage && (
             <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-2xl text-green-400 text-sm font-medium">
-              <Sparkles className="w-5 h-5 shrink-0" />
+              <CheckCircle className="w-5 h-5 shrink-0" />
               {successMessage}
             </div>
           )}
