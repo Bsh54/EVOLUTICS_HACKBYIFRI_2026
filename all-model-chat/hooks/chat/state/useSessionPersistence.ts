@@ -4,6 +4,8 @@ import { SavedChatSession, ChatGroup, ChatMessage } from '../../../types';
 import { dbService } from '../../../utils/db';
 import { logService, rehydrateSessionFiles } from '../../../utils/appUtils';
 import { useMultiTabSync } from '../../core/useMultiTabSync';
+import { chatService } from '../../../services/chatService';
+import { supabase } from '../../../services/supabaseClient';
 
 interface UseSessionPersistenceProps {
     setSavedSessions: React.Dispatch<React.SetStateAction<SavedChatSession[]>>;
@@ -64,7 +66,7 @@ export const useSessionPersistence = ({
         }
     }, [setSavedGroups]);
 
-    // Re-sync when tab becomes visible if data is dirty
+    // Re-sync when tab becomes visible if data is dirty, OR if a global sync was triggered
     useEffect(() => {
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible' && isDirtyRef.current) {
@@ -75,8 +77,18 @@ export const useSessionPersistence = ({
             }
         };
 
+        const handleGlobalSync = () => {
+            logService.info('[Sync] Global sync triggered (e.g. login).');
+            refreshSessions();
+        };
+
         document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('sync_chat_history_complete', handleGlobalSync);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('sync_chat_history_complete', handleGlobalSync);
+        };
     }, [refreshSessions, refreshGroups]);
 
     const { broadcast } = useMultiTabSync({
@@ -203,12 +215,17 @@ export const useSessionPersistence = ({
                  const updates: Promise<void>[] = [];
                  const newSessionsMap = new Map(newFullSessions.map(s => [s.id, s]));
                  const modifiedSessionIds: string[] = [];
-                 
+
                  // Save changed sessions
                  newFullSessions.forEach(session => {
                      const prevSession = virtualFullSessions.find(ps => ps.id === session.id);
                      if (prevSession !== session) {
+                         // Sauvegarde locale IndexedDB
                          updates.push(dbService.saveSession(session));
+                         // Synchronisation Cloud Supabase (Non bloquant)
+                         chatService.saveSession(session).catch(e =>
+                            console.error('Erreur sync Supabase:', e)
+                         );
                          modifiedSessionIds.push(session.id);
                      }
                  });
@@ -217,6 +234,10 @@ export const useSessionPersistence = ({
                  prevMetadataSessions.forEach(session => {
                      if (!newSessionsMap.has(session.id)) {
                          updates.push(dbService.deleteSession(session.id));
+                         // Supprimer aussi sur Supabase
+                         chatService.deleteSession(session.id).catch(e =>
+                            console.error('Erreur delete Supabase:', e)
+                         );
                      }
                  });
 

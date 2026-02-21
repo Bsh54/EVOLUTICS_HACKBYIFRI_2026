@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authService } from '../services/authService';
+import { chatService } from '../services/chatService';
+import { dbService } from '../utils/db';
 import { UserProfile } from '../types/user';
 
 interface AuthContextType {
@@ -70,6 +72,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Fonction pour synchroniser l'historique des chats depuis Supabase vers IndexedDB
+  const syncChatHistory = async (authUser: any) => {
+    if (!authUser) return;
+    try {
+      const cloudSessions = await chatService.getSessions();
+      if (cloudSessions.length > 0) {
+        // Enregistrer dans IndexedDB pour que l'UI puisse les lire
+        await dbService.setAllSessions(cloudSessions);
+        // On dispatche un événement pour dire à l'UI de rafraîchir la liste
+        window.dispatchEvent(new Event('sync_chat_history_complete'));
+      }
+    } catch (error) {
+      console.error('Erreur synchronisation historique des chats:', error);
+    }
+  };
+
   // Initialisation : vérifier la session existante
   useEffect(() => {
     let mounted = true;
@@ -87,6 +105,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (session?.user) {
           setUser(session.user);
           await loadProfile(session.user);
+          // Sync chat history in background
+          syncChatHistory(session.user);
         }
       } catch (error) {
         console.error('Erreur initialisation auth:', error);
@@ -107,6 +127,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
           await loadProfile(session.user);
+          syncChatHistory(session.user);
           setIsLoading(false);
         } else if (event === 'INITIAL_SESSION' && session?.user) {
           setUser(session.user);
@@ -148,6 +169,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const { user: authUser } = await authService.signIn(email, password);
     setUser(authUser);
     await loadProfile(authUser);
+    syncChatHistory(authUser);
   };
 
   const signUp = async (email: string, password: string, displayName: string) => {
@@ -157,6 +179,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Confirmation email désactivée → session disponible → auto-login
       setUser(data.user);
       await loadProfile(data.user);
+      syncChatHistory(data.user);
     } else if (data.user && !data.session) {
       // Cas où la confirmation email est activée côté Supabase.
       // Le user est créé, mais la session est nulle en attendant le clic sur le lien.
@@ -175,6 +198,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     await authService.signOut();
     setUser(null);
     setProfile(null);
+    // Clear local chat DB to prevent mixing histories
+    await dbService.clearAllData();
   };
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
