@@ -189,8 +189,23 @@ export const useSessionPersistence = ({
             });
 
             // 2. Run Updater
-            const newFullSessions = updater(virtualFullSessions);
-            
+            let newFullSessions = updater(virtualFullSessions);
+
+            // 2.5 PROTECT TITLES: Empêcher un titre généré temporairement d'écraser un vrai titre
+            newFullSessions = newFullSessions.map(newSession => {
+                const prevSession = virtualFullSessions.find(ps => ps.id === newSession.id);
+                // Si la session existait déjà et avait un titre "propre" (qui n'est pas New Chat ni un extrait de texte avec '...')
+                // et qu'on essaie de la remplacer par un titre par défaut ou vide, on bloque.
+                if (prevSession && prevSession.title && prevSession.title !== 'New Chat' && prevSession.title !== 'Nouvelle conversation') {
+                    // Si le nouveau titre est moins bien (vide, ou fallback local avec '...')
+                    // alors qu'on avait un bon titre généré par l'IA, on garde l'ancien.
+                    if (!newSession.title || newSession.title === 'New Chat' || newSession.title === 'Nouvelle conversation' || (newSession.title.endsWith('...') && !prevSession.title.endsWith('...'))) {
+                        return { ...newSession, title: prevSession.title };
+                    }
+                }
+                return newSession;
+            });
+
             // 3. Sort
              newFullSessions.sort((a, b) => {
                 if (a.isPinned && !b.isPinned) return -1;

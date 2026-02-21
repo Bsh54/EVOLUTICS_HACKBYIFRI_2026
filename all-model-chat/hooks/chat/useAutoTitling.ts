@@ -79,7 +79,7 @@ export const useAutoTitling = ({
             logService.error(`Failed to auto-generate title for session ${sessionId}`, { error });
             // Fallback to local generation to prevent infinite retry loops on "New Chat"
             const localTitle = generateSessionTitle(messages);
-            if (localTitle && localTitle !== 'New Chat') {
+            if (localTitle && localTitle !== 'New Chat' && session.title === 'New Chat') {
                 updateAndPersistSessions(prev =>
                     prev.map(s => (s.id === sessionId ? { ...s, title: localTitle } : s))
                 );
