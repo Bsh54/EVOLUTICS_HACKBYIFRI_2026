@@ -60,6 +60,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
         setError('Un compte avec cet email existe déjà. Connectez-vous.');
       } else if (msg.includes('Email not confirmed')) {
         setError('Veuillez confirmer votre email avant de vous connecter.');
+      } else if (msg === 'EMAIL_CONFIRMATION_REQUIRED') {
+        // Succès technique, mais l'utilisateur doit lire ses emails
+        setSuccessMessage('Inscription réussie ! Veuillez vérifier vos emails pour confirmer votre compte avant de vous connecter.');
+        setMode('login'); // Rediriger l'UI vers le mode connexion
       } else if (msg.includes('Too many requests') || msg.includes('rate limit')) {
         setError('Trop de tentatives. Veuillez patienter quelques minutes.');
       } else if (msg.includes('Password should be')) {

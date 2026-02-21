@@ -157,10 +157,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Confirmation email désactivée → session disponible → auto-login
       setUser(data.user);
       await loadProfile(data.user);
+    } else if (data.user && !data.session) {
+      // Cas où la confirmation email est activée côté Supabase.
+      // Le user est créé, mais la session est nulle en attendant le clic sur le lien.
+      throw new Error('EMAIL_CONFIRMATION_REQUIRED');
     } else {
-      // Confirmation email activée mais pas de SMTP configuré
-      // Indiquer clairement le problème au lieu de planter
-      throw new Error('CONFIRM_EMAIL_DISABLED');
+      // Autre erreur inattendue
+      throw new Error('UNKNOWN_SIGNUP_ERROR');
     }
   };
 
