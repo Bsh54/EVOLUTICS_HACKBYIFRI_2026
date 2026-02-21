@@ -88,7 +88,8 @@ export const MessageList: React.FC<MessageListProps> = ({
       scrollToNextTurn,
       showScrollDown,
       showScrollUp,
-      scrollerRef
+      scrollerRef,
+      scrollToBottom
   } = useMessageListScroll({ messages, setScrollContainerRef, activeSessionId });
 
   // Determine if current model is Gemini 3 to enable per-part resolution
@@ -163,11 +164,11 @@ export const MessageList: React.FC<MessageListProps> = ({
             t={t} 
         />
 
-        <ScrollNavigation 
+        <ScrollNavigation
           showUp={showScrollUp}
           showDown={showScrollDown}
           onScrollToPrev={scrollToPrevTurn}
-          onScrollToNext={scrollToNextTurn}
+          onScrollToNext={() => scrollToBottom('smooth')}
           bottomOffset={chatInputHeight}
         />
       </div>
