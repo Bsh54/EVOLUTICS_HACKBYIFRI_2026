@@ -97,9 +97,9 @@ Vous devrez également créer deux buckets publics manuellement dans la section 
 
 Projet réalisé pour le hackathon **HACKBYIFRI 2026**.
 
-- **Shadrac** (Bsh54)
-- **X045-lyse** (Marlyse Boukari)
-- **Othniel-Ken** (Othniel Guidi)
+- **Shadrak BESSANH**
+- **Marlyse BOUKARI** 
+- **Othniel AGUIDI** 
 
 ---
 
