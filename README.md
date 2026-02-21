@@ -26,9 +26,9 @@
 - **🔐 Authentification Complète** : Inscription/Connexion par Email ou Google OAuth.
 - **👤 Profil Utilisateur Riche** : Gestion de l'identité, parcours académique, expériences et préférences.
 - **🎓 Hub d'Opportunités** : Emplois, Stages, Bourses, Concours, Conférences avec filtres avancés.
-- **🤖 Coach Carrière IA** : Assistant contextuel (Gemini 2.5) pour rédiger CV/Lettres et simuler des entretiens.
+- **🤖 Coach Carrière IA** : Assistant contextuel (Gemini 2.5) pour rédiger CV/Lettres et simuler des entretiens. Historique de chat persistant et synchronisé sur le cloud.
 - **📱 Interface Mobile-First** : Navigation fluide par onglets (Explorer, Assistant, Profil).
-- **🎨 Design Moderne** : Mode sombre/clair, animations fluides, UX soignée.
+- **🎨 Design Moderne** : Mode sombre/clair, animations fluides, composants personnalisés et UX soignée (Sticky Scroll, Loaders custom).
 
 ---
 
@@ -42,8 +42,8 @@
 
 ### 1. Cloner le projet
 ```bash
-git clone https://github.com/votre-username/evolutics.git
-cd evolutics/all-model-chat
+git clone https://github.com/Bsh54/EVOLUTICS_HACKBYIFRI_2026.git
+cd EVOLUTICS_HACKBYIFRI_2026/all-model-chat
 ```
 
 ### 2. Installer les dépendances
@@ -68,142 +68,119 @@ L'application sera accessible sur `http://localhost:5173`.
 
 ---
 
-## 📚 Guide de Configuration Supabase (Production)
+## 📚 Guide de Configuration Supabase (Backend)
 
-Pour que l'application fonctionne, vous devez configurer votre projet Supabase. Exécutez les scripts SQL suivants dans l'éditeur SQL de votre dashboard Supabase.
+Pour que l'application fonctionne parfaitement avec la base de données distante, vous devez exécuter les scripts SQL suivants dans l'éditeur SQL de votre dashboard Supabase.
 
-### 1. Création des Tables
-
-#### Table `profiles`
-Stocke les informations détaillées des utilisateurs.
+<details>
+<summary><b>1. Table <code>profiles</code> (Profils utilisateurs)</b></summary>
 
 ```sql
--- Création de la table profiles
 create table public.profiles (
   id uuid references auth.users not null primary key,
   email text,
   display_name text,
   avatar_url text,
   bio text,
-
-  -- Académique
   university text,
   field_of_study text,
   education_level text,
   graduation_year integer,
-
-  -- Professionnel
   skills text[],
   experience_years integer,
   current_position text,
   linkedin_url text,
   portfolio_url text,
-
-  -- Préférences
   preferred_types text[],
   preferred_locations text[],
   availability_date text,
   salary_expectation text,
-
-  -- Système
   onboarding_completed boolean default false,
   last_login_at timestamp with time zone,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Activer RLS (Row Level Security)
 alter table public.profiles enable row level security;
-
--- Politiques de sécurité
-create policy "Public profiles are viewable by everyone."
-  on profiles for select
-  using ( true );
-
-create policy "Users can insert their own profile."
-  on profiles for insert
-  with check ( auth.uid() = id );
-
-create policy "Users can update own profile."
-  on profiles for update
-  using ( auth.uid() = id );
+create policy "Public profiles are viewable by everyone." on profiles for select using (true);
+create policy "Users can insert their own profile." on profiles for insert with check (auth.uid() = id);
+create policy "Users can update own profile." on profiles for update using (auth.uid() = id);
 ```
+</details>
 
-#### Table `opportunities`
-Stocke les offres affichées sur la plateforme.
+<details>
+<summary><b>2. Table <code>opportunities</code> (Hub des offres)</b></summary>
 
 ```sql
 create table public.opportunities (
-  id uuid default gen_random_uuid() primary key,
-  type text not null, -- 'Emploi', 'Stage', 'Bourse', etc.
-  title text not null,
+  id text primary key,
+  type text not null,
+  title text,
   organization text,
   description text,
-  full_content text, -- Contenu Markdown complet
-  deadline timestamp with time zone,
+  full_content text, 
+  deadline text,
   location text,
   image text,
   link text,
-  contact_email text,
-  apply_method text, -- 'link' ou 'email'
-  status text default 'Ouvert',
+  contact_email text, 
+  apply_method text, 
+  status text,
   reward text,
-  tags text[],
-
-  -- Champs spécifiques
+  tags text[], 
   salary text,
-  contract_type text,
+  contract_type text, 
   duration text,
   level text,
   prizes text,
   speakers text,
   schedule text,
-
-  -- IA
-  ai_greeting text, -- Message d'intro personnalisé pour l'IA
-  is_partner boolean default false,
-
+  ai_greeting text, 
+  is_partner boolean default false, 
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Activer RLS
 alter table public.opportunities enable row level security;
-
--- Tout le monde peut lire les opportunités
-create policy "Opportunities are viewable by everyone."
-  on opportunities for select
-  using ( true );
-
--- Seuls les admins peuvent modifier (à adapter selon vos rôles)
--- Pour le développement, permettre l'écriture authentifiée :
-create policy "Authenticated users can insert opportunities."
-  on opportunities for insert
-  with check ( auth.role() = 'authenticated' );
+create policy "Public opportunities are viewable by everyone" on opportunities for select using (true);
+create policy "Enable insert for everyone" on opportunities for insert with check (true);
+create policy "Enable update for everyone" on opportunities for update using (true);
+create policy "Enable delete for everyone" on opportunities for delete using (true);
 ```
+</details>
 
-### 2. Configuration du Stockage (Storage)
+<details>
+<summary><b>3. Table <code>chat_sessions</code> (Historique des conversations IA)</b></summary>
 
-Créez deux buckets publics dans le menu "Storage" de Supabase :
+```sql
+create table chat_sessions (
+  id text primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  title text not null default 'Nouvelle conversation',
+  messages jsonb default '[]'::jsonb not null,
+  settings jsonb default '{}'::jsonb not null,
+  is_pinned boolean default false not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
 
-1.  **`avatars`** : Pour les photos de profil
-    *   **Public**: Oui
-    *   **Policy**: Give users access to insert/update their own files (`auth.uid() = (storage.foldername(name))[1]`).
+create index idx_chat_sessions_user_id on chat_sessions(user_id);
+create index idx_chat_sessions_updated_at on chat_sessions(updated_at desc);
 
-2.  **`cvs`** : Pour les CVs des utilisateurs
-    *   **Public**: Oui
-    *   **Policy**: Give users access to insert/update their own files.
+alter table chat_sessions enable row level security;
 
-### 3. Authentification Google (OAuth)
+create policy "Users can view their own chat sessions" on chat_sessions for select using (auth.uid() = user_id);
+create policy "Users can insert their own chat sessions" on chat_sessions for insert with check (auth.uid() = user_id);
+create policy "Users can update their own chat sessions" on chat_sessions for update using (auth.uid() = user_id);
+create policy "Users can delete their own chat sessions" on chat_sessions for delete using (auth.uid() = user_id);
 
-Pour activer le bouton "Continuer avec Google" :
+create extension if not exists moddatetime schema extensions;
+create trigger handle_updated_at before update on chat_sessions
+  for each row execute procedure moddatetime (updated_at);
+```
+</details>
 
-1.  Allez dans **Authentication > Providers** sur Supabase.
-2.  Activez **Google**.
-3.  Obtenez vos identifiants sur la [Google Cloud Console](https://console.cloud.google.com/) :
-    *   Créez un projet > **APIs & Services** > **Credentials** > **Create Credentials** > **OAuth client ID**.
-    *   Type : **Web application**.
-    *   **Authorized JavaScript origins** : `http://localhost:5173` (et votre URL de prod).
-    *   **Authorized redirect URIs** : Ajoutez l'URL de callback fournie par Supabase (ex: `https://votre-project.supabase.co/auth/v1/callback`).
-4.  Copiez le *Client ID* et *Client Secret* dans Supabase.
+### Problèmes fréquents en production
+- **Erreur RLS lors de l'inscription :** Si Supabase requiert une confirmation par email, le compte est créé mais la connexion est différée. L'application gère cela proprement désormais en invitant l'utilisateur à vérifier sa boîte de réception.
+- **Redirection Google OAuth erronée (`localhost` au lieu du site) :** Assurez-vous d'avoir bien renseigné l'URL de votre site en production dans le dashboard Supabase (`Authentication` > `URL Configuration` > `Site URL` & `Redirect URLs`).
 
 ---
 
@@ -211,8 +188,9 @@ Pour activer le bouton "Continuer avec Google" :
 
 Projet réalisé pour le hackathon **HACKBYIFRI 2026**.
 
-- **X045-lyse** (Marlyse Boukari) - *Co-Author*
-- **Othniel-Ken** (Othniel Guidi) - *Co-Author*
+- **Shadrac** (Bsh54)
+- **X045-lyse** (Marlyse Boukari)
+- **Othniel-Ken** (Othniel Guidi)
 
 ---
 
