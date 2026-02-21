@@ -79,17 +79,7 @@ Toutes les instructions et requêtes SQL se trouvent dans le fichier **`supabase
 2. Cliquez sur **New query**.
 3. Copiez le contenu entier du fichier `supabase_schema.sql` et exécutez-le (`Run`).
 
-### Configuration du Stockage (Storage)
 
-Vous devrez également créer deux buckets publics manuellement dans la section "Storage" de Supabase :
-1. **`avatars`** : Pour les photos de profil.
-2. **`cvs`** : Pour les CVs des utilisateurs.
-
-(N'oubliez pas d'autoriser l'insertion de fichiers pour les utilisateurs authentifiés via les Policies du Storage).
-
-### Problèmes fréquents en production
-- **Erreur RLS lors de l'inscription :** Si Supabase requiert une confirmation par email, le compte est créé mais la connexion est différée. L'application gère cela proprement désormais en invitant l'utilisateur à vérifier sa boîte de réception.
-- **Redirection Google OAuth erronée (`localhost` au lieu du site) :** Assurez-vous d'avoir bien renseigné l'URL de votre site en production dans le dashboard Supabase (`Authentication` > `URL Configuration` > `Site URL` & `Redirect URLs`).
 
 ---
 
