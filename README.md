@@ -68,115 +68,24 @@ L'application sera accessible sur `http://localhost:5173`.
 
 ---
 
-## 📚 Guide de Configuration Supabase (Backend)
+## 📚 Configuration Base de Données (Supabase)
 
-Pour que l'application fonctionne parfaitement avec la base de données distante, vous devez exécuter les scripts SQL suivants dans l'éditeur SQL de votre dashboard Supabase.
+Afin que l'application fonctionne de bout en bout (profils utilisateurs, annonces et historique de chat IA), la structure de la base de données doit être créée sur votre instance Supabase.
 
-<details>
-<summary><b>1. Table <code>profiles</code> (Profils utilisateurs)</b></summary>
+Toutes les instructions et requêtes SQL se trouvent dans le fichier **`supabase_schema.sql`** situé à la racine du projet.
 
-```sql
-create table public.profiles (
-  id uuid references auth.users not null primary key,
-  email text,
-  display_name text,
-  avatar_url text,
-  bio text,
-  university text,
-  field_of_study text,
-  education_level text,
-  graduation_year integer,
-  skills text[],
-  experience_years integer,
-  current_position text,
-  linkedin_url text,
-  portfolio_url text,
-  preferred_types text[],
-  preferred_locations text[],
-  availability_date text,
-  salary_expectation text,
-  onboarding_completed boolean default false,
-  last_login_at timestamp with time zone,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
+**Étapes :**
+1. Ouvrez votre dashboard Supabase > section **SQL Editor**.
+2. Cliquez sur **New query**.
+3. Copiez le contenu entier du fichier `supabase_schema.sql` et exécutez-le (`Run`).
 
-alter table public.profiles enable row level security;
-create policy "Public profiles are viewable by everyone." on profiles for select using (true);
-create policy "Users can insert their own profile." on profiles for insert with check (auth.uid() = id);
-create policy "Users can update own profile." on profiles for update using (auth.uid() = id);
-```
-</details>
+### Configuration du Stockage (Storage)
 
-<details>
-<summary><b>2. Table <code>opportunities</code> (Hub des offres)</b></summary>
+Vous devrez également créer deux buckets publics manuellement dans la section "Storage" de Supabase :
+1. **`avatars`** : Pour les photos de profil.
+2. **`cvs`** : Pour les CVs des utilisateurs.
 
-```sql
-create table public.opportunities (
-  id text primary key,
-  type text not null,
-  title text,
-  organization text,
-  description text,
-  full_content text, 
-  deadline text,
-  location text,
-  image text,
-  link text,
-  contact_email text, 
-  apply_method text, 
-  status text,
-  reward text,
-  tags text[], 
-  salary text,
-  contract_type text, 
-  duration text,
-  level text,
-  prizes text,
-  speakers text,
-  schedule text,
-  ai_greeting text, 
-  is_partner boolean default false, 
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-alter table public.opportunities enable row level security;
-create policy "Public opportunities are viewable by everyone" on opportunities for select using (true);
-create policy "Enable insert for everyone" on opportunities for insert with check (true);
-create policy "Enable update for everyone" on opportunities for update using (true);
-create policy "Enable delete for everyone" on opportunities for delete using (true);
-```
-</details>
-
-<details>
-<summary><b>3. Table <code>chat_sessions</code> (Historique des conversations IA)</b></summary>
-
-```sql
-create table chat_sessions (
-  id text primary key,
-  user_id uuid references auth.users(id) on delete cascade not null,
-  title text not null default 'Nouvelle conversation',
-  messages jsonb default '[]'::jsonb not null,
-  settings jsonb default '{}'::jsonb not null,
-  is_pinned boolean default false not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
-create index idx_chat_sessions_user_id on chat_sessions(user_id);
-create index idx_chat_sessions_updated_at on chat_sessions(updated_at desc);
-
-alter table chat_sessions enable row level security;
-
-create policy "Users can view their own chat sessions" on chat_sessions for select using (auth.uid() = user_id);
-create policy "Users can insert their own chat sessions" on chat_sessions for insert with check (auth.uid() = user_id);
-create policy "Users can update their own chat sessions" on chat_sessions for update using (auth.uid() = user_id);
-create policy "Users can delete their own chat sessions" on chat_sessions for delete using (auth.uid() = user_id);
-
-create extension if not exists moddatetime schema extensions;
-create trigger handle_updated_at before update on chat_sessions
-  for each row execute procedure moddatetime (updated_at);
-```
-</details>
+(N'oubliez pas d'autoriser l'insertion de fichiers pour les utilisateurs authentifiés via les Policies du Storage).
 
 ### Problèmes fréquents en production
 - **Erreur RLS lors de l'inscription :** Si Supabase requiert une confirmation par email, le compte est créé mais la connexion est différée. L'application gère cela proprement désormais en invitant l'utilisateur à vérifier sa boîte de réception.
