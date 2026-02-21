@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { X, Loader2, Download } from 'lucide-react';
+import { X, Download } from 'lucide-react';
 import { Modal } from '../shared/Modal';
 import { translations } from '../../utils/appUtils';
 import { useResponsiveValue } from '../../hooks/useDevice';
 import { ExportOptions } from '../message/buttons/export/ExportOptions';
+import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 
 interface ExportChatModalProps {
   isOpen: boolean;
@@ -42,7 +43,7 @@ export const ExportChatModal: React.FC<ExportChatModalProps> = ({ isOpen, onClos
                 <div className="p-4 sm:p-6">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center h-40 text-[var(--theme-text-secondary)]">
-                            <Loader2 size={36} className="animate-spin text-[var(--theme-text-link)] mb-4" />
+                            <EvoluticsLoader size="lg" className="mb-4" />
                             <p className="text-base font-medium">Exporting conversation...</p>
                             <p className="text-sm mt-1">This may take a moment for long chats or images.</p>
                         </div>
