@@ -14,8 +14,9 @@ export const authService = {
 
     if (error) throw error;
 
-    // Créer le profil dans la table profiles
-    if (data.user) {
+    // Créer le profil dans la table profiles (Peut échouer à cause du RLS si confirmation email requise)
+    // Nous le tentons, mais ignorons l'erreur si c'est le cas (ensureProfile le fera plus tard)
+    if (data.user && data.session) {
       const { error: profileError } = await supabase
         .from('profiles')
         .insert([{
@@ -26,7 +27,10 @@ export const authService = {
           created_at: new Date().toISOString(),
         }]);
 
-      if (profileError) console.error('Erreur création profil:', profileError);
+      if (profileError) {
+        // Log en warn et non en error, car c'est attendu si la confirmation email est active
+        console.warn('Création profil différée (RLS ou Email non confirmé) :', profileError.message);
+      }
     }
 
     return data;
