@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
-import { Loader2, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
+import { EvoluticsLoader } from '../../../../components/icons/EvoluticsLoader';
 
 interface InputBarProps {
     value: string;
@@ -85,7 +86,7 @@ export const InputBar: React.FC<InputBarProps> = ({
                     disabled={!value.trim() || disabled || isLoading}
                     className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] rounded-lg text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm active:scale-95 whitespace-nowrap"
                 >
-                    {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} strokeWidth={2.5} />}
+                    {isLoading ? <EvoluticsLoader size="sm" variant="white" /> : <Plus size={16} strokeWidth={2.5} />}
                     <span className="hidden sm:inline">{submitLabel}</span>
                 </button>
                 
