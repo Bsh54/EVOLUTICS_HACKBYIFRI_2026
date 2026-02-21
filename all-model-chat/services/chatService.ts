@@ -26,10 +26,9 @@ export const chatService = {
       title: session.title,
       messages: session.messages || [],
       settings: session.settings || {},
-      date: new Date(session.updated_at).toLocaleString(), // Format d'affichage attendu
-      // Conserver les timestamp originaux pour un tri exact
-      _rawCreatedAt: session.created_at,
-      _rawUpdatedAt: session.updated_at,
+      timestamp: new Date(session.updated_at).getTime(), // Très important pour le tri et le Sidebar
+      date: new Date(session.updated_at).toLocaleString(),
+      isPinned: session.is_pinned || false,
     }));
   },
 
@@ -50,7 +49,9 @@ export const chatService = {
       title: data.title,
       messages: data.messages || [],
       settings: data.settings || {},
+      timestamp: new Date(data.updated_at).getTime(),
       date: new Date(data.updated_at).toLocaleString(),
+      isPinned: data.is_pinned || false,
     };
   },
 
@@ -68,6 +69,7 @@ export const chatService = {
       title: session.title || 'Nouvelle conversation',
       messages: session.messages,
       settings: session.settings,
+      is_pinned: session.isPinned || false,
       updated_at: new Date().toISOString()
     };
 
