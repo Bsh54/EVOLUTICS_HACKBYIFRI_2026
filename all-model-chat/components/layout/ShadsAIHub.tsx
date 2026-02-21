@@ -11,7 +11,6 @@ import {
   Plus,
   Search,
   Heart,
-  Loader2,
   User
 } from 'lucide-react';
 
@@ -22,6 +21,7 @@ import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
 import ProfilePage from '../auth/ProfilePage';
 import { useAuth } from '../../contexts/AuthContext';
+import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -229,7 +229,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
       {/* MOBILE HEADER */}
       <header className="flex md:hidden items-center justify-between px-4 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100]">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
+          <EvoluticsLogo className="w-8 h-8" />
           <span className="font-black text-sm uppercase tracking-tighter">EVOLUTICS</span>
         </div>
       </header>
@@ -237,9 +237,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
       {/* HEADER DESKTOP */}
       <header className="hidden md:flex items-center justify-between px-6 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100] shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
-          </div>
+          <EvoluticsLogo className="w-10 h-10" />
           <span className="font-black text-lg tracking-tighter uppercase">EVOLUTICS</span>
         </div>
 

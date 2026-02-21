@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import {
   User, LogOut, ArrowLeft, Mail, GraduationCap, Briefcase,
   MapPin, Calendar, Heart, Sparkles, ExternalLink, Edit3, Check,
-  X, Plus, Loader2, ChevronRight
+  X, Plus, ChevronRight
 } from 'lucide-react';
+import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 import { UserProfile, EducationLevel } from '../../types/user';
 import { OpportunityType } from '../../types/opportunity';
 import { getDefaultAvatar } from '../../utils/defaultAvatars';
@@ -182,7 +183,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
                   <X className="w-4 h-4" /> Annuler
                 </button>
                 <button onClick={handleSave} disabled={isSaving} className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-black uppercase tracking-wider bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] hover:bg-[var(--theme-bg-accent-hover)] transition-all disabled:opacity-50">
-                  {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                  {isSaving ? <EvoluticsLoader size="sm" variant="white" /> : <Check className="w-4 h-4" />}
                   {isSaving ? 'Sauvegarde...' : 'Enregistrer'}
                 </button>
               </>
