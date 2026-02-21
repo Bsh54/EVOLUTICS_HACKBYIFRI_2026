@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
+import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -238,7 +239,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
               className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-4 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-[0.98] text-sm uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <EvoluticsLoader size="sm" variant="white" />
               ) : (
                 <>
                   {mode === 'login' ? 'SE CONNECTER' : "S'INSCRIRE"}

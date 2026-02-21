@@ -9,7 +9,8 @@ import { AddOpportunityForm } from './components/layout/AddOpportunityForm';
 import AuthPage from './components/auth/AuthPage';
 import OnboardingForm from './components/auth/OnboardingForm';
 import LandingPage from './components/layout/LandingPage';
-import { Loader2, Sparkles } from 'lucide-react';
+import { EvoluticsLoader } from './components/icons/EvoluticsLoader';
+import { EvoluticsLogo } from './components/icons/EvoluticsLogo';
 
 // Composant interne qui utilise le contexte Auth
 const AppContent: React.FC = () => {
@@ -44,12 +45,12 @@ const AppContent: React.FC = () => {
   // Écran de chargement initial
   if (isAuthLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] gap-4">
-        <div className="w-14 h-14 bg-[var(--theme-bg-accent)] rounded-2xl flex items-center justify-center">
-          <Sparkles className="w-7 h-7 text-[var(--theme-text-accent)]" />
-        </div>
-        <Loader2 className="w-6 h-6 animate-spin text-[var(--theme-bg-accent)]" />
-        <span className="text-sm font-bold text-[var(--theme-text-tertiary)] uppercase tracking-widest">Chargement...</span>
+      <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] gap-6">
+        <EvoluticsLogo className="h-14 animate-pulse" />
+        <EvoluticsLoader size="lg" variant="accent" />
+        <span className="text-[10px] font-black text-[var(--theme-bg-accent)] uppercase tracking-[0.3em] opacity-80 mt-2">
+          Initialisation
+        </span>
       </div>
     );
   }

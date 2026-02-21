@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Sparkles, ArrowRight, ArrowLeft, Check, User, GraduationCap,
-  Briefcase, Heart, Loader2, Upload, MapPin, Calendar, X, Plus
+  ArrowRight, ArrowLeft, Check, User, GraduationCap,
+  Briefcase, Heart, Upload, MapPin, Calendar, X, Plus
 } from 'lucide-react';
+import { EvoluticsLogo } from '../icons/EvoluticsLogo';
+import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 import { UserProfile, EducationLevel } from '../../types/user';
 import { OpportunityType } from '../../types/opportunity';
 
@@ -461,10 +463,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
 
         {/* Logo */}
         <div className="flex items-center gap-3 justify-center">
-          <div className="w-10 h-10 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
-          </div>
-          <span className="font-black text-xl tracking-tighter uppercase">EVOLUTICS</span>
+            <EvoluticsLogo className="h-9" />
         </div>
 
         {/* Stepper */}
@@ -541,7 +540,7 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
             className="flex items-center gap-3 px-8 py-3.5 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black rounded-2xl shadow-xl transition-all group active:scale-[0.98] text-sm uppercase tracking-widest disabled:opacity-50"
           >
             {isSubmitting ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <EvoluticsLoader size="sm" variant="white" />
             ) : isLastStep ? (
               <>
                 TERMINER <Check className="w-4 h-4" />
