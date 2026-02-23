@@ -73,18 +73,19 @@ export const ChatSuggestions: React.FC<ChatSuggestionsProps> = ({ show, onSugges
                                 }
                             }}
                             className="
-                                flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl
-                                bg-[var(--theme-bg-input)] hover:bg-[var(--theme-bg-tertiary)]
-                                border border-[var(--theme-border-secondary)]
-                                text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]
-                                text-xs sm:text-sm font-medium whitespace-nowrap
-                                transition-all active:scale-95 shadow-sm
+                                flex items-center gap-2 px-4 py-2.5 rounded-2xl
+                                bg-white/50 hover:bg-white dark:bg-[#121214]/50 dark:hover:bg-[#1a1a1c]
+                                border border-black/5 dark:border-white/5
+                                text-[var(--theme-text-secondary)] hover:text-[var(--theme-bg-accent)]
+                                text-sm font-medium whitespace-nowrap
+                                transition-all duration-300 ease-out hover:shadow-lg hover:-translate-y-0.5
+                                active:scale-95 active:translate-y-0 backdrop-blur-md
                             "
                         >
-                            <SuggestionIcon iconName={(s as any).icon} />
+                            <span className="text-[var(--theme-bg-accent)] opacity-80"><SuggestionIcon iconName={(s as any).icon} /></span>
                             <span>{t(s.titleKey as any)}</span>
                         </button>
-                        
+
                         {/* Insert BBox and Guide Buttons after "Smart Board" (organize action) if available */}
                         {(s as any).specialAction === 'organize' && (
                             <>
