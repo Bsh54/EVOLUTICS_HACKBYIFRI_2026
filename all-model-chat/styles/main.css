@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* Base Variables & Reset */
 :root {
   /* Apple-style spring easing for premium feel */
@@ -14,11 +16,20 @@ html, body, #root {
   margin: 0;
   padding: 0;
   overflow: hidden; /* Prevent body scroll, let React app handle scrolling */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
   display: flex;
   flex-direction: column;
+}
+
+/* Premium gradient enhancements */
+.chat-bg-enhancement {
+  background-image: radial-gradient(circle at top right, var(--theme-bg-tertiary) 0%, transparent 45%),
+                    radial-gradient(circle at bottom left, var(--theme-bg-secondary) 0%, transparent 45%);
 }
 
 /* Custom Selection Color (Yellow Note Style) */
@@ -32,25 +43,26 @@ html, body, #root {
   color: #1f2937;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Sleek and Modern */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--theme-scrollbar-thumb) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: var(--theme-scrollbar-thumb);
   border-radius: 10px;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s ease;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
