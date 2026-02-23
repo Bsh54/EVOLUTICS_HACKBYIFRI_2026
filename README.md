@@ -13,26 +13,25 @@
 
 **EVOLUTICS** est née d'un constat simple : les étudiants ont souvent du mal à trouver des offres qui leur correspondent et se sentent parfois démunis face aux recruteurs.
 
-Notre solution est un véritable **compagnon de carrière**. Elle ne se contente pas d'afficher des offres (stages, emplois, bourses, concours), elle intègre un **Coach IA personnel**. Cet assistant aide l'étudiant à rédiger son CV, préparer ses lettres de motivation, et même simuler des entretiens en se basant spécifiquement sur l'offre qui l'intéresse.
+Notre solution est un véritable **compagnon de carrière**. Elle ne se contente pas d'afficher des offres (stages, emplois, bourses, concours), elle intègre un **Coach IA personnel**. Cet assistant aide l'étudiant à rédiger son CV, préparer ses lettres de motivation, et même simuler des entretiens en se basant spécifiquement sur l'offre qui l'intéresse et bien d'autres .
 
 ### ✨ Ce que propose EVOLUTICS :
 
 - 🎓 **Un catalogue d'opportunités ciblé** : Trouvez facilement des stages, des emplois ou des formations adaptés à votre profil.
-- 🤖 **Un Coach Carrière Personnel (IA)** : Un assistant intelligent toujours disponible pour vous conseiller, corriger votre CV ou vous entraîner pour un entretien.
-- 👤 **Un profil étudiant complet** : Mettez en valeur votre parcours, vos compétences et vos aspirations.
-- 🎨 **Une expérience belle et intuitive** : Une application fluide et facile à utiliser, pensée d'abord pour le confort des étudiants (sur téléphone comme sur ordinateur).
+- 🤖 **Un Coach Carrière Personnel (IA)** : Un assistant intelligent toujours disponible pour vous conseiller . 
+- 🎨 **Une expérience belle et intuitive** : Une application fluide et facile à utiliser, pensée d'abord pour le confort 
 
 ---
 
-## 🚀 Guide d'Exécution (Comment lancer le projet)
+## 🚀 Guide d'Exécution 
 
-Suivez ces quelques étapes simples pour faire tourner l'application sur votre propre machine.
+
 
 ### 1. Préparer le terrain
 Assurez-vous d'avoir installé sur votre ordinateur :
-- **Node.js** (le programme de base pour faire tourner l'application)
-- Un compte **Supabase** (pour stocker les annonces et les profils)
-- Une clé **Google Gemini** (pour faire fonctionner l'Intelligence Artificielle)
+- **Node.js** 
+- Un compte **Supabase** 
+- Une clé **Google Gemini** 
 
 ### 2. Récupérer le projet
 Ouvrez votre terminal (ou invite de commande) et tapez :
