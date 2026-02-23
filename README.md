@@ -28,7 +28,7 @@
 - **🎓 Hub d'Opportunités** : Emplois, Stages, Bourses, Concours, Conférences avec filtres avancés.
 - **🤖 Coach Carrière IA** : Assistant contextuel (Gemini 2.5) pour rédiger CV/Lettres et simuler des entretiens. Historique de chat persistant et synchronisé sur le cloud.
 - **📱 Interface Mobile-First** : Navigation fluide par onglets (Explorer, Assistant, Profil).
-- **🎨 Design Moderne** : Mode sombre/clair, animations fluides, composants personnalisés et UX soignée (Sticky Scroll, Loaders custom).
+- **🎨 Design Moderne (Glassmorphism)** : Mode sombre/clair refondu, palettes "Onyx" et "Pearl", typographie *Inter*, effet verre dépoli (Glassmorphism), animations fluides, composants personnalisés et UX soignée (Sticky Scroll, Pilules flottantes).
 
 ---
 
