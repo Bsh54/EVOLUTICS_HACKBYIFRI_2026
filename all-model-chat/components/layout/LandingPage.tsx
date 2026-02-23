@@ -28,12 +28,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         {/* Background photo — career/tech ambiance */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop"
-            alt="Background"
-            className="w-full h-full object-cover opacity-20 blur-[1px]"
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+            alt="Étudiants travaillant ensemble"
+            className="w-full h-full object-cover object-center opacity-80"
           />
-          {/* Multi-layer overlay for readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-bg-primary)] via-[var(--theme-bg-primary)]/90 to-[var(--theme-bg-primary)]" />
+          {/* Multi-layer overlay for readability - Darkened significantly for contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-secondary)] via-[var(--theme-bg-secondary)]/90 to-[var(--theme-bg-accent)]/50 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-[#09090b]/60" /> {/* Darkening for contrast */}
         </div>
 
         {/* Decorative blurs */}
@@ -178,23 +179,23 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto">
+        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8">
           {/* Logo */}
-          <div className="flex items-center gap-3 mb-10 landing-fade-in">
-            <EvoluticsLogo className="w-14 h-14" />
-            <span className="font-black text-3xl tracking-tighter uppercase">EVOLUTICS</span>
+          <div className="flex items-center gap-3 mb-8 landing-fade-in bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 shadow-2xl">
+            <EvoluticsLogo className="w-8 h-8 brightness-0 invert" />
+            <span className="font-black text-xl tracking-widest text-white">EVOLUTICS</span>
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6 landing-fade-in-d1">
-            Votre avenir professionnel,{' '}
-            <span className="bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6 landing-fade-in-d1 text-white">
+            Votre avenir professionnel,<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
               propulsé par l'IA
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg md:text-xl text-[var(--theme-text-secondary)] font-medium max-w-2xl leading-relaxed mb-10 landing-fade-in-d2">
+          <p className="text-base sm:text-lg md:text-xl text-white/80 font-medium max-w-2xl leading-relaxed mb-10 landing-fade-in-d2">
             Explorez des centaines d'opportunités, préparez vos candidatures avec un coach IA et décrochez le poste de vos rêves — le tout sur une seule plateforme.
           </p>
 
@@ -202,22 +203,22 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto landing-fade-in-d3">
             <button
               onClick={onGetStarted}
-              className="flex items-center justify-center gap-3 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-4 px-8 rounded-2xl shadow-xl shadow-[var(--theme-bg-accent)]/25 transition-all active:scale-[0.98] text-sm uppercase tracking-widest group"
+              className="flex items-center justify-center gap-3 bg-white text-[var(--theme-bg-accent)] hover:bg-gray-50 font-black py-3.5 px-8 rounded-2xl shadow-[0_8px_30px_rgb(255,255,255,0.2)] transition-all active:scale-[0.98] text-sm uppercase tracking-widest group"
             >
               Commencer gratuitement
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={onSignIn}
-              className="flex items-center justify-center gap-3 bg-transparent border-2 border-[var(--theme-border-primary)] hover:border-[var(--theme-bg-accent)] text-[var(--theme-text-primary)] hover:text-[var(--theme-bg-accent)] font-black py-4 px-8 rounded-2xl transition-all active:scale-[0.98] text-sm uppercase tracking-widest"
+              className="flex items-center justify-center gap-3 bg-black/20 backdrop-blur-md border border-white/20 hover:bg-black/40 hover:border-white/40 text-white font-bold py-3.5 px-8 rounded-2xl transition-all active:scale-[0.98] text-sm uppercase tracking-widest"
             >
               Se connecter
             </button>
           </div>
 
           {/* Scroll hint */}
-          <div className="mt-16 landing-fade-in-d5 opacity-50">
-            <ChevronRight className="w-5 h-5 rotate-90 animate-bounce" />
+          <div className="mt-16 landing-fade-in-d5 opacity-60 text-white">
+            <ChevronRight className="w-6 h-6 rotate-90 animate-bounce" />
           </div>
         </div>
       </section>
