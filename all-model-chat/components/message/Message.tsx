@@ -57,17 +57,17 @@ export const Message: React.FC<MessageProps> = React.memo((props) => {
 
     if (message.role === 'user') {
         // User Message: Bubble style
-        bubbleClasses += "w-fit px-4 py-3 sm:px-5 sm:py-4 shadow-sm ";
-        bubbleClasses += "bg-[var(--theme-bg-user-message)] text-[var(--theme-bg-user-message-text)] rounded-2xl rounded-tr-sm border border-transparent";
+        bubbleClasses += "w-fit px-5 py-3.5 shadow-md ";
+        bubbleClasses += "bg-[var(--theme-bg-user-message)] text-[var(--theme-bg-user-message-text)] rounded-3xl rounded-br-sm border border-transparent shadow-[0_4px_14px_0_rgba(0,0,0,0.08)]";
     } else if (message.role === 'model') {
         // Model Message: No bubble style
         // Removed padding (px-4 py-3), background, shadow, border, rounded corners
         // Changed to py-0 to further align text top with avatar icon center/top
-        bubbleClasses += `w-full py-0 text-[var(--theme-text-primary)] ${isModelThinkingOrHasThoughts ? 'sm:min-w-[320px]' : ''}`;
+        bubbleClasses += `w-full py-1 text-[var(--theme-text-primary)] leading-relaxed text-[1.05em] ${isModelThinkingOrHasThoughts ? 'sm:min-w-[320px]' : ''}`;
     } else {
         // Error Message: Bubble style (Red)
-        bubbleClasses += "w-fit px-4 py-3 shadow-sm ";
-        bubbleClasses += "bg-[var(--theme-bg-error-message)] text-[var(--theme-bg-error-message-text)] rounded-2xl border border-transparent";
+        bubbleClasses += "w-fit px-5 py-3.5 shadow-md ";
+        bubbleClasses += "bg-[var(--theme-bg-error-message)] text-[var(--theme-bg-error-message-text)] rounded-3xl border border-red-500/20";
     }
 
     return (
