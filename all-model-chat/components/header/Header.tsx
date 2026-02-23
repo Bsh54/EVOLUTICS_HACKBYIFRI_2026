@@ -81,8 +81,8 @@ export const Header: React.FC<HeaderProps> = ({
   const showTextTools = !isNativeAudioModel && !isImageModel && !isTtsModel;
 
   return (
-    <header className={`${themeId === 'pearl' ? 'bg-[var(--theme-bg-primary)]' : 'bg-[var(--theme-bg-secondary)]'} p-2 sm:p-3 flex items-center justify-between gap-2 sm:gap-3 flex-shrink-0 relative z-20`}>
-      
+    <header className={`${themeId === 'pearl' ? 'bg-[var(--theme-bg-primary)]/85' : 'bg-[var(--theme-bg-secondary)]/85'} backdrop-blur-xl p-3 sm:p-4 flex items-center justify-between gap-2 sm:gap-3 flex-shrink-0 relative z-20 shadow-sm border-b border-[var(--theme-border-secondary)]/40`}>
+
       {/* Left Section: Navigation & Model Selector */}
       <div className="flex items-center gap-2 min-w-0">
         <button
