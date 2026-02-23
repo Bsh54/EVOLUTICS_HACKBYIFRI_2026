@@ -106,21 +106,21 @@ export const ChatInputArea: React.FC<ChatInputAreaProps> = ({
 
     const isUIBlocked = inputProps.disabled && !isAnimatingSend && !isRecording;
 
-    const wrapperClass = isFullscreen 
-        ? "fixed inset-0 z-[2000] bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] p-4 sm:p-6 flex flex-col fullscreen-enter-animation" 
+    const wrapperClass = isFullscreen
+        ? "fixed inset-0 z-[2000] bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] p-4 sm:p-6 flex flex-col fullscreen-enter-animation"
         : `bg-transparent ${isUIBlocked ? 'opacity-30 pointer-events-none' : ''}`;
 
     const innerContainerClass = isFullscreen
         ? "w-full max-w-6xl mx-auto flex flex-col h-full"
-        : `mx-auto w-full ${!isPipActive ? 'max-w-4xl' : ''} px-2 sm:px-3 pt-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)]`;
+        : `mx-auto w-full ${!isPipActive ? 'max-w-4xl' : ''} px-3 sm:px-6 pt-0 pb-4 sm:pb-8`;
 
     const formClass = isFullscreen
         ? "flex-grow flex flex-col relative min-h-0"
         : `relative ${isAnimatingSend ? 'form-send-animate' : ''}`;
 
     const inputContainerClass = isFullscreen
-        ? "flex flex-col gap-2 rounded-none sm:rounded-[26px] border-0 sm:border border-[var(--theme-border-secondary)] bg-[var(--theme-bg-input)] px-4 py-4 shadow-none h-full transition-all duration-200 relative"
-        : "flex flex-col gap-2 rounded-[26px] border border-[var(--theme-border-secondary)] bg-[var(--theme-bg-input)] p-3 sm:p-4 shadow-lg transition-all duration-300 focus-within:border-[var(--theme-border-focus)] relative";
+        ? "flex flex-col gap-2 rounded-none sm:rounded-[32px] border-0 sm:border border-[var(--theme-border-secondary)]/60 bg-[var(--theme-bg-input)] px-4 py-4 h-full transition-all duration-200 relative"
+        : "flex flex-col gap-2 rounded-[32px] border border-[var(--theme-border-secondary)]/50 bg-[var(--theme-bg-input)]/80 backdrop-blur-xl p-3 sm:p-4 shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 focus-within:shadow-[0_8px_40px_rgb(0,0,0,0.12)] focus-within:border-[var(--theme-bg-accent)]/40 relative";
 
     return (
         <div className={wrapperClass} aria-hidden={isUIBlocked}>
