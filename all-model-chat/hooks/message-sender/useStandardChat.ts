@@ -43,7 +43,8 @@ export const useStandardChat = ({
         getStreamHandlers,
         handleGenerateCanvas,
         setSessionLoading,
-        activeJobs
+        activeJobs,
+        updateAndPersistSessions
     });
 
     const sendStandardMessage = useCallback(async (

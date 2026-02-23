@@ -1,12 +1,14 @@
 
 import React, { useCallback, Dispatch, SetStateAction } from 'react';
-import { AppSettings, ChatMessage, ChatSettings as IndividualChatSettings, UploadedFile } from '../../../types';
+import { AppSettings, ChatMessage, ChatSettings as IndividualChatSettings, UploadedFile, SavedChatSession } from '../../../types';
 import { createChatHistoryForApi, isGemini3Model, logService } from '../../../utils/appUtils';
 import { buildGenerationConfig } from '../../../services/api/baseApi';
 import { geminiServiceInstance } from '../../../services/geminiService';
 import { isLikelyHtml } from '../../../utils/codeUtils';
 import { GetStreamHandlers } from '../types';
 import { ContentPart } from '../../../types/chat';
+
+type SessionsUpdater = (updater: (prev: SavedChatSession[]) => SavedChatSession[]) => void;
 
 interface UseApiInteractionProps {
     appSettings: AppSettings;
@@ -15,6 +17,7 @@ interface UseApiInteractionProps {
     handleGenerateCanvas: (sourceMessageId: string, content: string) => Promise<void>;
     setSessionLoading: (sessionId: string, isLoading: boolean) => void;
     activeJobs: React.MutableRefObject<Map<string, AbortController>>;
+    updateAndPersistSessions: SessionsUpdater;
 }
 
 export const useApiInteraction = ({
@@ -23,7 +26,8 @@ export const useApiInteraction = ({
     getStreamHandlers,
     handleGenerateCanvas,
     setSessionLoading,
-    activeJobs
+    activeJobs,
+    updateAndPersistSessions
 }: UseApiInteractionProps) => {
 
     const performApiCall = useCallback(async (params: {
@@ -113,6 +117,39 @@ export const useApiInteraction = ({
             sessionToUpdate.mediaResolution
         );
 
+        // Helper pour générer et sauvegarder le titre
+        const generateAndSaveTitle = async (sessionId: string, userPrompt: string, modelResponse: string) => {
+            try {
+                // Déterminer la langue (défaut 'en' si system ou autre)
+                const lang = appSettings.language === 'zh' ? 'zh' : 'en';
+
+                // Appel API pour générer le titre
+                const newTitle = await geminiServiceInstance.generateTitle(
+                    keyToUse,
+                    userPrompt,
+                    modelResponse,
+                    lang
+                );
+
+                // Mise à jour optimiste de la session avec le nouveau titre
+                updateAndPersistSessions(prev => {
+                    const sessionIndex = prev.findIndex(s => s.id === sessionId);
+                    if (sessionIndex === -1) return prev;
+
+                    const newSessions = [...prev];
+                    newSessions[sessionIndex] = {
+                        ...newSessions[sessionIndex],
+                        title: newTitle
+                    };
+                    return newSessions;
+                });
+
+                logService.info("Auto-generated title applied", { sessionId, newTitle });
+            } catch (error) {
+                logService.warn("Failed to auto-generate title", { error });
+            }
+        };
+
         const { streamOnError, streamOnComplete, streamOnPart, onThoughtChunk } = getStreamHandlers(
             finalSessionId,
             generationId,
@@ -125,6 +162,12 @@ export const useApiInteraction = ({
                     if (trimmed.startsWith('```') && trimmed.endsWith('```')) return;
                     logService.info("Auto-triggering Canvas visualization for message", { msgId });
                     handleGenerateCanvas(msgId, content);
+                }
+
+                // Logique de génération de titre automatique
+                const isFirstTurn = messages.length === 0;
+                if (isFirstTurn && content && content.length > 10) {
+                    generateAndSaveTitle(finalSessionId, textToUse, content);
                 }
             }
         );
