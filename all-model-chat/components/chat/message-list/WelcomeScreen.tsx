@@ -145,10 +145,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
     t, 
 }) => {
     return (
-        <div className="flex flex-col items-center justify-center min-h-full w-full max-w-4xl mx-auto px-4 pb-16">
+        <div className="flex flex-col items-center justify-center min-h-full w-full max-w-4xl mx-auto px-4 pb-20">
           <div className="w-full">
-            <h1 className="text-3xl md:text-4xl font-medium text-center text-[var(--theme-text-primary)] mb-6 sm:mb-12 welcome-message-animate tracking-tight min-h-[3rem] flex items-center justify-center">
-              <TypewriterEffect text={t('welcome_greeting')} />
+            <h1 className="text-4xl md:text-6xl font-extrabold text-center mb-8 sm:mb-14 welcome-message-animate tracking-tight min-h-[4rem] flex items-center justify-center">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--theme-bg-accent)] to-[var(--theme-text-primary)] pb-2">
+                <TypewriterEffect text={t('welcome_greeting')} />
+              </span>
             </h1>
           </div>
         </div>
