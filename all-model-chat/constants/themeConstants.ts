@@ -6,113 +6,113 @@ export const ONYX_THEME_COLORS: ThemeColors = {
   bgPrimary: '#09090b', // Zinc 950 - Main Content
   bgSecondary: '#000000', // True Black - Sidebar/Header (Framing effect)
   bgTertiary: '#18181b', // Zinc 900 - Hover states
-  bgAccent: '#3b82f6', // Blue 500 - Vibrant Accent
-  bgAccentHover: '#2563eb', // Blue 600
-  bgDanger: '#7f1d1d', // Red 900
-  bgDangerHover: '#991b1b',
-  bgInput: '#121214', // Zinc 925 - Very deep input area
+  bgAccent: '#6366f1', // Indigo 500 - Vibrant Accent (Modern)
+  bgAccentHover: '#4f46e5', // Indigo 600
+  bgDanger: '#ef4444', // Red 500
+  bgDangerHover: '#dc2626',
+  bgInput: '#18181b', // Zinc 900 - Deep input area
   bgCodeBlock: '#121214', // Deep subtle grey for code
   bgCodeBlockHeader: '#1a1a1c', // Slightly lighter header
-  bgUserMessage: '#2563eb', // Blue 600 - Classic user bubble
+  bgUserMessage: '#4f46e5', // Indigo 600 - Modern user bubble
   bgModelMessage: 'transparent',
-  bgErrorMessage: 'rgba(127, 29, 29, 0.25)',
-  bgSuccess: 'rgba(6, 78, 59, 0.25)',
+  bgErrorMessage: 'rgba(239, 68, 68, 0.1)',
+  bgSuccess: 'rgba(34, 197, 94, 0.1)',
   textSuccess: '#4ade80',
-  bgInfo: 'rgba(30, 58, 138, 0.25)',
-  textInfo: '#60a5fa',
-  bgWarning: 'rgba(120, 53, 15, 0.25)',
+  bgInfo: 'rgba(56, 189, 248, 0.1)',
+  textInfo: '#38bdf8',
+  bgWarning: 'rgba(245, 158, 11, 0.1)',
   textWarning: '#fbbf24',
 
   // Text
-  textPrimary: '#f4f4f5', // Zinc 100 - High contrast text
-  textSecondary: '#a1a1aa', // Zinc 400
-  textTertiary: '#52525b', // Zinc 600
+  textPrimary: '#f8fafc', // Slate 50 - High contrast text
+  textSecondary: '#94a3b8', // Slate 400
+  textTertiary: '#64748b', // Slate 500
   textAccent: '#ffffff',
   textDanger: '#fca5a5', // Light Red
-  textLink: '#38bdf8', // Sky 400
-  textCode: '#e4e4e7', // Zinc 200
+  textLink: '#818cf8', // Indigo 400
+  textCode: '#e2e8f0', // Slate 200
   bgUserMessageText: '#ffffff',
-  bgModelMessageText: '#e4e4e7',
+  bgModelMessageText: '#f8fafc',
   bgErrorMessageText: '#fca5a5',
 
   // Borders
-  borderPrimary: '#18181b', // Zinc 900 - blending more with tertiary
-  borderSecondary: '#27272a', // Zinc 800 - Slightly lighter for visible borders
-  borderFocus: '#3b82f6', // Blue 500
+  borderPrimary: '#27272a', // Zinc 800 - blending more with tertiary
+  borderSecondary: '#3f3f46', // Zinc 700 - Slightly lighter for visible borders
+  borderFocus: '#6366f1', // Indigo 500
 
   // Scrollbar
-  scrollbarThumb: '#27272a',
+  scrollbarThumb: '#3f3f46',
   scrollbarTrack: 'transparent',
 
   // Icons
   iconUser: '#ffffff',
-  iconModel: '#38bdf8', // Sky 400
+  iconModel: '#818cf8', // Indigo 400
   iconError: '#ef4444',
   iconThought: '#71717a',
-  iconSettings: '#a1a1aa',
-  iconClearChat: '#f4f4f5',
+  iconSettings: '#94a3b8',
+  iconClearChat: '#f8fafc',
   iconSend: '#ffffff',
-  iconAttach: '#a1a1aa',
+  iconAttach: '#94a3b8',
   iconStop: '#ffffff',
-  iconEdit: '#a1a1aa',
-  iconHistory: '#a1a1aa',
+  iconEdit: '#94a3b8',
+  iconHistory: '#94a3b8',
 };
 
 export const PEARL_THEME_COLORS: ThemeColors = {
   // Backgrounds
-  bgPrimary: '#FFFFFF',
-  bgSecondary: '#f9f9f9',
-  bgTertiary: '#ECECF1',
-  bgAccent: '#40414F',
-  bgAccentHover: '#202123',
-  bgDanger: '#DF3434',
-  bgDangerHover: '#B32929',
-  bgInput: '#FFFFFF',
-  bgCodeBlock: '#F7F7F8',
-  bgCodeBlockHeader: 'rgba(236, 236, 241, 0.9)',
-  bgUserMessage: '#f3f4f6', // Light Gray
-  bgModelMessage: '#FFFFFF', // White
-  bgErrorMessage: '#FEE',
-  bgSuccess: 'rgba(22, 163, 74, 0.1)',
+  bgPrimary: '#ffffff',
+  bgSecondary: '#f8fafc', // Slate 50
+  bgTertiary: '#f1f5f9', // Slate 100
+  bgAccent: '#4f46e5', // Indigo 600
+  bgAccentHover: '#4338ca', // Indigo 700
+  bgDanger: '#ef4444',
+  bgDangerHover: '#dc2626',
+  bgInput: '#ffffff', // White for frosted glass input
+  bgCodeBlock: '#f8fafc',
+  bgCodeBlockHeader: 'rgba(241, 245, 249, 0.9)',
+  bgUserMessage: '#4f46e5', // Indigo 600 - Modern sleek bubble
+  bgModelMessage: 'transparent',
+  bgErrorMessage: 'rgba(239, 68, 68, 0.1)',
+  bgSuccess: 'rgba(34, 197, 94, 0.1)',
   textSuccess: '#16a34a',
-  bgInfo: 'rgba(64, 65, 79, 0.05)',
-  textInfo: '#40414F',
-  bgWarning: 'rgba(212, 167, 44, 0.1)',
-  textWarning: '#825F0A',
+  bgInfo: 'rgba(56, 189, 248, 0.1)',
+  textInfo: '#0284c7',
+  bgWarning: 'rgba(245, 158, 11, 0.1)',
+  textWarning: '#b45309',
 
   // Text - Darkened significantly for high contrast
-  textPrimary: '#000000', // Pure Black
-  textSecondary: '#000000', // Pure Black (was #333333)
-  textTertiary: '#666666', // Dark Gray (was #333333, lightened slightly for placeholder distinction)
-  textAccent: '#FFFFFF',
-  textDanger: '#DF3434', // Red (was #FFFFFF, which is invisible on light backgrounds)
-  textLink: '#2563eb', // Blue 600 (was #000000)
-  textCode: '#000000', // Black (was #40414f)
-  bgUserMessageText: '#000000', 
-  bgModelMessageText: '#000000', 
-  bgErrorMessageText: '#DF3434',
+  textPrimary: '#0f172a', // Slate 900
+  textSecondary: '#475569', // Slate 600
+  textTertiary: '#64748b', // Slate 500
+  textAccent: '#ffffff',
+  textDanger: '#dc2626',
+  textLink: '#4f46e5', // Indigo 600
+  textCode: '#0f172a',
+  bgUserMessageText: '#ffffff',
+  bgModelMessageText: '#0f172a',
+  bgErrorMessageText: '#dc2626',
 
   // Borders
-  borderPrimary: '#E5E5E5',
-  borderSecondary: '#D9D9E3',
-  borderFocus: '#40414F',
+  borderPrimary: '#e2e8f0', // Slate 200
+  borderSecondary: '#cbd5e1', // Slate 300
+  borderFocus: '#4f46e5',
 
   // Scrollbar
-  scrollbarThumb: '#D9D9E3',
-  scrollbarTrack: '#F7F7F8',
+  scrollbarThumb: '#cbd5e1',
+  scrollbarTrack: 'transparent',
 
   // Icons
-  iconUser: '#202123',
-  iconModel: '#10a37f',
-  iconError: '#DF3434',
-  iconThought: '#323232',
-  iconSettings: '#000000', // Pure Black (was #323232)
-  iconClearChat: '#FFFFFF',
-  iconSend: '#FFFFFF',
-  iconAttach: '#323232',
-  iconStop: '#FFFFFF',
-  iconEdit: '#323232',
-  iconHistory: '#000000', // Pure Black (was #323232)
+  iconUser: '#ffffff',
+  iconModel: '#4f46e5',
+  iconError: '#dc2626',
+  iconThought: '#64748b',
+  iconSettings: '#475569',
+  iconClearChat: '#ffffff',
+  iconSend: '#ffffff',
+  iconAttach: '#64748b',
+  iconStop: '#ffffff',
+  iconEdit: '#64748b',
+  iconHistory: '#0f172a',
 };
 
 export const AVAILABLE_THEMES: Theme[] = [
