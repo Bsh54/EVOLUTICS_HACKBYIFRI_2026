@@ -1,29 +1,27 @@
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* Enhanced fadeInUp with 'settle' effect */
-@keyframes fadeInUp { 
-  0% { opacity: 0; transform: translateY(20px) scale(0.98); filter: blur(4px); } 
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } 
+/* Enhanced fadeInUp with 'settle' effect - FASTER */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(15px) scale(0.98); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 /* User-requested Smooth Reveal Output Animation - OPTIMIZED */
 /* Removed filter:blur and scale() to prevent frame drops during text streaming */
 @keyframes fadeInMove {
-    0% { 
-        opacity: 0; 
-        transform: translateY(8px) scale(0.9); 
-        filter: blur(3px); 
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
     }
-    100% { 
-        opacity: 1; 
-        transform: translateY(0) scale(1); 
-        filter: blur(0); 
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
 .message-smooth-entry {
-  animation: fadeInMove 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: fadeInMove 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 /* Side Panel Slide In */
@@ -33,19 +31,19 @@
 }
 
 /* Smoother modal entry with scale and slight vertical slide */
-@keyframes modalEnter { 
-  from { opacity: 0; transform: scale(0.95) translateY(10px); } 
-  to { opacity: 1; transform: scale(1) translateY(0); } 
+@keyframes modalEnter {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes modalExit { 
-  from { opacity: 1; transform: scale(1); } 
-  to { opacity: 0; transform: scale(0.98); } 
+@keyframes modalExit {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.99); }
 }
 
-@keyframes fullscreenEnter { 
-  from { opacity: 0; transform: scale(0.98); } 
-  to { opacity: 1; transform: scale(1); } 
+@keyframes fullscreenEnter {
+  from { opacity: 0; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes micPulse { 
@@ -199,22 +197,22 @@
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* Landing utility classes with staggered delays */
+/* Landing utility classes with staggered delays - Sped up by ~30% */
 .landing-fade-in {
-  animation: fadeInUp 0.8s var(--ease-out-expo) both;
+  animation: fadeInUp 0.4s var(--ease-out-expo) both;
 }
-.landing-fade-in-d1 { animation: fadeInUp 0.8s 0.1s var(--ease-out-expo) both; }
-.landing-fade-in-d2 { animation: fadeInUp 0.8s 0.2s var(--ease-out-expo) both; }
-.landing-fade-in-d3 { animation: fadeInUp 0.8s 0.3s var(--ease-out-expo) both; }
-.landing-fade-in-d4 { animation: fadeInUp 0.8s 0.4s var(--ease-out-expo) both; }
-.landing-fade-in-d5 { animation: fadeInUp 0.8s 0.5s var(--ease-out-expo) both; }
+.landing-fade-in-d1 { animation: fadeInUp 0.4s 0.05s var(--ease-out-expo) both; }
+.landing-fade-in-d2 { animation: fadeInUp 0.4s 0.1s var(--ease-out-expo) both; }
+.landing-fade-in-d3 { animation: fadeInUp 0.4s 0.15s var(--ease-out-expo) both; }
+.landing-fade-in-d4 { animation: fadeInUp 0.4s 0.2s var(--ease-out-expo) both; }
+.landing-fade-in-d5 { animation: fadeInUp 0.4s 0.25s var(--ease-out-expo) both; }
 
 .landing-slide-up {
-  animation: fadeInUp 0.6s var(--ease-spring) both;
+  animation: fadeInUp 0.3s var(--ease-spring) both;
 }
-.landing-slide-up-d1 { animation: fadeInUp 0.6s 0.15s var(--ease-spring) both; }
-.landing-slide-up-d2 { animation: fadeInUp 0.6s 0.3s var(--ease-spring) both; }
-.landing-slide-up-d3 { animation: fadeInUp 0.6s 0.45s var(--ease-spring) both; }
+.landing-slide-up-d1 { animation: fadeInUp 0.3s 0.1s var(--ease-spring) both; }
+.landing-slide-up-d2 { animation: fadeInUp 0.3s 0.2s var(--ease-spring) both; }
+.landing-slide-up-d3 { animation: fadeInUp 0.3s 0.3s var(--ease-spring) both; }
 
 .landing-scale-in {
   animation: scaleIn 0.5s var(--ease-spring) both;
