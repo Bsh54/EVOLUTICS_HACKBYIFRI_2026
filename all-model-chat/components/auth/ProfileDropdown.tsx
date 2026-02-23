@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   User, LogOut, Settings, Shield, ChevronDown,
-  GraduationCap, Briefcase, MapPin, Mail, ExternalLink
+  GraduationCap, Briefcase, MapPin, Mail, ExternalLink, AlertTriangle
 } from 'lucide-react';
 import { UserProfile } from '../../types/user';
 
@@ -15,6 +15,9 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
   const [isOpen, setIsOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Vérifier si le profil est incomplet
+  const isProfileIncomplete = !profile.education_level || !profile.field_of_study || !profile.university;
 
   // Fermer le dropdown au clic extérieur
   useEffect(() => {
@@ -54,7 +57,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
       {/* Bouton avatar */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-[var(--theme-bg-tertiary)] transition-all group"
+        className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-[var(--theme-bg-tertiary)] transition-all group relative"
       >
         <div className="w-8 h-8 rounded-full bg-[var(--theme-bg-accent)] flex items-center justify-center overflow-hidden border-2 border-[var(--theme-border-primary)] group-hover:border-[var(--theme-bg-accent)] transition-colors">
           {profile.avatar_url ? (
@@ -63,6 +66,12 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
             <span className="text-[var(--theme-text-accent)] text-xs font-black">{initials}</span>
           )}
         </div>
+
+        {/* Pastille de notification si le profil est incomplet */}
+        {isProfileIncomplete && (
+          <span className="absolute top-1 left-7 w-3 h-3 bg-red-500 border-2 border-[var(--theme-bg-secondary)] rounded-full animate-pulse"></span>
+        )}
+
         <ChevronDown className={`w-3.5 h-3.5 text-[var(--theme-text-tertiary)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -71,6 +80,17 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
         <div className="absolute right-0 top-full mt-2 w-80 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-2xl shadow-2xl z-[200] overflow-hidden"
           style={{ animation: 'fadeInUp 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both' }}
         >
+          {/* Alerte Profil Incomplet */}
+          {isProfileIncomplete && (
+            <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-3 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-bold text-amber-600 dark:text-amber-500">Profil incomplet</p>
+                <p className="text-[10px] text-amber-600/80 dark:text-amber-500/80 mt-0.5 leading-tight">Complétez vos informations pour que l'IA vous propose des offres plus ciblées.</p>
+              </div>
+            </div>
+          )}
+
           {/* En-tête profil */}
           <div className="p-5 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-tertiary)]">
             <div className="flex items-center gap-4">
