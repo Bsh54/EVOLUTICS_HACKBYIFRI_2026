@@ -50,18 +50,19 @@ html, body, #root {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--theme-bg-secondary);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: var(--theme-scrollbar-thumb);
   border-radius: 10px;
+  border: 2px solid var(--theme-bg-secondary);
   transition: background-color 0.3s ease;
 }
 

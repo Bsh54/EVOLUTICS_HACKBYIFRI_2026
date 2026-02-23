@@ -88,7 +88,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
     <div className="h-screen w-full flex bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden font-sans">
 
       {/* Panneau gauche - Image représentative et Branding */}
-      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-[var(--theme-bg-secondary)] flex-col justify-between">
+      <div className="hidden lg:flex lg:w-[50%] relative overflow-hidden bg-[var(--theme-bg-secondary)] flex-col justify-between">
 
         {/* Image de fond avec Overlay Gradient pour lisibilité */}
         <div className="absolute inset-0 z-0">
@@ -129,20 +129,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
         <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="min-h-full flex items-center justify-center p-4 sm:p-6 md:p-8 relative z-10">
-          <div className="w-full max-w-[400px] space-y-6">
+          <div className="w-full max-w-[420px] space-y-7">
 
             {/* Logo mobile */}
             <div className="lg:hidden flex items-center justify-center mb-6">
                <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] shadow-sm px-5 py-2.5 rounded-2xl">
-                  <EvoluticsLogo className="h-7" />
+                  <EvoluticsLogo className="h-8" />
                </div>
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-black tracking-tight">
+              <h2 className="text-3xl font-black tracking-tight">
                 {mode === 'login' ? 'Bon retour parmi nous 👋' : 'Créez votre compte 🚀'}
               </h2>
-              <p className="text-[var(--theme-text-secondary)] font-medium text-[13px] leading-relaxed">
+              <p className="text-[var(--theme-text-secondary)] font-medium text-[14px] leading-relaxed">
                 {mode === 'login'
                   ? 'Connectez-vous pour accéder à votre tableau de bord et à vos opportunités.'
                   : 'Rejoignez EVOLUTICS et prenez en main votre avenir professionnel dès aujourd\'hui.'}
@@ -164,18 +164,18 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
             )}
 
             {/* Formulaire */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4.5">
               {mode === 'register' && (
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Nom complet</label>
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Nom complet</label>
                   <div className="relative group">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
                     <input
                       type="text"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Jean Dupont"
-                      className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-10 pr-4 py-3 text-[13px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
+                      className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-11 pr-4 py-3.5 text-[14px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -183,36 +183,36 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
               )}
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Adresse email</label>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Adresse email</label>
                 <div className="relative group">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="etudiant@ecole.edu"
-                    className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-10 pr-4 py-3 text-[13px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
+                    className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-11 pr-4 py-3.5 text-[14px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Mot de passe</label>
+                <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Mot de passe</label>
                 <div className="relative group">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-10 pr-10 py-3 text-[13px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
+                    className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-11 pr-11 py-3.5 text-[14px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] transition-all focus:outline-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] transition-all focus:outline-none"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -221,15 +221,15 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
 
               {mode === 'register' && (
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Confirmer le mot de passe</label>
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-[var(--theme-text-tertiary)] ml-1">Confirmer le mot de passe</label>
                   <div className="relative group">
-                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-10 pr-4 py-3 text-[13px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
+                      className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl pl-11 pr-4 py-3.5 text-[14px] text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/15 focus:border-[var(--theme-bg-accent)] transition-all shadow-sm"
                       required
                     />
                   </div>
@@ -237,31 +237,31 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
               )}
 
               {mode === 'login' && (
-                  <div className="flex justify-end pb-1">
-                      <button type="button" className="text-[11px] font-semibold text-[var(--theme-bg-accent)] hover:underline">Mot de passe oublié ?</button>
+                  <div className="flex justify-end pb-1.5">
+                      <button type="button" className="text-[12px] font-semibold text-[var(--theme-bg-accent)] hover:underline">Mot de passe oublié ?</button>
                   </div>
               )}
 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white font-bold py-3.5 rounded-xl shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] transition-all flex items-center justify-center gap-2 group active:scale-[0.98] text-[14px] disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+                className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white font-bold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] transition-all flex items-center justify-center gap-2 group active:scale-[0.98] text-[15px] disabled:opacity-70 disabled:cursor-not-allowed mt-2"
               >
                 {isLoading ? (
                   <EvoluticsLoader size="sm" variant="white" />
                 ) : (
                   <>
                     {mode === 'login' ? 'Se connecter' : "Créer mon compte"}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
               </button>
             </form>
 
             {/* Séparateur */}
-            <div className="relative flex items-center py-2">
+            <div className="relative flex items-center py-2.5">
               <div className="flex-grow border-t border-[var(--theme-border-primary)]"></div>
-              <span className="flex-shrink-0 mx-3 text-[10px] font-bold text-[var(--theme-text-tertiary)] uppercase tracking-widest">
+              <span className="flex-shrink-0 mx-4 text-[11px] font-bold text-[var(--theme-text-tertiary)] uppercase tracking-widest">
                 Ou
               </span>
               <div className="flex-grow border-t border-[var(--theme-border-primary)]"></div>
@@ -270,9 +270,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
             {/* Google OAuth */}
             <button
               onClick={handleGoogleLogin}
-              className="w-full bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] font-semibold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] text-[14px]"
+              className="w-full bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] font-semibold py-3.5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-3 active:scale-[0.98] text-[15px]"
             >
-              <svg className="w-[16px] h-[16px]" viewBox="0 0 24 24">
+              <svg className="w-[20px] h-[20px]" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -282,8 +282,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
             </button>
 
             {/* Switch mode */}
-            <div className="text-center pt-5 mt-2 border-t border-[var(--theme-border-primary)]/50">
-              <span className="text-[13px] text-[var(--theme-text-secondary)] font-medium block mb-3">
+            <div className="text-center pt-5 mt-4 border-t border-[var(--theme-border-primary)]/50">
+              <span className="text-[14px] text-[var(--theme-text-secondary)] font-medium block mb-3">
                 {mode === 'login' ? "Nouveau sur EVOLUTICS ? " : "Vous avez déjà un compte ? "}
               </span>
               <button
@@ -292,7 +292,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
                   setError(null);
                   setSuccessMessage(null);
                 }}
-                className="w-full bg-transparent border-2 border-[var(--theme-bg-accent)] text-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent)] hover:text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] text-[14px]"
+                className="w-full bg-transparent border-2 border-[var(--theme-bg-accent)] text-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent)] hover:text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] text-[15px]"
               >
                 {mode === 'login' ? "S'inscrire gratuitement" : 'Se connecter'}
               </button>

@@ -41,8 +41,8 @@ export const ONYX_THEME_COLORS: ThemeColors = {
   borderFocus: '#6366f1', // Indigo 500
 
   // Scrollbar
-  scrollbarThumb: '#3f3f46',
-  scrollbarTrack: 'transparent',
+  scrollbarThumb: '#52525b', // Zinc 600 - plus visible
+  scrollbarTrack: '#18181b', // Zinc 900 - léger fond
 
   // Icons
   iconUser: '#ffffff',
@@ -98,8 +98,8 @@ export const PEARL_THEME_COLORS: ThemeColors = {
   borderFocus: '#4f46e5',
 
   // Scrollbar
-  scrollbarThumb: '#cbd5e1',
-  scrollbarTrack: 'transparent',
+  scrollbarThumb: '#94a3b8', // Slate 400 - plus visible
+  scrollbarTrack: '#f1f5f9', // Slate 100 - fond léger
 
   // Icons
   iconUser: '#ffffff',
