@@ -64,17 +64,17 @@ export const SendControls: React.FC<SendControlsProps> = ({
     const isDisabled = !isLoading && (!canSend || isWaitingForUpload);
     
     // Determine background class
-    let bgClass = "bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)]";
-    
+    let bgClass = "bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white shadow-[0_4px_12px_0_rgba(79,70,229,0.3)] hover:shadow-[0_6px_16px_0_rgba(79,70,229,0.4)]";
+
     if (isDisabled && !isUpload) {
-        bgClass = "bg-[var(--theme-bg-tertiary)] text-[var(--theme-text-tertiary)] cursor-not-allowed";
+        bgClass = "bg-[var(--theme-bg-tertiary)] text-[var(--theme-text-tertiary)] cursor-not-allowed shadow-none";
     } else if (isStop) {
-        bgClass = "bg-[var(--theme-bg-danger)] hover:bg-[var(--theme-bg-danger-hover)] text-[var(--theme-icon-stop)]";
+        bgClass = "bg-[var(--theme-bg-danger)] hover:bg-[var(--theme-bg-danger-hover)] text-white shadow-[0_4px_12px_0_rgba(239,68,68,0.3)]";
     } else if (isEdit) {
-        bgClass = "bg-amber-500 hover:bg-amber-600 text-white";
+        bgClass = "bg-amber-500 hover:bg-amber-600 text-white shadow-[0_4px_12px_0_rgba(245,158,11,0.3)]";
     } else if (isUpload) {
         // Active processing state uses accent color with progress stripes
-        bgClass = "bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] cursor-wait bg-progress-stripe";
+        bgClass = "bg-[var(--theme-bg-accent)] text-white cursor-wait bg-progress-stripe shadow-[0_4px_12px_0_rgba(79,70,229,0.3)]";
     }
 
     // Determine shape class for morphing
