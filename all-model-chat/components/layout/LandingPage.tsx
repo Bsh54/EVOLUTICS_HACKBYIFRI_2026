@@ -179,15 +179,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto pt-4 md:pt-8">
+        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto pt-6 md:pt-10">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-8 landing-fade-in bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 shadow-2xl">
-            <EvoluticsLogo className="w-8 h-8 brightness-0 invert" />
-            <span className="font-black text-xl tracking-widest text-white">EVOLUTICS</span>
+            <EvoluticsLogo className="w-10 h-10 brightness-0 invert" />
+            <span className="font-black text-2xl tracking-widest text-white">EVOLUTICS</span>
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6 landing-fade-in-d1 text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] mb-6 landing-fade-in-d1 text-white">
             Votre avenir professionnel,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
               propulsé par l'IA
@@ -195,7 +195,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg md:text-xl text-white/80 font-medium max-w-2xl leading-relaxed mb-10 landing-fade-in-d2">
+          <p className="text-base sm:text-lg text-white/80 font-medium max-w-2xl leading-relaxed mb-10 landing-fade-in-d2">
             Explorez des centaines d'opportunités, préparez vos candidatures avec un coach IA et décrochez le poste de vos rêves — le tout sur une seule plateforme.
           </p>
 
@@ -217,7 +217,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
           </div>
 
           {/* Scroll hint */}
-          <div className="mt-16 landing-fade-in-d5 opacity-60 text-white">
+          <div className="mt-20 landing-fade-in-d5 opacity-60 text-white">
             <ChevronRight className="w-6 h-6 rotate-90 animate-bounce" />
           </div>
         </div>
