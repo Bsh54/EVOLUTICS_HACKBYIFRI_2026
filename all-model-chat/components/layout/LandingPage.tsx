@@ -33,8 +33,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
             className="w-full h-full object-cover object-center opacity-80"
           />
           {/* Multi-layer overlay for readability - Darkened significantly for contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-secondary)] via-[var(--theme-bg-secondary)]/90 to-[var(--theme-bg-accent)]/50 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-[#09090b]/60" /> {/* Darkening for contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-secondary)] via-[var(--theme-bg-secondary)]/95 to-[var(--theme-bg-accent)]/30 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-[#09090b]/40" /> {/* Darkening for contrast */}
         </div>
 
         {/* Decorative blurs */}
@@ -187,7 +187,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] mb-6 landing-fade-in-d1 text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black tracking-tight leading-[1.15] mb-6 landing-fade-in-d1 text-white">
             Votre avenir professionnel,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
               propulsé par l'IA
@@ -195,7 +195,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-white/80 font-medium max-w-2xl leading-relaxed mb-10 landing-fade-in-d2">
+          <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium max-w-2xl leading-relaxed mb-10 landing-fade-in-d2">
             Explorez des centaines d'opportunités, préparez vos candidatures avec un coach IA et décrochez le poste de vos rêves — le tout sur une seule plateforme.
           </p>
 

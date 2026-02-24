@@ -45,12 +45,10 @@ const AppContent: React.FC = () => {
   // Écran de chargement initial
   if (isAuthLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] gap-6">
-        <EvoluticsLogo className="h-14 animate-pulse" />
-        <EvoluticsLoader size="lg" variant="accent" />
-        <span className="text-[10px] font-black text-[var(--theme-bg-accent)] uppercase tracking-[0.3em] opacity-80 mt-2">
-          Initialisation
-        </span>
+      <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)]">
+        <div className="relative animate-pulse flex flex-col items-center gap-4">
+            <EvoluticsLogo className="h-12 w-12" />
+        </div>
       </div>
     );
   }
