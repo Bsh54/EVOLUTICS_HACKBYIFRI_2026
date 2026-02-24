@@ -82,11 +82,12 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
         >
           {/* Alerte Profil Incomplet */}
           {isProfileIncomplete && (
-            <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-3 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-xs font-bold text-amber-600 dark:text-amber-500">Profil incomplet</p>
-                <p className="text-[10px] text-amber-600/80 dark:text-amber-500/80 mt-0.5 leading-tight">Complétez vos informations pour que l'IA vous propose des offres plus ciblées.</p>
+            <div className="bg-red-500/10 border-b border-red-500/20 px-4 py-3 flex items-start gap-3 relative overflow-hidden group/alert cursor-pointer" onClick={onOpenSettings}>
+              <div className="absolute inset-0 bg-red-500/5 translate-y-full group-hover/alert:translate-y-0 transition-transform duration-300 ease-out" />
+              <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5 relative z-10" />
+              <div className="relative z-10">
+                <p className="text-xs font-bold text-red-600 dark:text-red-400">Profil incomplet !</p>
+                <p className="text-[10px] text-red-600/80 dark:text-red-400/80 mt-0.5 leading-tight pr-2">Renseignez votre université et filière pour débloquer les recommandations d'IA. <span className="font-bold underline decoration-red-500/30 underline-offset-2">Cliquez ici.</span></p>
               </div>
             </div>
           )}
