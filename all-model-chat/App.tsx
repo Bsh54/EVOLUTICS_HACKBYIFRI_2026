@@ -249,7 +249,8 @@ const AppContent: React.FC = () => {
       <div className="animate-fade-in-smooth">
         <AuthPage
           onAuthSuccess={() => {
-            // Après authentification réussie, forcer la réévaluation de l'état
+            // Après authentification réussie, masquer immédiatement la landing page
+            setShowLanding(false);
             // Le contexte Auth va automatiquement détecter needsOnboarding
           }}
           signIn={signIn}
