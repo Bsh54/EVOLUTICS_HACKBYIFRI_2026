@@ -718,72 +718,42 @@ RÈGLES DE COMPORTEMENT :
           onClick={() => navigateToTab('opportunities')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'opportunities'
-              ? 'text-[var(--theme-bg-accent)]'
+              ? 'text-[var(--theme-text-primary)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
-          <div className={`p-2 rounded-xl transition-all duration-300 ${
-            activeTab === 'opportunities'
-              ? 'bg-[var(--theme-bg-accent)]/10 scale-110'
-              : 'group-hover:bg-[var(--theme-bg-tertiary)] group-active:bg-[var(--theme-bg-accent)]/5'
-          }`}>
+          <div className="p-2 rounded-xl transition-all duration-300">
             <Lightbulb className="w-5 h-5" />
           </div>
           <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Explorer</span>
-          {activeTab === 'opportunities' && (
-            <div className="absolute bottom-1 w-8 h-1 bg-[var(--theme-bg-accent)] rounded-full animate-mobile-tab-indicator" />
-          )}
-          {activeTab === 'opportunities' && (
-            <div className="absolute inset-0 bg-[var(--theme-bg-accent)]/5 rounded-t-2xl animate-mobile-tab-glow" />
-          )}
         </button>
 
         <button
           onClick={() => navigateToTab('chat')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'chat'
-              ? 'text-[var(--theme-bg-accent)]'
+              ? 'text-[var(--theme-text-primary)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
-          <div className={`p-2 rounded-xl transition-all duration-300 ${
-            activeTab === 'chat'
-              ? 'bg-[var(--theme-bg-accent)]/10 scale-110'
-              : 'group-hover:bg-[var(--theme-bg-tertiary)] group-active:bg-[var(--theme-bg-accent)]/5'
-          }`}>
+          <div className="p-2 rounded-xl transition-all duration-300">
             <MessageSquare className="w-5 h-5" />
           </div>
           <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Assistant</span>
-          {activeTab === 'chat' && (
-            <div className="absolute bottom-1 w-8 h-1 bg-[var(--theme-bg-accent)] rounded-full animate-mobile-tab-indicator" />
-          )}
-          {activeTab === 'chat' && (
-            <div className="absolute inset-0 bg-[var(--theme-bg-accent)]/5 rounded-t-2xl animate-mobile-tab-glow" />
-          )}
         </button>
 
         <button
           onClick={() => navigateToTab('profile')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'profile'
-              ? 'text-[var(--theme-bg-accent)]'
+              ? 'text-[var(--theme-text-primary)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
-          <div className={`p-2 rounded-xl transition-all duration-300 ${
-            activeTab === 'profile'
-              ? 'bg-[var(--theme-bg-accent)]/10 scale-110'
-              : 'group-hover:bg-[var(--theme-bg-tertiary)] group-active:bg-[var(--theme-bg-accent)]/5'
-          }`}>
+          <div className="p-2 rounded-xl transition-all duration-300">
             <User className="w-5 h-5" />
           </div>
           <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Profil</span>
-          {activeTab === 'profile' && (
-            <div className="absolute bottom-1 w-8 h-1 bg-[var(--theme-bg-accent)] rounded-full animate-mobile-tab-indicator" />
-          )}
-          {activeTab === 'profile' && (
-            <div className="absolute inset-0 bg-[var(--theme-bg-accent)]/5 rounded-t-2xl animate-mobile-tab-glow" />
-          )}
         </button>
       </nav>
 

@@ -122,7 +122,7 @@ const AppContent: React.FC = () => {
         </div>
 
         {/* Styles CSS intégrés */}
-        <style jsx>{`
+        <style>{`
           @keyframes evoluticsLoader {
             to {
               transform: rotate(360deg);
@@ -167,7 +167,7 @@ const AppContent: React.FC = () => {
           signUp={signUp}
           signInWithGoogle={signInWithGoogle}
         />
-        <style jsx>{`
+        <style>{`
           @keyframes fade-in-smooth {
             0% {
               opacity: 0;
