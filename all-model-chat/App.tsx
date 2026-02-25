@@ -4,15 +4,17 @@ import { useAppLogic } from './hooks/app/useAppLogic';
 import { useAppProps } from './hooks/app/useAppProps';
 import { WindowProvider } from './contexts/WindowContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AdminAuthProvider, useAdminAuth } from './contexts/AdminAuthContext';
 import ShadsAIHub from './components/layout/ShadsAIHub';
 import { AddOpportunityForm } from './components/layout/AddOpportunityForm';
 import AuthPage from './components/auth/AuthPage';
+import { AdminLoginForm } from './components/auth/AdminLoginForm';
 import OnboardingForm from './components/auth/OnboardingForm';
 import LandingPage from './components/layout/LandingPage';
 import { EvoluticsLoader } from './components/icons/EvoluticsLoader';
 import { EvoluticsLogo } from './components/icons/EvoluticsLogo';
 
-// Composant interne qui utilise le contexte Auth
+// Composant interne qui utilise les contextes Auth et AdminAuth
 const AppContent: React.FC = () => {
   const {
     isLoading: isAuthLoading,
@@ -25,6 +27,12 @@ const AppContent: React.FC = () => {
     signOut,
     updateProfile,
   } = useAuth();
+
+  const {
+    isAdminAuthenticated,
+    isLoading: isAdminLoading,
+    logoutAdmin,
+  } = useAdminAuth();
 
   // Landing page s'affiche par défaut pour les visiteurs non connectés
   const [showLanding, setShowLanding] = useState(true);
@@ -55,10 +63,91 @@ const AppContent: React.FC = () => {
 
   const { sidebarProps, chatAreaProps, appModalsProps } = useAppProps(logic);
 
-  // Système de routage simple pour l'admin
+  // Système de routage avec priorité admin
   const isAdmin = window.location.pathname === '/admin-portal';
 
-  // Écran de chargement initial
+  // PRIORITÉ 1: Gestion de la route admin
+  if (isAdmin) {
+    // Écran de chargement admin
+    if (isAdminLoading) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
+          <div className="relative flex items-center justify-center">
+            <EvoluticsLogo className="h-24 w-auto sm:h-28 md:h-32 z-10" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="evolutics-loader"
+                style={{
+                  width: 'clamp(150px, 40vw, 200px)',
+                  height: 'clamp(150px, 40vw, 200px)',
+                  aspectRatio: '1',
+                  borderRadius: '50%',
+                  background: 'var(--theme-bg-accent)',
+                  WebkitMask: `
+                    repeating-conic-gradient(
+                      transparent 0deg,
+                      black 2deg 65deg,
+                      transparent 66deg 90deg
+                    ),
+                    radial-gradient(
+                      farthest-side,
+                      transparent calc(100% - 12px - 1px),
+                      black calc(100% - 12px)
+                    )
+                  `,
+                  mask: `
+                    repeating-conic-gradient(
+                      transparent 0deg,
+                      black 2deg 65deg,
+                      transparent 66deg 90deg
+                    ),
+                    radial-gradient(
+                      farthest-side,
+                      transparent calc(100% - 12px - 1px),
+                      black calc(100% - 12px)
+                    )
+                  `,
+                  WebkitMaskComposite: 'destination-in',
+                  maskComposite: 'intersect',
+                  animation: 'evoluticsLoader 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite'
+                }}
+              />
+            </div>
+          </div>
+          <style>{`
+            @keyframes evoluticsLoader {
+              to {
+                transform: rotate(360deg);
+              }
+            }
+          `}</style>
+        </div>
+      );
+    }
+
+    // Admin non authentifié : formulaire de connexion admin
+    if (!isAdminAuthenticated) {
+      return <AdminLoginForm />;
+    }
+
+    // Admin authentifié : interface d'administration
+    return (
+      <div className={`relative flex h-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] theme-${currentTheme.id} overflow-hidden`}>
+        <div className="w-full h-full bg-[var(--theme-bg-primary)]">
+          <AddOpportunityForm
+            onClose={() => {
+              logoutAdmin();
+              window.location.href = '/';
+            }}
+            onAdd={() => {
+              window.dispatchEvent(new Event('storage'));
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+  // PRIORITÉ 2: Flux utilisateur normal - Écran de chargement initial
   if (isAuthLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
@@ -230,9 +319,11 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <WindowProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <AdminAuthProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </AdminAuthProvider>
     </WindowProvider>
   );
 };
