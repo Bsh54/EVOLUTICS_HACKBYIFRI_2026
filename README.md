@@ -18,6 +18,14 @@
 
 ---
 
+## 📋 Cahier des Charges
+
+**Pour consulter le cahier des charges complet du projet EVOLUTICS :**
+
+[📄 Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER_DE_CHARGES.pdf)
+
+---
+
 ##  Présentation du Projet
 
 **EVOLUTICS** est née d'un constat simple : les étudiants ont souvent du mal à trouver des offres qui leur correspondent et se sentent parfois démunis face aux recruteurs.
@@ -30,14 +38,6 @@ Notre solution est un véritable **compagnon de carrière**. Elle ne se contente
 - **Un Coach Carrière IA disponible 24/7** : Assistant conversationnel qui conseille
 - **Une expérience moderne et fluide** : Interface  responsive avec animations soignées et navigation intuitive
 - **Authentification sécurisée** : Connexion par email/mot de passe ou Google OAuth
-
----
-
-## 📋 Cahier des Charges
-
-**Pour consulter le cahier des charges complet du projet EVOLUTICS :**
-
-[📄 Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER_DE_CHARGES.pdf)
 
 ---
 
