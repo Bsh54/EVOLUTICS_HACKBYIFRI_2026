@@ -179,7 +179,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto -mt-4 md:-mt-8">
+        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto -mt-8 md:-mt-12 lg:-mt-14">
           {/* Logo */}
           <div className="flex items-center gap-4 mb-8 bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border-2 border-white/20 shadow-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <EvoluticsLogo className="h-20 w-auto drop-shadow-sm border-2 border-white/30 rounded-xl p-1" />
