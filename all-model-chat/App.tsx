@@ -30,6 +30,13 @@ const AppContent: React.FC = () => {
   const [showLanding, setShowLanding] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Réinitialiser showLanding quand l'utilisateur se connecte
+  useEffect(() => {
+    if (isAuthenticated) {
+      setShowLanding(false);
+    }
+  }, [isAuthenticated]);
+
   const handleTransitionToAuth = () => {
     setIsTransitioning(true);
     setTimeout(() => {
@@ -152,7 +159,10 @@ const AppContent: React.FC = () => {
     return (
       <div className="animate-fade-in-smooth">
         <AuthPage
-          onAuthSuccess={() => {}}
+          onAuthSuccess={() => {
+            // Après authentification réussie, forcer la réévaluation de l'état
+            // Le contexte Auth va automatiquement détecter needsOnboarding
+          }}
           signIn={signIn}
           signUp={signUp}
           signInWithGoogle={signInWithGoogle}
