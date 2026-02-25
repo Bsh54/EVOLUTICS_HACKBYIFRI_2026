@@ -22,7 +22,7 @@
 
 **Pour consulter le cahier des charges complet du projet EVOLUTICS :**
 
-[📄 Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER_DE_CHARGES.pdf)
+[📄 Cahier des Charges EVOLUTICS](./EVOLUTICS%20CAHIER%20DE%20CHARGES.pdf)
 
 ## 🎥 Vidéo de Présentation
 
