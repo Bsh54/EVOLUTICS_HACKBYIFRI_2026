@@ -1,0 +1,15 @@
+export const apiSettings = {
+    settingsApiConfig: { en: 'Configuration de l\'API', zh: 'API 配置' },
+    settingsUseCustomApi: { en: 'Utiliser une configuration API personnalisée', zh: '使用自定义 API 配置' },
+    settingsApiKey: { en: 'Clé(s) API Gemini', zh: 'Gemini API 密钥' },
+    settingsApiKeyHelpText: { en: 'Vous pouvez entrer plusieurs clés, une par ligne. Une clé sera utilisée en rotation pour chaque nouvelle session de chat.', zh: '您可以输入多个密钥，每行一个。每个新聊天会话将轮流使用一个密钥。' },
+    apiConfig_default_info: { en: 'Utilisation de la configuration API par défaut de l\'environnement. Activez pour les paramètres personnalisés.', zh: '正在使用环境中的默认 API 配置。启用以进行自定义设置。' },
+    apiConfig_key_placeholder: { en: 'Entrez votre/vos clé(s) API Gemini', zh: '输入您的 Gemini API 密钥' },
+    apiConfig_key_placeholder_disabled: { en: 'Utilisation du défaut', zh: '使用默认值' },
+    apiConfig_testConnection: { en: 'Tester la connexion', zh: '测试连通性' },
+    apiConfig_testing: { en: 'Test en cours...', zh: '测试中...' },
+    apiConfig_testSuccess: { en: 'Connexion réussie', zh: '连接成功' },
+    apiConfig_testFailed: { en: 'Échec de la connexion', zh: '连接失败' },
+    apiConfig_vertexExpress: { en: 'Utiliser le point de terminaison Vertex AI Express', zh: '使用 Vertex AI Express 端点' },
+    apiConfig_vertexExpress_btn: { en: 'Vertex Express', zh: 'Vertex Express' },
+};
