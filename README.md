@@ -33,6 +33,14 @@ Notre solution est un véritable **compagnon de carrière**. Elle ne se contente
 
 ---
 
+## 📋 Cahier des Charges
+
+**Pour consulter le cahier des charges complet du projet EVOLUTICS :**
+
+[📄 Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER_DE_CHARGES.pdf)
+
+---
+
 ## Technologies utilisées
 
 - **Frontend :** React 18 + TypeScript + Tailwind CSS + Vite
