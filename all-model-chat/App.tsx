@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppLogic } from './hooks/app/useAppLogic';
 import { useAppProps } from './hooks/app/useAppProps';
 import { WindowProvider } from './contexts/WindowContext';
