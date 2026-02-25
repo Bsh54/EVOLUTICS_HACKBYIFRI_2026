@@ -24,6 +24,12 @@
 
 [📄 Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER_DE_CHARGES.pdf)
 
+## 🎥 Vidéo de Présentation
+
+**Découvrez EVOLUTICS en action :**
+
+[🎬 Vidéo de Présentation EVOLUTICS](./EVOLUTICS%20VIDEO%20PRESENTATION.mp4)
+
 ---
 
 ##  Présentation du Projet
