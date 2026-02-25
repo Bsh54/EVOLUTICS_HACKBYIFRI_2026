@@ -94,10 +94,8 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
             prevMsgCount.current = messages.length;
             userScrolledUpRef.current = false;
 
-            // Un très léger délai pour s'assurer que Virtuoso a rendu les éléments
-            setTimeout(() => {
-                scrollToBottom('auto');
-            }, 50);
+            // Scroll immédiat sans délai pour éviter les problèmes de timing
+            scrollToBottom('auto');
         }
     }, [activeSessionId, messages.length, scrollToBottom]);
 
@@ -106,11 +104,13 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
         if (messages.length > prevMsgCount.current) {
             const newMessage = messages[messages.length - 1];
 
-            // Si c'est l'utilisateur qui parle, OU si on était déjà en bas, on force le scroll down
-            if (newMessage.role === 'user' || isAtBottom) {
-                setTimeout(() => {
-                    scrollToBottom('smooth');
-                }, 50);
+            // Si c'est l'utilisateur qui parle, on force le scroll down IMMÉDIATEMENT
+            if (newMessage.role === 'user') {
+                // Scroll immédiat sans délai pour éviter le saut vers le haut
+                scrollToBottom('auto');
+            } else if (isAtBottom) {
+                // Pour les réponses IA, scroll smooth seulement si on était déjà en bas
+                scrollToBottom('smooth');
             }
             prevMsgCount.current = messages.length;
         }
@@ -118,9 +118,12 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
 
     // --- 3. Auto-scroll "Sticky" pendant le streaming (Comportement ChatGPT) ---
     useLayoutEffect(() => {
-        if (isStreaming && !userScrolledUpRef.current && scrollerRef) {
-            // Force le maintien en bas à chaque mise à jour du contenu
-            scrollerRef.scrollTop = scrollerRef.scrollHeight;
+        if (isStreaming && scrollerRef) {
+            // Auto-scroll pendant le streaming SAUF si l'utilisateur a scrollé manuellement vers le haut
+            if (!userScrolledUpRef.current) {
+                // Force le maintien en bas à chaque mise à jour du contenu
+                scrollerRef.scrollTop = scrollerRef.scrollHeight;
+            }
         }
     }, [lastMessage?.content, isStreaming, scrollerRef]);
 
