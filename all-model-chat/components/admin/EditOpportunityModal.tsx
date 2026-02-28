@@ -10,10 +10,13 @@ import {
   Bot,
   Sparkles,
   Trash2,
-  CheckCircle
+  CheckCircle,
+  RefreshCw,
+  MessageSquare
 } from 'lucide-react';
 import { PendingOpportunity } from '../../types/pendingOpportunity';
 import { pendingOpportunityService } from '../../services/pendingOpportunityService';
+import { geminiServiceInstance } from '../../services/geminiService';
 
 interface EditOpportunityModalProps {
   opportunity: PendingOpportunity;
@@ -60,6 +63,62 @@ export const EditOpportunityModal: React.FC<EditOpportunityModalProps> = ({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+
+  // Générer le message d'accueil IA
+  const handleGenerateAiGreeting = async () => {
+    if (!formData.title || !formData.organization) {
+      alert("Veuillez d'abord remplir le Titre et l'Organisation pour donner du contexte à l'IA.");
+      return;
+    }
+
+    setIsGeneratingAi(true);
+    try {
+      const prompt = `Tu es un Coach Carrière Expert pour la plateforme étudiante EVOLUTICS.
+
+      TÂCHE : Rédige un message d'accueil court, chaleureux et professionnel pour l'Assistant IA qui va aider un étudiant sur cette opportunité précise.
+
+      DÉTAILS DE L'OPPORTUNITÉ :
+      - Type : ${formData.type}
+      - Titre : ${formData.title}
+      - Organisation : ${formData.organization}
+      - Description : ${formData.description || "Non spécifiée"}
+
+      CONTENU DU MESSAGE D'ACCUEIL :
+      1. Salue l'étudiant (ex: "Bonjour ! 👋").
+      2. Montre que tu connais déjà l'offre (cite le poste/titre).
+      3. Propose 3 pistes d'aide concrètes adaptées à ce type d'offre (ex: pour un stage -> CV/Lettre; pour un concours -> Idées/Pitch).
+      4. Sois encourageant.
+
+      Format : Markdown, avec emojis, concis (max 100 mots).`;
+
+      const parts = [{ text: prompt }];
+
+      // Utilisation d'une clé dummy car l'API proxy gère l'auth
+      await geminiServiceInstance.sendMessageNonStream(
+        "dummy-key",
+        "gemini-2.5-flash",
+        [], // Historique vide
+        parts,
+        { temperature: 0.7 },
+        new AbortController().signal,
+        (error) => {
+          console.error("Erreur génération IA:", error);
+          alert("Erreur lors de la génération. Vérifiez votre connexion.");
+          setIsGeneratingAi(false);
+        },
+        (responseParts) => {
+          if (responseParts && responseParts.length > 0 && responseParts[0].text) {
+             setFormData(prev => ({ ...prev, aiGreeting: responseParts[0].text }));
+          }
+          setIsGeneratingAi(false);
+        }
+      );
+    } catch (e) {
+      console.error(e);
+      setIsGeneratingAi(false);
+    }
+  };
 
   // Sauvegarde
   const handleSave = async () => {
@@ -369,16 +428,32 @@ export const EditOpportunityModal: React.FC<EditOpportunityModalProps> = ({
                   </h4>
                   <p className="text-xs text-gray-600 mt-1">Générez un message d'accueil personnalisé pour le chat.</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={handleGenerateAiGreeting}
+                  disabled={isGeneratingAi}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isGeneratingAi ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:scale-105 shadow-lg'}`}
+                >
+                  {isGeneratingAi ? (
+                    <><RefreshCw className="w-3 h-3 animate-spin" /> Génération...</>
+                  ) : (
+                    <><Sparkles className="w-3 h-3" /> Générer avec l'IA</>
+                  )}
+                </button>
               </div>
 
-              <div className="space-y-3">
-                <div className="bg-white border border-gray-200 rounded-xl p-4 min-h-[100px]">
-                  {formData.aiGreeting ? (
-                    <p className="text-sm text-gray-700">{formData.aiGreeting}</p>
-                  ) : (
-                    <p className="text-sm text-gray-400 italic">Le message d'accueil généré par l'IA apparaîtra ici...</p>
-                  )}
-                </div>
+              <div className="relative">
+                <textarea
+                  className={`${inputClass} min-h-[150px] text-xs leading-relaxed`}
+                  placeholder="Le message d'accueil généré par l'IA apparaîtra ici..."
+                  value={formData.aiGreeting}
+                  onChange={e => setFormData({...formData, aiGreeting: e.target.value})}
+                />
+                {!formData.aiGreeting && !isGeneratingAi && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+                    <MessageSquare className="w-12 h-12 text-gray-400" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
