@@ -124,9 +124,16 @@ export const EditOpportunityModal: React.FC<EditOpportunityModalProps> = ({
   const handleSave = async () => {
     setIsLoading(true);
     try {
+      // Exclure le champ status du formData car il contient 'Ouvert'
+      // qui n'est pas valide pour pending_opportunities (doit être pending/approved/rejected/processing)
+      const { status, durationValue, durationUnit, startTime, endTime, ...validFormData } = formData;
+
       const updatedOpp = {
         ...opportunity,
-        ...formData,
+        ...validFormData,
+        // Reconstruire les champs composés
+        duration: `${formData.durationValue} ${formData.durationUnit.toUpperCase()}`,
+        schedule: `${formData.startTime} - ${formData.endTime}`,
         updatedAt: new Date().toISOString()
       };
 
