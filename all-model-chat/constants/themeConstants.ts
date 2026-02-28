@@ -117,16 +117,16 @@ export const ONYX_THEME_COLORS: ThemeColors = {
 };
 
 export const PEARL_THEME_COLORS: ThemeColors = {
-  // Backgrounds
-  bgPrimary: '#ffffff',
-  bgSecondary: '#f8fafc', // Slate 50
-  bgTertiary: '#f1f5f9', // Slate 100
+  // Backgrounds - Couleurs plus douces et moins éblouissantes
+  bgPrimary: '#fefefe', // Blanc cassé très subtil au lieu du blanc pur
+  bgSecondary: '#f6f8fa', // Gris très clair avec une pointe de bleu
+  bgTertiary: '#eef2f5', // Gris clair plus doux
   bgAccent: '#4f46e5', // Indigo 600
   bgAccentHover: '#4338ca', // Indigo 700
   bgDanger: '#ef4444',
   bgDangerHover: '#dc2626',
-  bgInput: '#ffffff', // White for frosted glass input
-  bgCodeBlock: '#f8fafc',
+  bgInput: '#f9fafb', // Fond input légèrement grisé pour moins de contraste
+  bgCodeBlock: '#f6f8fa', // Code block avec fond très doux
   bgCodeBlockHeader: 'rgba(241, 245, 249, 0.9)',
   bgUserMessage: '#4f46e5', // Indigo 600 - Modern sleek bubble
   bgModelMessage: 'transparent',
@@ -138,39 +138,39 @@ export const PEARL_THEME_COLORS: ThemeColors = {
   bgWarning: 'rgba(245, 158, 11, 0.1)',
   textWarning: '#b45309',
 
-  // Text - Darkened significantly for high contrast
-  textPrimary: '#0f172a', // Slate 900
-  textSecondary: '#475569', // Slate 600
-  textTertiary: '#64748b', // Slate 500
+  // Text - Contraste réduit pour plus de confort
+  textPrimary: '#1a202c', // Gris très foncé au lieu du noir pur
+  textSecondary: '#4a5568', // Gris moyen plus doux
+  textTertiary: '#718096', // Gris clair mais lisible
   textAccent: '#ffffff',
   textDanger: '#dc2626',
   textLink: '#4f46e5', // Indigo 600
-  textCode: '#0f172a',
+  textCode: '#2d3748', // Code avec couleur plus douce
   bgUserMessageText: '#ffffff',
-  bgModelMessageText: '#0f172a',
+  bgModelMessageText: '#1a202c',
   bgErrorMessageText: '#dc2626',
 
-  // Borders
-  borderPrimary: '#e2e8f0', // Slate 200
-  borderSecondary: '#cbd5e1', // Slate 300
+  // Borders - Plus subtiles et douces
+  borderPrimary: '#e5e7eb', // Bordures très douces
+  borderSecondary: '#d1d5db', // Bordures secondaires subtiles
   borderFocus: '#4f46e5',
 
   // Scrollbar
-  scrollbarThumb: '#94a3b8', // Slate 400 - plus visible
-  scrollbarTrack: '#f1f5f9', // Slate 100 - fond léger
+  scrollbarThumb: '#9ca3af', // Scrollbar plus visible mais douce
+  scrollbarTrack: '#f3f4f6', // Track très subtile
 
-  // Icons
+  // Icons - Couleurs adoucies
   iconUser: '#ffffff',
   iconModel: '#4f46e5',
   iconError: '#dc2626',
-  iconThought: '#64748b',
-  iconSettings: '#475569',
+  iconThought: '#6b7280',
+  iconSettings: '#4a5568',
   iconClearChat: '#ffffff',
   iconSend: '#ffffff',
-  iconAttach: '#64748b',
+  iconAttach: '#6b7280',
   iconStop: '#ffffff',
-  iconEdit: '#64748b',
-  iconHistory: '#0f172a',
+  iconEdit: '#6b7280',
+  iconHistory: '#1a202c',
 };
 
 export const AVAILABLE_THEMES: Theme[] = [
