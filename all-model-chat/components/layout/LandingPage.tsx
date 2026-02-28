@@ -14,15 +14,28 @@ import {
 } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { Footer } from './Footer';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 interface LandingPageProps {
   onGetStarted: () => void;
   onSignIn: () => void;
+  themeId: string;
+  onThemeChange: (themeId: string) => void;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, themeId, onThemeChange }) => {
   return (
     <div className="h-screen w-full overflow-y-auto overflow-x-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] custom-scrollbar">
+
+      {/* Toggle de thème fixe en haut à droite */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle
+          currentThemeId={themeId}
+          onThemeChange={onThemeChange}
+          size="md"
+          className="shadow-lg"
+        />
+      </div>
 
       {/* ═══════════ HERO SECTION ═══════════ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 overflow-hidden">

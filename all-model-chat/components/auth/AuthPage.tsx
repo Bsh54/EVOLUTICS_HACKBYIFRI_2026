@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle, GraduationCap, Briefcase, BrainCircuit } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { EvoluticsLoader } from '../icons/EvoluticsLoader';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -9,9 +10,11 @@ interface AuthPageProps {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  themeId: string;
+  onThemeChange: (themeId: string) => void;
 }
 
-const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, signIn, signUp, signInWithGoogle }) => {
+const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, signIn, signUp, signInWithGoogle, themeId, onThemeChange }) => {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -87,6 +90,16 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
 
   return (
     <div className="h-screen w-full flex bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden font-sans">
+
+      {/* Toggle de thème fixe en haut à droite */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle
+          currentThemeId={themeId}
+          onThemeChange={onThemeChange}
+          size="md"
+          className="shadow-lg"
+        />
+      </div>
 
       {/* Panneau gauche - Image représentative et Branding */}
       <div className="hidden lg:flex lg:w-[50%] relative overflow-hidden bg-[var(--theme-bg-secondary)] flex-col justify-between">

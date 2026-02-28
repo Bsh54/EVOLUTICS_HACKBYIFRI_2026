@@ -254,6 +254,8 @@ const AppContent: React.FC = () => {
           <LandingPage
             onGetStarted={handleTransitionToAuth}
             onSignIn={handleTransitionToAuth}
+            themeId={currentTheme.id}
+            onThemeChange={handleThemeChange}
           />
         </div>
       );
@@ -270,6 +272,8 @@ const AppContent: React.FC = () => {
           signIn={signIn}
           signUp={signUp}
           signInWithGoogle={signInWithGoogle}
+          themeId={currentTheme.id}
+          onThemeChange={handleThemeChange}
         />
         <style>{`
           @keyframes fade-in-smooth {
@@ -299,6 +303,8 @@ const AppContent: React.FC = () => {
         onComplete={async (updates) => {
           await updateProfile(updates);
         }}
+        themeId={currentTheme.id}
+        onThemeChange={handleThemeChange}
       />
     );
   }

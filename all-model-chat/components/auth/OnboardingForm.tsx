@@ -5,12 +5,15 @@ import {
 } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { EvoluticsLoader } from '../icons/EvoluticsLoader';
+import { ThemeToggle } from '../ui/ThemeToggle';
 import { UserProfile, EducationLevel } from '../../types/user';
 import { OpportunityType } from '../../types/opportunity';
 
 interface OnboardingFormProps {
   profile: UserProfile;
   onComplete: (updates: Partial<UserProfile>) => Promise<void>;
+  themeId: string;
+  onThemeChange: (themeId: string) => void;
 }
 
 const STEPS = [
@@ -35,7 +38,7 @@ const FIELDS_OF_STUDY = [
   'Sociologie', 'Psychologie', 'Philosophie', 'Arts', 'Agriculture', 'Autre'
 ];
 
-const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) => {
+const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete, themeId, onThemeChange }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -459,6 +462,17 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete }) 
 
   return (
     <div className="h-full w-full overflow-y-auto bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] p-4 md:p-8">
+
+      {/* Toggle de thème fixe en haut à droite */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle
+          currentThemeId={themeId}
+          onThemeChange={onThemeChange}
+          size="md"
+          className="shadow-lg"
+        />
+      </div>
+
       <div className="w-full max-w-2xl mx-auto space-y-8 py-8">
 
         {/* Logo */}
