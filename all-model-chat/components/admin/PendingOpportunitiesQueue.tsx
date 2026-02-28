@@ -33,7 +33,7 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('pending');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [stats, setStats] = useState<QueueStats | null>(null);
   const [adminNotes, setAdminNotes] = useState('');
   const [showBulkActions, setShowBulkActions] = useState(false);
@@ -270,6 +270,17 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
           </div>
 
           <div className="flex items-center gap-2">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">Tous les statuts</option>
+              <option value="pending">En attente</option>
+              <option value="approved">Approuvées</option>
+              <option value="rejected">Rejetées</option>
+            </select>
+
             <button
               onClick={loadPendingOpportunities}
               disabled={isLoading}
