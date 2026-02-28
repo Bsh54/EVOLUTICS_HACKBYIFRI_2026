@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sun, Moon, Palette } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { AVAILABLE_THEMES } from '../../constants/themeConstants';
 
 interface ThemeToggleProps {
@@ -17,7 +17,6 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   showLabel = false,
   size = 'md'
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
   const currentTheme = AVAILABLE_THEMES.find(t => t.id === currentThemeId);
 
   const sizeClasses = {
@@ -32,16 +31,20 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     lg: 'w-6 h-6'
   };
 
+  // Fonction pour basculer entre les thèmes
+  const toggleTheme = () => {
+    const nextTheme = currentThemeId === 'midnight' ? 'pearl' : 'midnight';
+    onThemeChange(nextTheme);
+  };
+
   const getThemeIcon = (themeId: string) => {
     switch (themeId) {
       case 'pearl':
         return <Sun className={iconSizeClasses[size]} />;
       case 'midnight':
         return <Moon className={iconSizeClasses[size]} />;
-      case 'onyx':
-        return <Palette className={iconSizeClasses[size]} />;
       default:
-        return <Palette className={iconSizeClasses[size]} />;
+        return <Moon className={iconSizeClasses[size]} />;
     }
   };
 
@@ -51,8 +54,6 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         return 'text-amber-500 hover:text-amber-600';
       case 'midnight':
         return 'text-blue-400 hover:text-blue-300';
-      case 'onyx':
-        return 'text-purple-400 hover:text-purple-300';
       default:
         return 'text-gray-400 hover:text-gray-300';
     }
@@ -61,7 +62,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   return (
     <div className={`relative ${className}`}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleTheme}
         className={`
           ${sizeClasses[size]}
           theme-toggle-button
@@ -75,8 +76,8 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
           group
           ${getThemeColor(currentThemeId)}
         `}
-        title={`Thème actuel: ${currentTheme?.name}`}
-        aria-label="Changer de thème"
+        title={`Basculer vers ${currentThemeId === 'midnight' ? 'Pearl (Clair)' : 'Midnight (Sombre)'}`}
+        aria-label="Basculer le thème"
       >
         <div className="theme-toggle-icon">
           {getThemeIcon(currentThemeId)}
@@ -92,57 +93,6 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         <span className="ml-2 text-sm text-[var(--theme-text-secondary)]">
           {currentTheme?.name}
         </span>
-      )}
-
-      {/* Menu déroulant */}
-      {isOpen && (
-        <>
-          {/* Overlay pour fermer le menu */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
-          />
-
-          {/* Menu des thèmes */}
-          <div className="theme-toggle-menu absolute top-full mt-2 right-0 z-50 min-w-48 bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] rounded-lg shadow-xl overflow-hidden">
-            {AVAILABLE_THEMES.map((theme) => (
-              <button
-                key={theme.id}
-                onClick={() => {
-                  onThemeChange(theme.id);
-                  setIsOpen(false);
-                }}
-                className={`
-                  theme-option
-                  w-full px-4 py-3 text-left flex items-center gap-3
-                  hover:bg-[var(--theme-bg-tertiary)]
-                  transition-colors duration-150
-                  ${theme.id === currentThemeId ? 'bg-[var(--theme-bg-tertiary)]' : ''}
-                `}
-              >
-                <div className={`flex items-center justify-center w-6 h-6 ${getThemeColor(theme.id)}`}>
-                  {getThemeIcon(theme.id)}
-                </div>
-
-                <div className="flex-1">
-                  <div className="text-sm font-medium text-[var(--theme-text-primary)]">
-                    {theme.name}
-                  </div>
-                  <div className="text-xs text-[var(--theme-text-secondary)]">
-                    {theme.id === 'pearl' && 'Thème clair et professionnel'}
-                    {theme.id === 'midnight' && 'Thème sombre élégant'}
-                    {theme.id === 'onyx' && 'Thème très sombre'}
-                  </div>
-                </div>
-
-                {/* Indicateur du thème actuel */}
-                {theme.id === currentThemeId && (
-                  <div className="theme-indicator w-2 h-2 bg-[var(--theme-bg-accent)] rounded-full" />
-                )}
-              </button>
-            ))}
-          </div>
-        </>
       )}
     </div>
   );

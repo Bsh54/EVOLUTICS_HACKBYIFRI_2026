@@ -59,63 +59,6 @@ export const MIDNIGHT_THEME_COLORS: ThemeColors = {
   iconHistory: '#8b949e',
 };
 
-export const ONYX_THEME_COLORS: ThemeColors = {
-  // Backgrounds
-  bgPrimary: '#09090b', // Zinc 950 - Main Content
-  bgSecondary: '#000000', // True Black - Sidebar/Header (Framing effect)
-  bgTertiary: '#18181b', // Zinc 900 - Hover states
-  bgAccent: '#6366f1', // Indigo 500 - Vibrant Accent (Modern)
-  bgAccentHover: '#4f46e5', // Indigo 600
-  bgDanger: '#ef4444', // Red 500
-  bgDangerHover: '#dc2626',
-  bgInput: '#18181b', // Zinc 900 - Deep input area
-  bgCodeBlock: '#121214', // Deep subtle grey for code
-  bgCodeBlockHeader: '#1a1a1c', // Slightly lighter header
-  bgUserMessage: '#4f46e5', // Indigo 600 - Modern user bubble
-  bgModelMessage: 'transparent',
-  bgErrorMessage: 'rgba(239, 68, 68, 0.1)',
-  bgSuccess: 'rgba(34, 197, 94, 0.1)',
-  textSuccess: '#4ade80',
-  bgInfo: 'rgba(56, 189, 248, 0.1)',
-  textInfo: '#38bdf8',
-  bgWarning: 'rgba(245, 158, 11, 0.1)',
-  textWarning: '#fbbf24',
-
-  // Text
-  textPrimary: '#f8fafc', // Slate 50 - High contrast text
-  textSecondary: '#94a3b8', // Slate 400
-  textTertiary: '#64748b', // Slate 500
-  textAccent: '#ffffff',
-  textDanger: '#fca5a5', // Light Red
-  textLink: '#818cf8', // Indigo 400
-  textCode: '#e2e8f0', // Slate 200
-  bgUserMessageText: '#ffffff',
-  bgModelMessageText: '#f8fafc',
-  bgErrorMessageText: '#fca5a5',
-
-  // Borders
-  borderPrimary: '#27272a', // Zinc 800 - blending more with tertiary
-  borderSecondary: '#3f3f46', // Zinc 700 - Slightly lighter for visible borders
-  borderFocus: '#6366f1', // Indigo 500
-
-  // Scrollbar
-  scrollbarThumb: '#52525b', // Zinc 600 - plus visible
-  scrollbarTrack: '#18181b', // Zinc 900 - léger fond
-
-  // Icons
-  iconUser: '#ffffff',
-  iconModel: '#818cf8', // Indigo 400
-  iconError: '#ef4444',
-  iconThought: '#71717a',
-  iconSettings: '#94a3b8',
-  iconClearChat: '#f8fafc',
-  iconSend: '#ffffff',
-  iconAttach: '#94a3b8',
-  iconStop: '#ffffff',
-  iconEdit: '#94a3b8',
-  iconHistory: '#94a3b8',
-};
-
 export const PEARL_THEME_COLORS: ThemeColors = {
   // Backgrounds - Couleurs plus douces et moins éblouissantes
   bgPrimary: '#fefefe', // Blanc cassé très subtil au lieu du blanc pur
@@ -176,7 +119,6 @@ export const PEARL_THEME_COLORS: ThemeColors = {
 export const AVAILABLE_THEMES: Theme[] = [
   { id: 'midnight', name: 'Midnight (Élégant)', colors: MIDNIGHT_THEME_COLORS },
   { id: 'pearl', name: 'Pearl (Clair)', colors: PEARL_THEME_COLORS },
-  { id: 'onyx', name: 'Onyx (Très Sombre)', colors: ONYX_THEME_COLORS },
 ];
 
 export const DEFAULT_THEME_ID = 'midnight';
