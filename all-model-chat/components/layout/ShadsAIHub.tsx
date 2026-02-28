@@ -22,6 +22,7 @@ import { SidePanel } from './SidePanel';
 import ProfilePage from '../auth/ProfilePage';
 import { useAuth } from '../../contexts/AuthContext';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -36,6 +37,7 @@ interface ShadsAIHubProps {
   sidePanelContent: any;
   onCloseSidePanel: () => void;
   themeId: string;
+  onThemeChange: (themeId: string) => void;
   currentTheme: any;
 }
 
@@ -49,6 +51,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
     sidePanelContent,
     onCloseSidePanel,
     themeId,
+    onThemeChange,
   } = props;
 
   const { profile, signOut, updateProfile } = useAuth();
@@ -232,6 +235,14 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           <EvoluticsLogo className="w-10 h-10" />
           <span className="font-black text-sm uppercase tracking-tighter">EVOLUTICS</span>
         </div>
+
+        {/* Toggle de thème mobile */}
+        <ThemeToggle
+          currentThemeId={themeId}
+          onThemeChange={onThemeChange}
+          size="sm"
+          className="flex-shrink-0"
+        />
       </header>
 
       {/* HEADER DESKTOP */}
@@ -261,7 +272,14 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             <User className="w-4 h-4" /> PROFIL
           </button>
         </nav>
-        <div className="w-9" />
+
+        {/* Toggle de thème desktop */}
+        <ThemeToggle
+          currentThemeId={themeId}
+          onThemeChange={onThemeChange}
+          size="md"
+          className="flex-shrink-0"
+        />
       </header>
 
       <div className="flex-1 relative overflow-hidden">

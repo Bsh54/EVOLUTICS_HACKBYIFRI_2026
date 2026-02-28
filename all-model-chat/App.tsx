@@ -63,9 +63,18 @@ const AppContent: React.FC = () => {
     sidePanelContent,
     handleCloseSidePanel,
     uiState,
+    setAppSettings,
   } = logic;
 
   const { sidebarProps, chatAreaProps, appModalsProps } = useAppProps(logic);
+
+  // Fonction de changement de thème
+  const handleThemeChange = (themeId: string) => {
+    setAppSettings(prev => ({
+      ...prev,
+      themeId
+    }));
+  };
 
   // Système de routage avec priorité admin
   const isAdmin = window.location.pathname === '/admin-portal';
@@ -315,6 +324,7 @@ const AppContent: React.FC = () => {
           sidePanelContent={sidePanelContent}
           onCloseSidePanel={handleCloseSidePanel}
           themeId={currentTheme.id}
+          onThemeChange={handleThemeChange}
           currentTheme={currentTheme}
         />
       )}

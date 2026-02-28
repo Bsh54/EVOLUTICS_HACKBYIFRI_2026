@@ -1,0 +1,144 @@
+/* Styles pour le toggle de thème avec effets élégants */
+
+.theme-toggle-button {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de glow pour le thème midnight */
+.theme-toggle-midnight {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.theme-toggle-midnight:hover {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+}
+
+/* Effet de brillance pour le thème pearl */
+.theme-toggle-pearl {
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+.theme-toggle-pearl:hover {
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+
+/* Effet cyberpunk pour le thème onyx */
+.theme-toggle-onyx {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.theme-toggle-onyx:hover {
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+}
+
+/* Animation de rotation pour l'icône lors du changement */
+.theme-toggle-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-button:hover .theme-toggle-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Menu déroulant avec animation fluide */
+.theme-toggle-menu {
+  animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Effet de hover sur les options du menu */
+.theme-option {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.theme-option:hover::before {
+  left: 100%;
+}
+
+/* Indicateur de thème actuel avec pulsation */
+.theme-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .theme-toggle-button {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .theme-toggle-menu {
+    min-width: 12rem;
+  }
+}
+
+/* Accessibilité - focus visible */
+.theme-toggle-button:focus-visible {
+  outline: 2px solid var(--theme-bg-accent);
+  outline-offset: 2px;
+}
+
+/* Transition globale pour tous les éléments du thème */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Effet de particules pour le thème midnight (optionnel) */
+.theme-midnight .theme-toggle-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background: rgba(34, 197, 94, 0.6);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: particle 3s infinite;
+}
+
+@keyframes particle {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

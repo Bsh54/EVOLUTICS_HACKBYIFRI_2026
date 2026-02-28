@@ -7,6 +7,7 @@ import App from './App';
 import './styles/main.css';
 import './styles/animations.css';
 import './styles/markdown.css';
+import './styles/theme-toggle.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

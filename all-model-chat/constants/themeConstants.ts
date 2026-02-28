@@ -1,6 +1,64 @@
 
 import { Theme, ThemeColors } from '../types/theme';
 
+// Nouveau thème sombre élégant inspiré du Cyberpunk UI mais plus doux
+export const MIDNIGHT_THEME_COLORS: ThemeColors = {
+  // Backgrounds - Plus doux que le full noir
+  bgPrimary: '#0f1419', // Bleu-gris très sombre mais pas noir
+  bgSecondary: '#1a1f2e', // Bleu-gris sombre pour sidebar/header
+  bgTertiary: '#252a3a', // Hover states plus visibles
+  bgAccent: '#22c55e', // Vert néon comme recommandé par le skill
+  bgAccentHover: '#16a34a', // Vert plus foncé au hover
+  bgDanger: '#ef4444',
+  bgDangerHover: '#dc2626',
+  bgInput: '#1e2532', // Input avec fond légèrement plus clair
+  bgCodeBlock: '#161b22', // Code block avec teinte bleutée
+  bgCodeBlockHeader: '#21262d',
+  bgUserMessage: '#22c55e', // Message utilisateur en vert néon
+  bgModelMessage: 'rgba(30, 37, 50, 0.3)', // Fond transparent léger
+  bgErrorMessage: 'rgba(239, 68, 68, 0.15)',
+  bgSuccess: 'rgba(34, 197, 94, 0.15)',
+  textSuccess: '#4ade80',
+  bgInfo: 'rgba(56, 189, 248, 0.15)',
+  textInfo: '#38bdf8',
+  bgWarning: 'rgba(245, 158, 11, 0.15)',
+  textWarning: '#fbbf24',
+
+  // Text - Contraste élevé mais pas éblouissant
+  textPrimary: '#e6edf3', // Blanc cassé pour moins de fatigue oculaire
+  textSecondary: '#8b949e', // Gris moyen bien visible
+  textTertiary: '#6e7681', // Gris plus foncé mais lisible
+  textAccent: '#ffffff',
+  textDanger: '#ff7b7b',
+  textLink: '#58a6ff', // Bleu néon doux
+  textCode: '#e6edf3',
+  bgUserMessageText: '#ffffff',
+  bgModelMessageText: '#e6edf3',
+  bgErrorMessageText: '#ff7b7b',
+
+  // Borders - Visibles mais subtiles
+  borderPrimary: '#30363d', // Bordures principales visibles
+  borderSecondary: '#21262d', // Bordures secondaires plus subtiles
+  borderFocus: '#22c55e', // Focus en vert néon
+
+  // Scrollbar
+  scrollbarThumb: '#484f58',
+  scrollbarTrack: '#21262d',
+
+  // Icons - Bien visibles avec effet néon subtil
+  iconUser: '#ffffff',
+  iconModel: '#58a6ff', // Bleu néon
+  iconError: '#ff7b7b',
+  iconThought: '#8b949e',
+  iconSettings: '#8b949e',
+  iconClearChat: '#e6edf3',
+  iconSend: '#ffffff',
+  iconAttach: '#8b949e',
+  iconStop: '#ffffff',
+  iconEdit: '#8b949e',
+  iconHistory: '#8b949e',
+};
+
 export const ONYX_THEME_COLORS: ThemeColors = {
   // Backgrounds
   bgPrimary: '#09090b', // Zinc 950 - Main Content
@@ -116,8 +174,9 @@ export const PEARL_THEME_COLORS: ThemeColors = {
 };
 
 export const AVAILABLE_THEMES: Theme[] = [
-  { id: 'onyx', name: 'Onyx (Dark)', colors: ONYX_THEME_COLORS },
-  { id: 'pearl', name: 'Pearl (Light)', colors: PEARL_THEME_COLORS },
+  { id: 'midnight', name: 'Midnight (Élégant)', colors: MIDNIGHT_THEME_COLORS },
+  { id: 'pearl', name: 'Pearl (Clair)', colors: PEARL_THEME_COLORS },
+  { id: 'onyx', name: 'Onyx (Très Sombre)', colors: ONYX_THEME_COLORS },
 ];
 
-export const DEFAULT_THEME_ID = 'pearl';
+export const DEFAULT_THEME_ID = 'midnight';

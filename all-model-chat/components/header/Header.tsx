@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Wand2, PictureInPicture, PictureInPicture2 } from 'lucide-react'; 
+import { Wand2, PictureInPicture, PictureInPicture2 } from 'lucide-react';
 import { ModelOption } from '../../types';
 import { translations } from '../../utils/appUtils';
 import { IconNewChat, IconSidebarToggle, IconScenarios } from '../icons/CustomIcons';
@@ -8,8 +8,8 @@ import { HeaderModelSelector } from './HeaderModelSelector';
 
 interface HeaderProps {
   onNewChat: () => void;
-  onOpenSettingsModal: () => void; 
-  onOpenScenariosModal: () => void; 
+  onOpenSettingsModal: () => void;
+  onOpenScenariosModal: () => void;
   onToggleHistorySidebar: () => void;
   isLoading: boolean;
   currentModelName?: string;
@@ -34,7 +34,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   onNewChat,
-  onOpenSettingsModal, 
+  onOpenSettingsModal,
   onOpenScenariosModal,
   onToggleHistorySidebar,
   isLoading,
@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right Section: Action Buttons (Redesigned) */}
       <div className="flex items-center gap-1 sm:gap-2.5 justify-end flex-shrink-0">
-        
+
         {/* 1. Canvas Helper Button (Arc/Wand) */}
         {showTextTools && (
             <button
@@ -147,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* 4. New Chat Button (formerly Settings) */}
         <button
-          onClick={onNewChat} 
+          onClick={onNewChat}
           className={`${headerButtonBase} ${headerButtonInactive} md:hidden`}
           aria-label={t('headerNewChat_aria')}
           title={`${t('newChat')} ${newChatShortcut ? `(${newChatShortcut})` : ''}`}
