@@ -90,11 +90,14 @@ const fromDbFormat = (dbRow: any): PendingOpportunity => ({
 });
 
 export const pendingOpportunityService = {
-  // Récupérer toutes les opportunités en attente
+  // Récupérer toutes les opportunités en attente (filtre automatiquement les expirées)
   async getAll(status?: string): Promise<PendingOpportunity[]> {
+    const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+
     let query = supabaseAdmin
       .from('pending_opportunities')
       .select('*')
+      .or(`deadline.is.null,deadline.gte.${today}`) // Inclut les opportunités sans deadline OU avec deadline >= aujourd'hui
       .order('created_at', { ascending: false });
 
     if (status) {

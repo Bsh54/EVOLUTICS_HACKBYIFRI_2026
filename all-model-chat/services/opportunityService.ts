@@ -59,11 +59,14 @@ const fromDbFormat = (dbRow: any): Opportunity => ({
 });
 
 export const opportunityService = {
-  // Récupérer toutes les opportunités
+  // Récupérer toutes les opportunités (filtre automatiquement les expirées)
   async getAll(): Promise<Opportunity[]> {
+    const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+
     const { data, error } = await supabase
       .from('opportunities')
       .select('*')
+      .or(`deadline.is.null,deadline.gte.${today}`) // Inclut les opportunités sans deadline OU avec deadline >= aujourd'hui
       .order('created_at', { ascending: false });
 
     if (error) {
