@@ -1,20 +1,20 @@
 
 import { Theme, ThemeColors } from '../types/theme';
 
-// Nouveau thème sombre élégant inspiré du Cyberpunk UI mais plus doux
+// Nouveau thème sombre élégant avec cohérence de couleur bleue EVOLUTICS
 export const MIDNIGHT_THEME_COLORS: ThemeColors = {
   // Backgrounds - Plus doux que le full noir
   bgPrimary: '#0f1419', // Bleu-gris très sombre mais pas noir
   bgSecondary: '#1a1f2e', // Bleu-gris sombre pour sidebar/header
   bgTertiary: '#252a3a', // Hover states plus visibles
-  bgAccent: '#22c55e', // Vert néon comme recommandé par le skill
-  bgAccentHover: '#16a34a', // Vert plus foncé au hover
+  bgAccent: '#3b82f6', // Bleu cohérent avec l'identité EVOLUTICS
+  bgAccentHover: '#2563eb', // Bleu plus foncé au hover
   bgDanger: '#ef4444',
   bgDangerHover: '#dc2626',
   bgInput: '#1e2532', // Input avec fond légèrement plus clair
   bgCodeBlock: '#161b22', // Code block avec teinte bleutée
   bgCodeBlockHeader: '#21262d',
-  bgUserMessage: '#22c55e', // Message utilisateur en vert néon
+  bgUserMessage: '#3b82f6', // Message utilisateur en bleu cohérent
   bgModelMessage: 'rgba(30, 37, 50, 0.3)', // Fond transparent léger
   bgErrorMessage: 'rgba(239, 68, 68, 0.15)',
   bgSuccess: 'rgba(34, 197, 94, 0.15)',
@@ -30,7 +30,7 @@ export const MIDNIGHT_THEME_COLORS: ThemeColors = {
   textTertiary: '#6e7681', // Gris plus foncé mais lisible
   textAccent: '#ffffff',
   textDanger: '#ff7b7b',
-  textLink: '#58a6ff', // Bleu néon doux
+  textLink: '#60a5fa', // Bleu néon doux cohérent
   textCode: '#e6edf3',
   bgUserMessageText: '#ffffff',
   bgModelMessageText: '#e6edf3',
@@ -39,15 +39,15 @@ export const MIDNIGHT_THEME_COLORS: ThemeColors = {
   // Borders - Visibles mais subtiles
   borderPrimary: '#30363d', // Bordures principales visibles
   borderSecondary: '#21262d', // Bordures secondaires plus subtiles
-  borderFocus: '#22c55e', // Focus en vert néon
+  borderFocus: '#3b82f6', // Focus en bleu cohérent
 
   // Scrollbar
   scrollbarThumb: '#484f58',
   scrollbarTrack: '#21262d',
 
-  // Icons - Bien visibles avec effet néon subtil
+  // Icons - Bien visibles avec effet bleu subtil
   iconUser: '#ffffff',
-  iconModel: '#58a6ff', // Bleu néon
+  iconModel: '#60a5fa', // Bleu néon cohérent
   iconError: '#ff7b7b',
   iconThought: '#8b949e',
   iconSettings: '#8b949e',

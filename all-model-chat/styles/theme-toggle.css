@@ -5,13 +5,13 @@
   overflow: hidden;
 }
 
-/* Effet de glow pour le thème midnight */
+/* Effet de glow pour le thème midnight - maintenant en bleu */
 .theme-toggle-midnight {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .theme-toggle-midnight:hover {
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
 }
 
 /* Effet de brillance pour le thème pearl */
@@ -118,7 +118,7 @@
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Effet de particules pour le thème midnight (optionnel) */
+/* Effet de particules pour le thème midnight (optionnel) - maintenant en bleu */
 .theme-midnight .theme-toggle-button::after {
   content: '';
   position: absolute;
@@ -126,7 +126,7 @@
   left: 50%;
   width: 4px;
   height: 4px;
-  background: rgba(34, 197, 94, 0.6);
+  background: rgba(59, 130, 246, 0.6);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   animation: particle 3s infinite;

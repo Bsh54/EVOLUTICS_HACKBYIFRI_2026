@@ -82,9 +82,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
           {getThemeIcon(currentThemeId)}
         </div>
 
-        {/* Effet de glow subtil pour le thème midnight */}
+        {/* Effet de glow subtil pour le thème midnight - maintenant en bleu */}
         {currentThemeId === 'midnight' && (
-          <div className="absolute inset-0 rounded-lg bg-green-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+          <div className="absolute inset-0 rounded-lg bg-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
         )}
       </button>
 
