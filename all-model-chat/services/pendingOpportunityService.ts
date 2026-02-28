@@ -90,7 +90,7 @@ const fromDbFormat = (dbRow: any): PendingOpportunity => ({
 });
 
 export const pendingOpportunityService = {
-  // Récupérer toutes les opportunités en attente (filtre automatiquement les expirées et approuvées)
+  // Récupérer toutes les opportunités en attente (filtre automatiquement les expirées)
   async getAll(status?: string): Promise<PendingOpportunity[]> {
     const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
 
@@ -102,9 +102,6 @@ export const pendingOpportunityService = {
 
     if (status) {
       query = query.eq('status', status);
-    } else {
-      // Par défaut, exclure les opportunités approuvées de la liste principale
-      query = query.neq('status', 'approved');
     }
 
     const { data, error } = await query;
