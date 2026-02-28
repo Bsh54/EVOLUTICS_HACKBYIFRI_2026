@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS personnalisées pour EVOLUTICS */
+:root {
+  --evolutics-primary: #0ea5e9;
+  --evolutics-secondary: #0369a1;
+  --evolutics-accent: #38bdf8;
+}
+
+/* Styles de base pour l'application */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Styles personnalisés pour les composants EVOLUTICS */
+.evolutics-gradient {
+  background: linear-gradient(135deg, var(--evolutics-primary), var(--evolutics-secondary));
+}
+
+.evolutics-card {
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700;
+}
+
+.evolutics-button {
+  @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
+}
+
+.evolutics-button-primary {
+  @apply bg-evolutics-500 hover:bg-evolutics-600 text-white;
+}
+
+.evolutics-input {
+  @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-evolutics-500 dark:bg-gray-700 dark:text-white;
+}
