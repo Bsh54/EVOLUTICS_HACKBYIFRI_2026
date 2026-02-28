@@ -60,17 +60,17 @@ export const MIDNIGHT_THEME_COLORS: ThemeColors = {
 };
 
 export const PEARL_THEME_COLORS: ThemeColors = {
-  // Backgrounds - Couleurs plus douces et moins éblouissantes
-  bgPrimary: '#fefefe', // Blanc cassé très subtil au lieu du blanc pur
-  bgSecondary: '#f6f8fa', // Gris très clair avec une pointe de bleu
-  bgTertiary: '#eef2f5', // Gris clair plus doux
+  // Backgrounds - Couleurs encore plus douces avec tons chauds
+  bgPrimary: '#faf9f7', // Blanc cassé avec une pointe de beige très subtile
+  bgSecondary: '#f5f4f2', // Gris très clair avec chaleur
+  bgTertiary: '#efede9', // Gris clair beige pour moins d'éblouissement
   bgAccent: '#4f46e5', // Indigo 600
   bgAccentHover: '#4338ca', // Indigo 700
   bgDanger: '#ef4444',
   bgDangerHover: '#dc2626',
-  bgInput: '#f9fafb', // Fond input légèrement grisé pour moins de contraste
-  bgCodeBlock: '#f6f8fa', // Code block avec fond très doux
-  bgCodeBlockHeader: 'rgba(241, 245, 249, 0.9)',
+  bgInput: '#f7f6f4', // Fond input avec teinte chaude très subtile
+  bgCodeBlock: '#f5f4f2', // Code block avec fond chaud
+  bgCodeBlockHeader: 'rgba(245, 244, 242, 0.9)',
   bgUserMessage: '#4f46e5', // Indigo 600 - Modern sleek bubble
   bgModelMessage: 'transparent',
   bgErrorMessage: 'rgba(239, 68, 68, 0.1)',
@@ -81,39 +81,39 @@ export const PEARL_THEME_COLORS: ThemeColors = {
   bgWarning: 'rgba(245, 158, 11, 0.1)',
   textWarning: '#b45309',
 
-  // Text - Contraste réduit pour plus de confort
-  textPrimary: '#1a202c', // Gris très foncé au lieu du noir pur
-  textSecondary: '#4a5568', // Gris moyen plus doux
-  textTertiary: '#718096', // Gris clair mais lisible
+  // Text - Contraste encore plus doux pour le confort
+  textPrimary: '#2c2825', // Brun très foncé au lieu du gris froid
+  textSecondary: '#5a5550', // Brun moyen plus chaleureux
+  textTertiary: '#78716c', // Brun clair mais lisible
   textAccent: '#ffffff',
   textDanger: '#dc2626',
   textLink: '#4f46e5', // Indigo 600
-  textCode: '#2d3748', // Code avec couleur plus douce
+  textCode: '#3c3530', // Code avec couleur brune douce
   bgUserMessageText: '#ffffff',
-  bgModelMessageText: '#1a202c',
+  bgModelMessageText: '#2c2825',
   bgErrorMessageText: '#dc2626',
 
-  // Borders - Plus subtiles et douces
-  borderPrimary: '#e5e7eb', // Bordures très douces
-  borderSecondary: '#d1d5db', // Bordures secondaires subtiles
+  // Borders - Encore plus subtiles avec tons chauds
+  borderPrimary: '#e7e5e1', // Bordures beiges très douces
+  borderSecondary: '#d6d3ce', // Bordures secondaires chaudes
   borderFocus: '#4f46e5',
 
   // Scrollbar
-  scrollbarThumb: '#9ca3af', // Scrollbar plus visible mais douce
-  scrollbarTrack: '#f3f4f6', // Track très subtile
+  scrollbarThumb: '#a8a29e', // Scrollbar beige plus douce
+  scrollbarTrack: '#f5f4f2', // Track avec chaleur
 
-  // Icons - Couleurs adoucies
+  // Icons - Couleurs adoucies avec tons chauds
   iconUser: '#ffffff',
   iconModel: '#4f46e5',
   iconError: '#dc2626',
-  iconThought: '#6b7280',
-  iconSettings: '#4a5568',
+  iconThought: '#78716c',
+  iconSettings: '#5a5550',
   iconClearChat: '#ffffff',
   iconSend: '#ffffff',
-  iconAttach: '#6b7280',
+  iconAttach: '#78716c',
   iconStop: '#ffffff',
-  iconEdit: '#6b7280',
-  iconHistory: '#1a202c',
+  iconEdit: '#78716c',
+  iconHistory: '#2c2825',
 };
 
 export const AVAILABLE_THEMES: Theme[] = [
