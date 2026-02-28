@@ -92,23 +92,35 @@ const fromDbFormat = (dbRow: any): PendingOpportunity => ({
 export const pendingOpportunityService = {
   // Récupérer toutes les opportunités en attente
   async getAll(status?: string): Promise<PendingOpportunity[]> {
+    console.log('🔍 SERVICE DEBUG: getAll appelé avec status =', status);
     let query = supabaseAdmin
       .from('pending_opportunities')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (status) {
+      console.log('🔍 SERVICE DEBUG: Ajout du filtre status =', status);
       query = query.eq('status', status);
     }
 
+    console.log('🔍 SERVICE DEBUG: Exécution de la requête...');
     const { data, error } = await query;
 
     if (error) {
-      console.error('Erreur Supabase (getAll pending):', error);
+      console.error('❌ SERVICE DEBUG: Erreur Supabase (getAll pending):', error);
+      console.error('❌ SERVICE DEBUG: Error code:', error.code);
+      console.error('❌ SERVICE DEBUG: Error message:', error.message);
       throw error;
     }
 
-    return (data || []).map(fromDbFormat);
+    console.log('✅ SERVICE DEBUG: Données brutes reçues:', data?.length || 0, 'items');
+    console.log('✅ SERVICE DEBUG: Premier item brut:', data?.[0]);
+
+    const result = (data || []).map(fromDbFormat);
+    console.log('✅ SERVICE DEBUG: Données formatées:', result.length, 'items');
+    console.log('✅ SERVICE DEBUG: Premier item formaté:', result[0]);
+
+    return result;
   },
 
   // Récupérer une opportunité spécifique

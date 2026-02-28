@@ -42,16 +42,23 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
 
   // Charger les opportunités en attente
   const loadPendingOpportunities = async () => {
+    console.log('🔍 DEBUG: Début loadPendingOpportunities');
+    console.log('🔍 DEBUG: statusFilter =', statusFilter);
     setIsLoading(true);
     try {
+      console.log('🔍 DEBUG: Appel pendingOpportunityService.getAll...');
       const [opps, queueStats] = await Promise.all([
         pendingOpportunityService.getAll(statusFilter === 'all' ? undefined : statusFilter),
         pendingOpportunityService.getStats()
       ]);
+      console.log('🔍 DEBUG: Données reçues:', opps.length, 'opportunités');
+      console.log('🔍 DEBUG: Première opportunité:', opps[0]);
+      console.log('🔍 DEBUG: Stats:', queueStats);
       setPendingOpps(opps);
       setStats(queueStats);
     } catch (error) {
-      console.error('Erreur chargement file d\'attente:', error);
+      console.error('❌ DEBUG: Erreur chargement file d\'attente:', error);
+      console.error('❌ DEBUG: Error details:', error.message, error.code);
     } finally {
       setIsLoading(false);
     }
