@@ -1,5 +1,6 @@
 import { supabaseAdmin } from './supabaseClient';
 import { PendingOpportunity, AIAnalysisResult, QueueStats } from '../types/pendingOpportunity';
+import { withSupabaseRetry } from './supabaseErrorHandler';
 
 // Mapping Frontend (camelCase) -> DB (snake_case)
 const toDbFormat = (opp: PendingOpportunity) => ({
@@ -92,26 +93,27 @@ const fromDbFormat = (dbRow: any): PendingOpportunity => ({
 export const pendingOpportunityService = {
   // Récupérer toutes les opportunités en attente (filtre automatiquement les expirées)
   async getAll(status?: string): Promise<PendingOpportunity[]> {
-    const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+    return withSupabaseRetry(async () => {
+      const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
 
-    let query = supabaseAdmin
-      .from('pending_opportunities')
-      .select('*')
-      .or(`deadline.is.null,deadline.gte.${today}`) // Inclut les opportunités sans deadline OU avec deadline >= aujourd'hui
-      .order('created_at', { ascending: false });
+      let query = supabaseAdmin
+        .from('pending_opportunities')
+        .select('*')
+        .or(`deadline.is.null,deadline.gte.${today}`) // Inclut les opportunités sans deadline OU avec deadline >= aujourd'hui
+        .order('created_at', { ascending: false });
 
-    if (status) {
-      query = query.eq('status', status);
-    }
+      if (status) {
+        query = query.eq('status', status);
+      }
 
-    const { data, error } = await query;
+      const { data, error } = await query;
 
-    if (error) {
-      console.error('Erreur Supabase (getAll pending):', error);
-      throw error;
-    }
+      if (error) {
+        throw error;
+      }
 
-    return (data || []).map(fromDbFormat);
+      return (data || []).map(fromDbFormat);
+    }, 'getAll pending');
   },
 
   // Récupérer une opportunité spécifique

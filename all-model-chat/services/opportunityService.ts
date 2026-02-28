@@ -3,32 +3,45 @@ import { supabase } from './supabaseClient';
 import { Opportunity } from '../types/opportunity';
 
 // Mapping Frontend (camelCase) -> DB (snake_case)
-const toDbFormat = (opp: Opportunity) => ({
-  id: opp.id,
-  type: opp.type,
-  title: opp.title,
-  organization: opp.organization,
-  description: opp.description,
-  full_content: opp.fullContent,
-  deadline: opp.deadline,
-  location: opp.location,
-  image: opp.image,
-  link: opp.link,
-  contact_email: opp.contactEmail,
-  apply_method: opp.applyMethod,
-  status: opp.status,
-  reward: opp.reward,
-  tags: opp.tags,
-  salary: opp.salary,
-  contract_type: opp.contractType,
-  duration: opp.duration,
-  level: opp.level,
-  prizes: opp.prizes,
-  speakers: opp.speakers,
-  schedule: opp.schedule,
-  ai_greeting: opp.aiGreeting,
-  is_partner: opp.isPartner
-});
+const toDbFormat = (opp: Opportunity) => {
+  // Nettoyer le champ schedule si invalide (doit être au format HH:mm ou null)
+  let cleanSchedule = opp.schedule;
+  if (cleanSchedule) {
+    // Vérifier si c'est au format HH:mm
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(cleanSchedule)) {
+      console.log(`Format schedule invalide pour ${opp.id}: "${cleanSchedule}" - conversion en null`);
+      cleanSchedule = null;
+    }
+  }
+
+  return {
+    id: opp.id,
+    type: opp.type,
+    title: opp.title,
+    organization: opp.organization,
+    description: opp.description,
+    full_content: opp.fullContent,
+    deadline: opp.deadline,
+    location: opp.location,
+    image: opp.image,
+    link: opp.link,
+    contact_email: opp.contactEmail,
+    apply_method: opp.applyMethod,
+    status: opp.status,
+    reward: opp.reward,
+    tags: opp.tags,
+    salary: opp.salary,
+    contract_type: opp.contractType,
+    duration: opp.duration,
+    level: opp.level,
+    prizes: opp.prizes,
+    speakers: opp.speakers,
+    schedule: cleanSchedule,
+    ai_greeting: opp.aiGreeting,
+    is_partner: opp.isPartner
+  };
+};
 
 // Mapping DB (snake_case) -> Frontend (camelCase)
 const fromDbFormat = (dbRow: any): Opportunity => ({

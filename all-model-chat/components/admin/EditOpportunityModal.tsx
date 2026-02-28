@@ -133,7 +133,8 @@ export const EditOpportunityModal: React.FC<EditOpportunityModalProps> = ({
         ...validFormData,
         // Reconstruire les champs composés
         duration: `${formData.durationValue} ${formData.durationUnit.toUpperCase()}`,
-        schedule: `${formData.startTime} - ${formData.endTime}`,
+        // Ne pas reconstruire schedule - utiliser startTime directement ou null
+        schedule: formData.startTime || null,
         updatedAt: new Date().toISOString()
       };
 
@@ -169,18 +170,30 @@ export const EditOpportunityModal: React.FC<EditOpportunityModalProps> = ({
   const handleApprove = async () => {
     setIsLoading(true);
     try {
+      // Préparer les données mises à jour
+      const { status, durationValue, durationUnit, startTime, endTime, ...validFormData } = formData;
+
       const updatedOpp = {
         ...opportunity,
-        ...formData,
+        ...validFormData,
+        // Reconstruire les champs composés
+        duration: `${formData.durationValue} ${formData.durationUnit.toUpperCase()}`,
+        // Ne pas reconstruire schedule - utiliser startTime directement ou null
+        schedule: formData.startTime || null,
         updatedAt: new Date().toISOString()
       };
 
+      // Sauvegarder les modifications dans pending_opportunities
+      await pendingOpportunityService.update(opportunity.id, updatedOpp);
+
+      // Puis approuver l'opportunité (qui utilisera les données mises à jour)
       await pendingOpportunityService.approve(opportunity.id);
+
       onApprove?.(updatedOpp);
       onClose();
     } catch (error) {
       console.error('Erreur approbation:', error);
-      alert('Erreur lors de l\'approbation');
+      alert('Erreur lors de l\'approbation: ' + (error?.message || 'Erreur inconnue'));
     } finally {
       setIsLoading(false);
     }

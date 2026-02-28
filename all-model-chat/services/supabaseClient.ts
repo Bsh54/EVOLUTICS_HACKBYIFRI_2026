@@ -10,8 +10,33 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error("ERREUR SUPABASE: Les variables d'environnement VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY sont manquantes.");
 }
 
-// Client principal avec clé anonyme
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Instance unique avec gestion des conflits de session
+let supabaseInstance: any = null;
+let supabaseAdminInstance: any = null;
 
-// Client admin avec clé de service (pour pending_opportunities)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+// Client principal avec clé anonyme (singleton)
+export const supabase = (() => {
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        storageKey: 'evolutics-auth-token', // Clé unique pour éviter les conflits
+        storage: window.localStorage
+      }
+    });
+  }
+  return supabaseInstance;
+})();
+
+// Client admin avec clé de service (singleton)
+export const supabaseAdmin = (() => {
+  if (!supabaseAdminInstance) {
+    supabaseAdminInstance = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        persistSession: false, // Pas de session persistante pour l'admin
+        storageKey: 'evolutics-admin-token' // Clé séparée pour l'admin
+      }
+    });
+  }
+  return supabaseAdminInstance;
+})();

@@ -31,17 +31,25 @@ import { geminiServiceInstance } from '../../services/geminiService';
 import { opportunityService } from '../../services/opportunityService';
 import { DEFAULT_CHAT_SETTINGS } from '../../constants/appConstants';
 import { PendingOpportunitiesQueue } from '../admin/PendingOpportunitiesQueue';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 interface AddOpportunityFormProps {
   onClose: () => void;
   onAdd: (allOpportunities: Opportunity[]) => void;
+  themeId?: string;
+  onThemeChange?: (themeId: string) => void;
 }
 
 /**
  * Composant principal de gestion des opportunités (Dashboard Admin).
  * Permet la création, modification et suppression.
  */
-export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose, onAdd }) => {
+export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({
+  onClose,
+  onAdd,
+  themeId = 'midnight',
+  onThemeChange
+}) => {
   const [adminTab, setAdminTab] = useState<'create' | 'manage' | 'queue' | 'analytics'>('queue');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -265,7 +273,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
   const labelClass = "text-[10px] font-black uppercase tracking-widest text-[var(--theme-text-tertiary)] mb-2 block";
 
   return (
-    <div className="flex flex-col h-full bg-[var(--theme-bg-primary)] animate-in fade-in duration-500">
+    <div className={`flex flex-col h-full bg-[var(--theme-bg-primary)] animate-in fade-in duration-500 theme-${themeId}`}>
       {/* Admin Navbar */}
       <div className="flex items-center justify-between p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)]/50 backdrop-blur-md sticky top-0 z-[100]">
         <div className="flex items-center gap-6">
@@ -314,6 +322,16 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
               {isPreview ? "Éditer" : "Aperçu"}
             </button>
           )}
+
+          {/* Theme Toggle */}
+          {onThemeChange && (
+            <ThemeToggle
+              currentThemeId={themeId}
+              onThemeChange={onThemeChange}
+              size="sm"
+            />
+          )}
+
           <button
             onClick={() => {
               setAdminTab('queue');

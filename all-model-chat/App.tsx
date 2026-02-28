@@ -155,6 +155,8 @@ const AppContent: React.FC = () => {
             onAdd={() => {
               window.dispatchEvent(new Event('storage'));
             }}
+            themeId={currentTheme.id}
+            onThemeChange={handleThemeChange}
           />
         </div>
       </div>
@@ -318,6 +320,8 @@ const AppContent: React.FC = () => {
             onAdd={() => {
               window.dispatchEvent(new Event('storage'));
             }}
+            themeId={currentTheme.id}
+            onThemeChange={handleThemeChange}
           />
         </div>
       ) : (
