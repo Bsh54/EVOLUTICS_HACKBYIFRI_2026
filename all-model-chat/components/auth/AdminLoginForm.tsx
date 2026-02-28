@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
 import { Eye, EyeOff, Lock, Shield } from 'lucide-react';
+import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 
 interface AdminLoginFormProps {
   onSuccess?: () => void;
+  onBackToLanding?: () => void;
 }
 
-export const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSuccess }) => {
+export const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSuccess, onBackToLanding }) => {
   const { loginAdmin } = useAdminAuth();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -36,6 +38,16 @@ export const AdminLoginForm: React.FC<AdminLoginFormProps> = ({ onSuccess }) => 
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
+          {/* Logo EVOLUTICS cliquable */}
+          {onBackToLanding && (
+            <button
+              onClick={onBackToLanding}
+              className="mx-auto mb-6 bg-white/80 backdrop-blur-sm border border-white/40 shadow-lg px-4 py-2 rounded-2xl hover:bg-white/90 transition-all duration-300 hover:scale-105 group"
+            >
+              <EvoluticsLogo className="h-12 group-hover:scale-105 transition-transform duration-300" />
+            </button>
+          )}
+
           <div className="mx-auto h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center">
             <Shield className="h-8 w-8 text-white" />
           </div>

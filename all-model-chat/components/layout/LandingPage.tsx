@@ -13,6 +13,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
+import { Footer } from './Footer';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -414,13 +415,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
             Rejoindre EVOLUTICS
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
-
-          {/* Footer mention */}
-          <div className="mt-16 text-[var(--theme-text-tertiary)] text-xs font-bold uppercase tracking-widest">
-            HACKBYIFRI 2026
-          </div>
         </div>
       </section>
+
+      {/* ═══════════ FOOTER ═══════════ */}
+      <Footer />
     </div>
   );
 };

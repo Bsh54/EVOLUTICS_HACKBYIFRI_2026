@@ -53,6 +53,10 @@ const AppContent: React.FC = () => {
     }, 300);
   };
 
+  const handleBackToLanding = () => {
+    setShowLanding(true);
+  };
+
   const logic = useAppLogic();
   const {
     currentTheme,
@@ -127,7 +131,7 @@ const AppContent: React.FC = () => {
 
     // Admin non authentifié : formulaire de connexion admin
     if (!isAdminAuthenticated) {
-      return <AdminLoginForm />;
+      return <AdminLoginForm onBackToLanding={handleBackToLanding} />;
     }
 
     // Admin authentifié : interface d'administration
@@ -253,6 +257,7 @@ const AppContent: React.FC = () => {
             setShowLanding(false);
             // Le contexte Auth va automatiquement détecter needsOnboarding
           }}
+          onBackToLanding={handleBackToLanding}
           signIn={signIn}
           signUp={signUp}
           signInWithGoogle={signInWithGoogle}

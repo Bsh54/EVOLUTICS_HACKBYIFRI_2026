@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { supabaseAdmin } from './supabaseClient';
 import { PendingOpportunity, AIAnalysisResult, QueueStats } from '../types/pendingOpportunity';
 
 // Mapping Frontend (camelCase) -> DB (snake_case)
@@ -92,7 +92,7 @@ const fromDbFormat = (dbRow: any): PendingOpportunity => ({
 export const pendingOpportunityService = {
   // Récupérer toutes les opportunités en attente
   async getAll(status?: string): Promise<PendingOpportunity[]> {
-    let query = supabase
+    let query = supabaseAdmin
       .from('pending_opportunities')
       .select('*')
       .order('created_at', { ascending: false });
@@ -113,7 +113,7 @@ export const pendingOpportunityService = {
 
   // Récupérer une opportunité spécifique
   async getById(id: string): Promise<PendingOpportunity | null> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pending_opportunities')
       .select('*')
       .eq('id', id)
@@ -143,7 +143,7 @@ export const pendingOpportunityService = {
       ...opp
     } as PendingOpportunity;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pending_opportunities')
       .insert([toDbFormat(newOpp)])
       .select()
@@ -164,7 +164,7 @@ export const pendingOpportunityService = {
       updated_at: new Date().toISOString()
     };
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('pending_opportunities')
       .update(toDbFormat(updateData as PendingOpportunity))
       .eq('id', id);
@@ -186,7 +186,7 @@ export const pendingOpportunityService = {
     if (adminNotes) updates.admin_notes = adminNotes;
     if (reviewedBy) updates.reviewed_by = reviewedBy;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('pending_opportunities')
       .update(updates)
       .eq('id', id);
@@ -204,7 +204,7 @@ export const pendingOpportunityService = {
     if (!pendingOpp) throw new Error('Opportunité non trouvée');
 
     // 2. Créer dans opportunities
-    const { error: createError } = await supabase
+    const { error: createError } = await supabaseAdmin
       .from('opportunities')
       .insert([{
         id: pendingOpp.id,
@@ -249,7 +249,7 @@ export const pendingOpportunityService = {
 
   // Supprimer une opportunité en attente
   async delete(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('pending_opportunities')
       .delete()
       .eq('id', id);
@@ -262,7 +262,7 @@ export const pendingOpportunityService = {
 
   // Obtenir les statistiques de la file d'attente
   async getStats(): Promise<QueueStats> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pending_opportunities')
       .select('status, ai_confidence, created_at');
 
@@ -311,7 +311,7 @@ export const pendingOpportunityService = {
 
   // Rechercher dans les opportunités en attente
   async search(query: string, status?: string): Promise<PendingOpportunity[]> {
-    let supabaseQuery = supabase
+    let supabaseQuery = supabaseAdmin
       .from('pending_opportunities')
       .select('*')
       .or(`title.ilike.%${query}%,organization.ilike.%${query}%,description.ilike.%${query}%`)

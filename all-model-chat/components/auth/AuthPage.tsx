@@ -5,12 +5,13 @@ import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
+  onBackToLanding: () => void;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
 }
 
-const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, signInWithGoogle }) => {
+const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, signIn, signUp, signInWithGoogle }) => {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -103,9 +104,12 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
 
         {/* Header - Logo */}
         <div className="relative z-10 p-12">
-            <div className="bg-white/10 backdrop-blur-md w-fit px-6 py-3 rounded-2xl border border-white/20 shadow-xl">
-                <EvoluticsLogo className="h-16" />
-            </div>
+            <button
+              onClick={onBackToLanding}
+              className="bg-white/10 backdrop-blur-md w-fit px-6 py-3 rounded-2xl border border-white/20 shadow-xl hover:bg-white/20 transition-all duration-300 hover:scale-105 group"
+            >
+                <EvoluticsLogo className="h-16 group-hover:scale-105 transition-transform duration-300" />
+            </button>
         </div>
 
         {/* Content - Hero Text & Features */}
@@ -133,9 +137,12 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, signIn, signUp, sign
 
             {/* Logo mobile */}
             <div className="lg:hidden flex items-center justify-center mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-               <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] shadow-sm px-4 py-2 rounded-2xl">
-                  <EvoluticsLogo className="h-10" />
-               </div>
+               <button
+                 onClick={onBackToLanding}
+                 className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] shadow-sm px-4 py-2 rounded-2xl hover:bg-[var(--theme-bg-tertiary)] transition-all duration-300 hover:scale-105 group"
+               >
+                  <EvoluticsLogo className="h-10 group-hover:scale-105 transition-transform duration-300" />
+               </button>
             </div>
 
             <div className="space-y-1.5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
