@@ -235,6 +235,22 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
     }
   };
 
+  // Supprimer une opportunité publiée de la base de données Supabase
+  const handleDeleteOpportunity = async (id: string) => {
+    setIsLoading(true);
+    try {
+      await opportunityService.delete(id);
+      // Recharger la liste des opportunités
+      await loadOpportunities();
+      console.log('Opportunité supprimée avec succès');
+    } catch (error) {
+      console.error('Erreur suppression opportunité:', error);
+      alert('Erreur lors de la suppression de l\'opportunité');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const startEdit = (opp: Opportunity) => {
     setFormData({
       ...opp,
@@ -611,6 +627,115 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
           </div>
         ) : adminTab === 'queue' ? (
           <PendingOpportunitiesQueue onRefresh={loadOpportunities} />
+        ) : adminTab === 'manage' ? (
+          <div className="p-6 md:p-12 animate-in fade-in duration-500">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-black text-gray-900 mb-2">Gestion des Opportunités</h2>
+                <p className="text-gray-600">Gérer les opportunités déjà publiées sur la plateforme</p>
+              </div>
+
+              {/* Barre de recherche */}
+              <div className="mb-6">
+                <div className="relative max-w-md mx-auto">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Rechercher une opportunité..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* Liste des opportunités publiées */}
+              {filteredOpps.length === 0 ? (
+                <div className="text-center py-12">
+                  <LayoutGrid className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Aucune opportunité</h3>
+                  <p className="text-gray-600">
+                    {searchQuery ? 'Aucune opportunité trouvée pour cette recherche' : 'Aucune opportunité publiée pour le moment'}
+                  </p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {filteredOpps.map((opp) => (
+                    <div
+                      key={opp.id}
+                      className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer"
+                      onClick={() => {
+                        setEditingId(opp.id);
+                        setFormData({
+                          type: opp.type,
+                          title: opp.title,
+                          organization: opp.organization,
+                          description: opp.description,
+                          fullContent: opp.fullContent,
+                          deadline: opp.deadline,
+                          location: opp.location,
+                          image: opp.image,
+                          link: opp.link,
+                          contactEmail: opp.contactEmail,
+                          applyMethod: opp.applyMethod,
+                          status: opp.status,
+                          reward: opp.reward,
+                          tags: opp.tags || [],
+                          salary: opp.salary,
+                          contractType: opp.contractType,
+                          duration: opp.duration,
+                          level: opp.level,
+                          prizes: opp.prizes,
+                          speakers: opp.speakers,
+                          schedule: opp.schedule,
+                          aiGreeting: opp.aiGreeting,
+                          isPartner: opp.isPartner
+                        });
+                        setAdminTab('create');
+                      }}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className={`px-2 py-1 text-xs font-bold rounded-full ${
+                              opp.type === 'Emploi' ? 'bg-green-100 text-green-800' :
+                              opp.type === 'Stage' ? 'bg-blue-100 text-blue-800' :
+                              opp.type === 'Bourse' ? 'bg-purple-100 text-purple-800' :
+                              opp.type === 'Concours' ? 'bg-orange-100 text-orange-800' :
+                              'bg-pink-100 text-pink-800'
+                            }`}>
+                              {opp.type}
+                            </span>
+                          </div>
+                          <h3 className="font-bold text-gray-900 text-lg mb-1">{opp.title}</h3>
+                          <p className="text-gray-600 mb-2">{opp.organization}</p>
+                          <p className="text-sm text-gray-500 line-clamp-2">{opp.description}</p>
+                          <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
+                            {opp.location && <span>📍 {opp.location}</span>}
+                            {opp.deadline && <span>⏰ {new Date(opp.deadline).toLocaleDateString('fr-FR')}</span>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (confirm('Êtes-vous sûr de vouloir supprimer cette opportunité ?')) {
+                                handleDeleteOpportunity(opp.id);
+                              }
+                            }}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Supprimer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         ) : adminTab === 'analytics' ? (
           <div className="p-6 md:p-12 animate-in fade-in duration-500">
             <div className="max-w-6xl mx-auto">
