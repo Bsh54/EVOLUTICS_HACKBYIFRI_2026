@@ -298,7 +298,15 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
               {isPreview ? "Éditer" : "Aperçu"}
             </button>
           )}
-          <button onClick={onClose} className="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all">
+          <button
+            onClick={() => {
+              setAdminTab('queue');
+              setShowSuccess(false);
+              setEditingId(null);
+            }}
+            className="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all"
+            title="Retour à la page principale admin"
+          >
             <X className="w-6 h-6" />
           </button>
         </div>

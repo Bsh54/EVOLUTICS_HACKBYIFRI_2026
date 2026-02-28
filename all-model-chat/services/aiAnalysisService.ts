@@ -92,46 +92,125 @@ export class AIAnalysisService {
   }
 
   /**
-   * Crée le prompt d'analyse pour Gemini
+   * Crée le prompt d'analyse pour Gemini avec champs spécifiques par type
    */
   private createAnalysisPrompt(url: string, content: string): string {
     return `
-Tu es un expert en analyse d'opportunités professionnelles. Analyse ce contenu et extrait les informations structurées.
+Tu es un expert en analyse d'opportunités professionnelles pour étudiants africains. Analyse ce contenu et extrait les informations structurées.
 
 URL: ${url}
 Contenu: ${content}
 
 INSTRUCTIONS:
 1. Détermine le type d'opportunité parmi: Emploi, Stage, Bourse, Concours, Conférences
-2. Extrait toutes les informations pertinentes
+2. Extrait toutes les informations pertinentes SELON LE TYPE
 3. Génère un message d'accueil personnalisé pour cette opportunité
 4. Évalue ta confiance dans l'analyse (0.0 à 1.0)
 
-RETOURNE UNIQUEMENT un JSON valide avec cette structure exacte:
+RETOURNE UNIQUEMENT un JSON valide avec cette structure EXACTE selon le type:
+
+POUR EMPLOI:
 {
-  "type": "Emploi|Stage|Bourse|Concours|Conférences",
-  "title": "titre exact de l'opportunité",
+  "type": "Emploi",
+  "title": "titre exact de l'emploi",
+  "organization": "nom de l'entreprise",
+  "description": "résumé en 2-3 phrases claires",
+  "fullContent": "contenu complet formaté en markdown",
+  "deadline": "YYYY-MM-DD ou null",
+  "location": "lieu précis ou 'Remote' ou 'Non spécifié'",
+  "salary": "salaire proposé ou null",
+  "contractType": "CDI|CDD|Stage Pro|Freelance|Prestation ou null",
+  "level": "niveau requis ou 'Non spécifié'",
+  "tags": ["tag1", "tag2", "tag3"],
+  "confidence": 0.95,
+  "aiGreeting": "message d'accueil personnalisé",
+  "contactEmail": "email de contact ou null",
+  "applyMethod": "link|email"
+}
+
+POUR STAGE:
+{
+  "type": "Stage",
+  "title": "titre exact du stage",
   "organization": "nom de l'organisation",
   "description": "résumé en 2-3 phrases claires",
   "fullContent": "contenu complet formaté en markdown",
-  "deadline": "YYYY-MM-DD ou null si pas de date",
+  "deadline": "YYYY-MM-DD ou null",
   "location": "lieu précis ou 'Remote' ou 'Non spécifié'",
-  "reward": "montant/salaire/prix ou null",
-  "level": "Junior|Senior|Étudiant|Tous niveaux|Non spécifié",
+  "duration": "durée formatée (ex: 6 MOIS)",
+  "level": "niveau requis (ex: Licence 3, Master 1) ou 'Non spécifié'",
   "tags": ["tag1", "tag2", "tag3"],
   "confidence": 0.95,
-  "aiGreeting": "Message d'accueil personnalisé de 1-2 phrases pour cette opportunité spécifique",
+  "aiGreeting": "message d'accueil personnalisé",
   "contactEmail": "email de contact ou null",
-  "applyMethod": "link|email",
-  "salary": "salaire si emploi ou null",
-  "contractType": "CDI|CDD|Stage|Freelance ou null",
-  "duration": "durée si applicable ou null",
-  "prizes": "prix si concours ou null",
-  "speakers": "intervenants si conférence ou null",
-  "schedule": "horaires si événement ou null"
+  "applyMethod": "link|email"
 }
 
-IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte avant ou après.
+POUR BOURSE:
+{
+  "type": "Bourse",
+  "title": "titre exact de la bourse",
+  "organization": "nom de l'organisation",
+  "description": "résumé en 2-3 phrases claires",
+  "fullContent": "contenu complet formaté en markdown",
+  "deadline": "YYYY-MM-DD ou null",
+  "location": "lieu ou pays ou 'International'",
+  "reward": "montant de la bourse (ex: 500.000 FCFA/an)",
+  "level": "niveau requis ou 'Non spécifié'",
+  "tags": ["tag1", "tag2", "tag3"],
+  "confidence": 0.95,
+  "aiGreeting": "message d'accueil personnalisé",
+  "contactEmail": "email de contact ou null",
+  "applyMethod": "link|email"
+}
+
+POUR CONCOURS:
+{
+  "type": "Concours",
+  "title": "titre exact du concours",
+  "organization": "nom de l'organisation",
+  "description": "résumé en 2-3 phrases claires",
+  "fullContent": "contenu complet formaté en markdown",
+  "deadline": "YYYY-MM-DD ou null",
+  "location": "lieu du concours ou 'En ligne'",
+  "prizes": "prix et récompenses (ex: 1er Prix: 100.000 FCFA + Mentorat)",
+  "level": "niveau requis ou 'Tous niveaux'",
+  "tags": ["tag1", "tag2", "tag3"],
+  "confidence": 0.95,
+  "aiGreeting": "message d'accueil personnalisé",
+  "contactEmail": "email de contact ou null",
+  "applyMethod": "link|email"
+}
+
+POUR CONFÉRENCES:
+{
+  "type": "Conférences",
+  "title": "titre exact de la conférence",
+  "organization": "nom de l'organisateur",
+  "description": "résumé en 2-3 phrases claires",
+  "fullContent": "contenu complet formaté en markdown",
+  "deadline": "YYYY-MM-DD ou null (date limite d'inscription)",
+  "location": "lieu de la conférence ou 'En ligne'",
+  "schedule": "horaires (ex: 09:00 - 18:00) ou null",
+  "speakers": "intervenants principaux ou null",
+  "tags": ["tag1", "tag2", "tag3"],
+  "confidence": 0.95,
+  "aiGreeting": "message d'accueil personnalisé",
+  "contactEmail": "email de contact ou null",
+  "applyMethod": "link|email"
+}
+
+RÈGLES STRICTES:
+1. Le JSON doit commencer par { et finir par }
+2. Toutes les clés et valeurs string doivent être entre guillemets doubles
+3. Pas de virgule après le dernier élément
+4. Pas de commentaires dans le JSON
+5. Pas de texte avant ou après le JSON
+6. Utilise null pour les champs sans information
+7. La confiance doit être un nombre entre 0 et 1
+8. SEULS les champs du type sélectionné doivent être présents
+
+RÉPONDS UNIQUEMENT AVEC LE JSON CORRESPONDANT AU TYPE DÉTECTÉ, RIEN D'AUTRE.
 `;
   }
 
