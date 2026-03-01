@@ -91,8 +91,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         cvData.contact.email === "votre.email@exemple.com" ||
         cvData.contact.phone === "+33 6 12 34 56 78" ||
         cvData.experiences.some(exp =>
-          exp.title === "Poste Actuel" ||
-          exp.title === "Poste Précédent" ||
+          exp.role === "Poste Actuel" ||
+          exp.role === "Poste Précédent" ||
           exp.company === "Entreprise Actuelle" ||
           exp.company === "Entreprise Précédente"
         ) ||

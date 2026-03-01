@@ -113,7 +113,7 @@ export class ProfileCVSyncService {
       objective: "Votre objectif de carrière",
       experiences: [
         {
-          title: "Poste Actuel",
+          role: "Poste Actuel",
           company: "Entreprise Actuelle",
           startDate: "2022",
           endDate: "",
@@ -121,7 +121,7 @@ export class ProfileCVSyncService {
           description: "Description de vos responsabilités et réalisations principales..."
         },
         {
-          title: "Poste Précédent",
+          role: "Poste Précédent",
           company: "Entreprise Précédente",
           startDate: "2020",
           endDate: "2022",
@@ -142,7 +142,7 @@ export class ProfileCVSyncService {
         {
           name: "Certification Professionnelle",
           issuer: "Organisme Certificateur",
-          date: "2023"
+          year: "2023"
         }
       ],
       skills: [
@@ -152,9 +152,9 @@ export class ProfileCVSyncService {
         { name: "Python", level: 70 }
       ],
       tools: [
-        { name: "VS Code", level: 90 },
-        { name: "Git", level: 85 },
-        { name: "Docker", level: 70 }
+        { id: "vscode", label: "VS Code", source: "simpleicons" },
+        { id: "git", label: "Git", source: "simpleicons" },
+        { id: "docker", label: "Docker", source: "simpleicons" }
       ],
       links: [
         {
@@ -167,9 +167,9 @@ export class ProfileCVSyncService {
         }
       ],
       languages: [
-        { name: "Français", level: "Natif" },
-        { name: "Anglais", level: "Courant" },
-        { name: "Espagnol", level: "Intermédiaire" }
+        "Français (Natif)",
+        "Anglais (Courant)",
+        "Espagnol (Intermédiaire)"
       ],
       hobbies: [
         "Développement open source",
@@ -179,10 +179,7 @@ export class ProfileCVSyncService {
       references: [
         {
           name: "Nom du Référent",
-          position: "Poste du Référent",
-          company: "Entreprise",
-          email: "referent@entreprise.com",
-          phone: "+33 6 12 34 56 78"
+          contact: "referent@entreprise.com - +33 6 12 34 56 78"
         }
       ],
       strategicPitch: "",
