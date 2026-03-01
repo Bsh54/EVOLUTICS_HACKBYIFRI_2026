@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Sparkles, Download, Loader2, Save } from 'lucide-react';
+import { ArrowLeft, Sparkles, Download, Loader2, Save, Wand2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { CVData } from '../../types/cvTypes';
 import ProfileCVSyncService from '../../services/profileCVSyncService';
 import CVDatabaseService from '../../services/cvDatabaseService';
+import CVAIOptimizationService, { JobOffer, OptimizationResult } from '../../services/cvAIOptimizationService';
 import CVTemplateSelector from './CVTemplateSelector';
 import CVEditorPanel from './CVEditorPanel';
 import CVTemplate from '../../templates/moderne/Moderne01';
@@ -17,7 +18,7 @@ interface CVBuilderPageProps {
   onThemeChange: (themeId: string) => void;
 }
 
-type CVBuilderStep = 'template-selection' | 'form-filling' | 'preview';
+type CVBuilderStep = 'template-selection' | 'form-filling' | 'preview' | 'ai-optimization';
 
 const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   onBack,
@@ -32,6 +33,16 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
+
+  // États pour l'optimisation IA
+  const [jobOffer, setJobOffer] = useState<JobOffer>({
+    title: '',
+    company: '',
+    description: ''
+  });
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [optimizationResult, setOptimizationResult] = useState<OptimizationResult | null>(null);
+  const [showOptimizationResults, setShowOptimizationResults] = useState(false);
 
   // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
@@ -183,6 +194,94 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  // Fonction d'optimisation IA
+  const handleAIOptimization = async () => {
+    if (!cvData) {
+      toast.error("Aucune donnée CV disponible pour l'optimisation");
+      return;
+    }
+
+    // Validation de l'offre d'emploi
+    if (!CVAIOptimizationService.validateJobOffer(jobOffer)) {
+      toast.error("Veuillez remplir au minimum le titre du poste et une description détaillée (50+ caractères)");
+      return;
+    }
+
+    setIsOptimizing(true);
+    const toastId = toast.loading("🤖 Optimisation IA en cours...");
+
+    try {
+      console.log('🤖 Début optimisation IA avec:', jobOffer);
+
+      const result = await CVAIOptimizationService.optimizeCV(cvData, jobOffer);
+
+      console.log('✅ Optimisation terminée:', result);
+
+      // Mettre à jour les données CV avec la version optimisée
+      setCvDataState(result.optimizedCV);
+      setOptimizationResult(result);
+      setShowOptimizationResults(true);
+
+      // Marquer tous les champs comme modifiés pour permettre la sauvegarde
+      const allFields = new Set([
+        'fullName', 'title', 'about', 'objective', 'experiences',
+        'education', 'skills', 'certifications', 'tools', 'links',
+        'languages', 'hobbies', 'references', 'strategicPitch'
+      ]);
+      setModifiedFields(allFields);
+
+      toast.update(toastId, {
+        render: `✅ CV optimisé ! Score de correspondance: ${result.matchScore}%`,
+        type: "success",
+        isLoading: false,
+        autoClose: 3000
+      });
+
+    } catch (error) {
+      console.error('❌ Erreur optimisation IA:', error);
+
+      let errorMessage = "Erreur lors de l'optimisation IA";
+      if (error instanceof Error) {
+        if (error.message.includes('API')) {
+          errorMessage = "Erreur de connexion à l'IA. Vérifiez votre connexion.";
+        } else if (error.message.includes('Clé API')) {
+          errorMessage = "Configuration IA manquante. Contactez le support.";
+        }
+      }
+
+      toast.update(toastId, {
+        render: `❌ ${errorMessage}`,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000
+      });
+    } finally {
+      setIsOptimizing(false);
+    }
+  };
+
+  // Fonction pour appliquer les résultats d'optimisation
+  const handleApplyOptimization = async () => {
+    if (!optimizationResult || !profile) return;
+
+    try {
+      // Sauvegarder le CV optimisé
+      await CVDatabaseService.saveCVData(
+        profile.id,
+        optimizationResult.optimizedCV,
+        selectedTemplate || 'moderne-01'
+      );
+
+      toast.success("✅ CV optimisé sauvegardé avec succès !");
+      setShowOptimizationResults(false);
+      setCurrentStep('preview');
+
+    } catch (error) {
+      console.error('❌ Erreur sauvegarde CV optimisé:', error);
+      toast.error("❌ Erreur lors de la sauvegarde du CV optimisé");
     }
   };
 
@@ -484,6 +583,14 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                 Modifier
               </button>
               <button
+                onClick={() => setCurrentStep('ai-optimization')}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl transition-all font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center shadow-lg"
+              >
+                <Wand2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Optimiser avec IA</span>
+                <span className="sm:hidden">IA</span>
+              </button>
+              <button
                 onClick={handleExportPDF}
                 disabled={isExporting}
                 className="flex items-center gap-2 px-4 sm:px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center"
@@ -499,6 +606,207 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
           <div className="flex-1 bg-gray-200 overflow-y-auto p-2 sm:p-3 md:p-6 flex justify-center">
             <div id="cv-preview" className="w-full max-w-[700px]">
               <CVTemplate data={cvData} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Étape 4: Optimisation IA */}
+      {currentStep === 'ai-optimization' && cvData && (
+        <div className="h-full flex flex-col">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)] gap-4 sm:gap-0">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setCurrentStep('preview')}
+                className="p-2 hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
+              </button>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-[var(--theme-text-primary)] flex items-center gap-2">
+                  <Wand2 className="w-6 h-6 text-purple-600" />
+                  Optimisation IA
+                </h1>
+                <p className="text-sm text-[var(--theme-text-secondary)]">
+                  Optimisez votre CV pour une offre d'emploi spécifique
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contenu principal */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+            <div className="max-w-4xl mx-auto">
+              {/* Instructions */}
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-700 rounded-xl p-6 mb-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Wand2 className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[var(--theme-text-primary)] mb-2">
+                      Comment ça marche ?
+                    </h3>
+                    <ul className="text-sm text-[var(--theme-text-secondary)] space-y-1">
+                      <li>• Collez l'offre d'emploi qui vous intéresse</li>
+                      <li>• Notre IA analyse les compétences et mots-clés recherchés</li>
+                      <li>• Votre CV est automatiquement optimisé pour cette offre</li>
+                      <li>• Téléchargez votre CV personnalisé et augmentez vos chances</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Formulaire d'offre d'emploi */}
+              <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-6">
+                <h3 className="text-lg font-bold text-[var(--theme-text-primary)] mb-4">
+                  Offre d'emploi cible
+                </h3>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-2">
+                      Titre du poste
+                    </label>
+                    <input
+                      type="text"
+                      value={jobOffer.title}
+                      onChange={(e) => setJobOffer(prev => ({ ...prev, title: e.target.value }))}
+                      placeholder="Ex: Développeur Full Stack Senior"
+                      className="w-full px-4 py-3 bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] rounded-xl text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-2">
+                      Entreprise
+                    </label>
+                    <input
+                      type="text"
+                      value={jobOffer.company}
+                      onChange={(e) => setJobOffer(prev => ({ ...prev, company: e.target.value }))}
+                      placeholder="Ex: Google, Microsoft, Startup innovante..."
+                      className="w-full px-4 py-3 bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] rounded-xl text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-2">
+                      Description complète de l'offre
+                    </label>
+                    <textarea
+                      rows={12}
+                      value={jobOffer.description}
+                      onChange={(e) => setJobOffer(prev => ({ ...prev, description: e.target.value }))}
+                      placeholder="Collez ici la description complète de l'offre d'emploi (missions, compétences requises, profil recherché, etc.)..."
+                      className="w-full px-4 py-3 bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] rounded-xl text-[var(--theme-text-primary)] placeholder:text-[var(--theme-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Boutons d'action */}
+                <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                  <button
+                    onClick={() => setCurrentStep('preview')}
+                    className="px-6 py-3 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] rounded-xl transition-colors font-medium"
+                  >
+                    Retour à la prévisualisation
+                  </button>
+                  <button
+                    onClick={handleAIOptimization}
+                    disabled={isOptimizing}
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl transition-all font-medium shadow-lg flex-1 sm:flex-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isOptimizing ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Wand2 className="w-5 h-5" />
+                    )}
+                    {isOptimizing ? 'Optimisation en cours...' : 'Optimiser mon CV avec l\'IA'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Résultats de l'optimisation IA */}
+              {showOptimizationResults && optimizationResult && (
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-green-200 dark:border-green-700 rounded-xl p-6 mt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-[var(--theme-text-primary)] mb-2 flex items-center gap-2">
+                        Optimisation terminée !
+                        <span className="text-sm bg-gradient-to-r from-green-600 to-blue-600 text-white px-2 py-1 rounded-full">
+                          {optimizationResult.matchScore}% de correspondance
+                        </span>
+                      </h3>
+
+                      {/* Changements effectués */}
+                      <div className="mb-4">
+                        <h4 className="font-semibold text-[var(--theme-text-primary)] mb-2">
+                          Modifications apportées ({optimizationResult.changes.length}) :
+                        </h4>
+                        <ul className="text-sm text-[var(--theme-text-secondary)] space-y-1">
+                          {optimizationResult.changes.slice(0, 5).map((change, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              {change}
+                            </li>
+                          ))}
+                          {optimizationResult.changes.length > 5 && (
+                            <li className="text-xs text-[var(--theme-text-tertiary)] italic">
+                              ... et {optimizationResult.changes.length - 5} autres modifications
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+
+                      {/* Recommandations */}
+                      {optimizationResult.recommendations.length > 0 && (
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-[var(--theme-text-primary)] mb-2">
+                            Recommandations supplémentaires :
+                          </h4>
+                          <ul className="text-sm text-[var(--theme-text-secondary)] space-y-1">
+                            {optimizationResult.recommendations.slice(0, 3).map((rec, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                                {rec}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          onClick={() => setShowOptimizationResults(false)}
+                          className="px-4 py-2 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] rounded-xl transition-colors"
+                        >
+                          Masquer les résultats
+                        </button>
+                        <button
+                          onClick={handleApplyOptimization}
+                          className="flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white rounded-xl transition-all font-medium shadow-lg flex-1 sm:flex-none"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          Sauvegarder le CV optimisé
+                        </button>
+                        <button
+                          onClick={() => setCurrentStep('preview')}
+                          className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
+                        >
+                          <Sparkles className="w-4 h-4" />
+                          Voir le résultat
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
