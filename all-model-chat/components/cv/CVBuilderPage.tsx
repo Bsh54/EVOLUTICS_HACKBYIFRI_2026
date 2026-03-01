@@ -87,7 +87,19 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       const hasDefaultData =
         cvData.fullName === "Votre Nom" ||
         cvData.title === "Votre Titre Professionnel" ||
-        cvData.about === "Décrivez votre profil professionnel ici...";
+        cvData.about === "Décrivez votre profil professionnel ici..." ||
+        cvData.contact.email === "votre.email@exemple.com" ||
+        cvData.contact.phone === "+33 6 12 34 56 78" ||
+        cvData.experiences.some(exp =>
+          exp.title === "Poste Actuel" ||
+          exp.title === "Poste Précédent" ||
+          exp.company === "Entreprise Actuelle" ||
+          exp.company === "Entreprise Précédente"
+        ) ||
+        cvData.education.some(edu =>
+          edu.degree === "Master en Informatique" ||
+          edu.school === "Université/École"
+        );
 
       if (hasDefaultData) {
         toast.update(toastId, {

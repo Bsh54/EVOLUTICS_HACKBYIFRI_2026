@@ -97,29 +97,94 @@ export class ProfileCVSyncService {
    * Synchronise les données du profil vers le CV
    */
   static syncProfileToCV(profile: UserProfile, existingCVData?: CVData): CVData {
-    // Données CV par défaut SANS exemples (données vides)
+    // Données CV par défaut avec exemples pour prévisualisation
     const defaultCVData: CVData = {
       fullName: "Votre Nom",
       title: "Votre Titre Professionnel",
       color: "#00a99d",
       profileImage: "",
       contact: {
-        phone: "",
-        email: "",
-        address: "",
-        linkedin: ""
+        phone: "+33 6 12 34 56 78",
+        email: "votre.email@exemple.com",
+        address: "Votre Adresse, Ville",
+        linkedin: "linkedin.com/in/votre-profil"
       },
       about: "Décrivez votre profil professionnel ici...",
-      objective: "",
-      experiences: [],
-      education: [],
-      certifications: [],
-      skills: [],
-      tools: [],
-      links: [],
-      languages: [],
-      hobbies: [],
-      references: [],
+      objective: "Votre objectif de carrière",
+      experiences: [
+        {
+          title: "Poste Actuel",
+          company: "Entreprise Actuelle",
+          startDate: "2022",
+          endDate: "",
+          isCurrent: true,
+          description: "Description de vos responsabilités et réalisations principales..."
+        },
+        {
+          title: "Poste Précédent",
+          company: "Entreprise Précédente",
+          startDate: "2020",
+          endDate: "2022",
+          isCurrent: false,
+          description: "Description de votre expérience précédente..."
+        }
+      ],
+      education: [
+        {
+          degree: "Master en Informatique",
+          school: "Université/École",
+          startDate: "2018",
+          endDate: "2020",
+          isCurrent: false
+        }
+      ],
+      certifications: [
+        {
+          name: "Certification Professionnelle",
+          issuer: "Organisme Certificateur",
+          date: "2023"
+        }
+      ],
+      skills: [
+        { name: "JavaScript", level: 85 },
+        { name: "React", level: 80 },
+        { name: "Node.js", level: 75 },
+        { name: "Python", level: 70 }
+      ],
+      tools: [
+        { name: "VS Code", level: 90 },
+        { name: "Git", level: 85 },
+        { name: "Docker", level: 70 }
+      ],
+      links: [
+        {
+          name: "Portfolio",
+          url: "https://votre-portfolio.com"
+        },
+        {
+          name: "GitHub",
+          url: "https://github.com/votre-username"
+        }
+      ],
+      languages: [
+        { name: "Français", level: "Natif" },
+        { name: "Anglais", level: "Courant" },
+        { name: "Espagnol", level: "Intermédiaire" }
+      ],
+      hobbies: [
+        "Développement open source",
+        "Photographie",
+        "Voyage"
+      ],
+      references: [
+        {
+          name: "Nom du Référent",
+          position: "Poste du Référent",
+          company: "Entreprise",
+          email: "referent@entreprise.com",
+          phone: "+33 6 12 34 56 78"
+        }
+      ],
       strategicPitch: "",
       isOptimized: false,
       sectionsOrder: {
