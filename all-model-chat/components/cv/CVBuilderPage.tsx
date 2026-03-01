@@ -45,9 +45,11 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
           const existingData = await CVDatabaseService.getCVData(profile.id);
 
           if (existingData) {
-            // Utiliser les données existantes de la base
+            // Fusionner les données sauvegardées avec les données de test par défaut
             console.log('✅ CV récupéré depuis la base de données');
-            setCvDataState(existingData);
+            const defaultData = ProfileCVSyncService.syncProfileToCV(profile);
+            const mergedData = mergeWithDefaults(existingData, defaultData);
+            setCvDataState(mergedData);
           } else {
             // Synchroniser avec le profil (auto-remplissage intelligent)
             const syncedData = ProfileCVSyncService.syncProfileToCV(profile);
@@ -149,7 +151,6 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     }
 
     setIsSaving(true);
-    const toastId = toast.loading("Sauvegarde en cours...");
 
     try {
       // Créer un objet avec seulement les données modifiées
@@ -169,23 +170,47 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       }
 
       console.log('✅ Sauvegarde terminée avec succès');
-      toast.update(toastId, {
-        render: `✅ CV sauvegardé ! (${modifiedFields.size} champs modifiés)`,
-        type: "success",
-        isLoading: false,
+      toast.success(`✅ CV sauvegardé ! (${modifiedFields.size} champs modifiés)`, {
         autoClose: 2000
       });
     } catch (error) {
       console.error('❌ Erreur sauvegarde:', error);
-      toast.update(toastId, {
-        render: "❌ Erreur lors de la sauvegarde",
-        type: "error",
-        isLoading: false,
+      toast.error("❌ Erreur lors de la sauvegarde", {
         autoClose: 3000
       });
     } finally {
       setIsSaving(false);
     }
+  };
+
+  // Fonction pour fusionner les données sauvegardées avec les données de test par défaut
+  const mergeWithDefaults = (savedData: CVData, defaultData: CVData): CVData => {
+    return {
+      fullName: savedData.fullName || defaultData.fullName,
+      title: savedData.title || defaultData.title,
+      color: savedData.color || defaultData.color,
+      profileImage: savedData.profileImage || defaultData.profileImage,
+      contact: {
+        phone: savedData.contact.phone || defaultData.contact.phone,
+        email: savedData.contact.email || defaultData.contact.email,
+        address: savedData.contact.address || defaultData.contact.address,
+        linkedin: savedData.contact.linkedin || defaultData.contact.linkedin
+      },
+      about: savedData.about || defaultData.about,
+      objective: savedData.objective || defaultData.objective,
+      experiences: savedData.experiences.length > 0 ? savedData.experiences : defaultData.experiences,
+      education: savedData.education.length > 0 ? savedData.education : defaultData.education,
+      certifications: savedData.certifications.length > 0 ? savedData.certifications : defaultData.certifications,
+      skills: savedData.skills.length > 0 ? savedData.skills : defaultData.skills,
+      tools: savedData.tools.length > 0 ? savedData.tools : defaultData.tools,
+      links: savedData.links.length > 0 ? savedData.links : defaultData.links,
+      languages: savedData.languages.length > 0 ? savedData.languages : defaultData.languages,
+      hobbies: savedData.hobbies.length > 0 ? savedData.hobbies : defaultData.hobbies,
+      references: savedData.references.length > 0 ? savedData.references : defaultData.references,
+      strategicPitch: savedData.strategicPitch || defaultData.strategicPitch,
+      isOptimized: savedData.isOptimized || defaultData.isOptimized,
+      sectionsOrder: savedData.sectionsOrder || defaultData.sectionsOrder
+    };
   };
 
   // Fonction pour créer les données CV filtrées (seulement les champs modifiés)
