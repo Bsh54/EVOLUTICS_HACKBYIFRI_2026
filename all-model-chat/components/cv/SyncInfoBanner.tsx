@@ -18,12 +18,11 @@ export const SyncInfoBanner: React.FC<SyncInfoBannerProps> = ({ className = '' }
         </div>
         <div className="flex-1">
           <h4 className="text-sm font-bold text-blue-900 mb-1">
-            Synchronisation Intelligente Activée
+            Synchronisation Activée
           </h4>
           <p className="text-xs text-blue-700 leading-relaxed">
-            Les champs marqués avec <RefreshCw className="w-3 h-3 inline mx-1 text-blue-600" />
-            sont automatiquement remplis depuis votre profil EVOLUTICS.
-            Vos modifications seront sauvegardées dans votre profil pour les prochains CV.
+            Les champs avec <RefreshCw className="w-3 h-3 inline mx-1 text-blue-600" />
+            sont auto-remplis depuis votre profil.
           </p>
         </div>
         <button
