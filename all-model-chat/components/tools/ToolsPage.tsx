@@ -181,43 +181,6 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange }) => {
         ))}
       </div>
 
-      {/* Info section */}
-      <div className="mt-12 max-w-4xl mx-auto">
-        <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-2xl p-8">
-          <h2 className="text-xl font-bold text-[var(--theme-text-primary)] mb-4">
-            ✨ Pourquoi utiliser nos outils ?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <FileText className="w-6 h-6 text-blue-500" />
-              </div>
-              <h3 className="font-bold text-[var(--theme-text-primary)] mb-2">Optimisés IA</h3>
-              <p className="text-sm text-[var(--theme-text-secondary)]">
-                Tous nos outils utilisent l'intelligence artificielle pour des résultats optimaux
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Users className="w-6 h-6 text-purple-500" />
-              </div>
-              <h3 className="font-bold text-[var(--theme-text-primary)] mb-2">Faciles à utiliser</h3>
-              <p className="text-sm text-[var(--theme-text-secondary)]">
-                Interface intuitive et guidage pas à pas pour tous les niveaux
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Briefcase className="w-6 h-6 text-green-500" />
-              </div>
-              <h3 className="font-bold text-[var(--theme-text-primary)] mb-2">Résultats Pro</h3>
-              <p className="text-sm text-[var(--theme-text-secondary)]">
-                Qualité professionnelle garantie pour impressionner les recruteurs
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
