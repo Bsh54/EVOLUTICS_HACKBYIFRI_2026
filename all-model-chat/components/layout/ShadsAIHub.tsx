@@ -11,7 +11,8 @@ import {
   Plus,
   Search,
   Heart,
-  User
+  User,
+  Palette
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -266,6 +267,12 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'chat' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
             <MessageSquare className="w-4 h-4" /> ASSISTANT
+          </button>
+          <button
+            onClick={() => navigateToTab('tools')}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'tools' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
+          >
+            <Palette className="w-4 h-4" /> OUTILS
           </button>
           <button
             onClick={() => navigateToTab('profile')}
