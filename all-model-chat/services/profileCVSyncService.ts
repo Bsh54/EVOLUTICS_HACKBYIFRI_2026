@@ -97,86 +97,29 @@ export class ProfileCVSyncService {
    * Synchronise les données du profil vers le CV
    */
   static syncProfileToCV(profile: UserProfile, existingCVData?: CVData): CVData {
-    // Données CV par défaut avec exemples
+    // Données CV par défaut SANS exemples (données vides)
     const defaultCVData: CVData = {
       fullName: "Votre Nom",
       title: "Votre Titre Professionnel",
       color: "#00a99d",
       profileImage: "",
       contact: {
-        phone: "+33 6 12 34 56 78",
-        email: "votre.email@exemple.com",
-        address: "Paris, France",
-        linkedin: "linkedin.com/in/votre-profil"
+        phone: "",
+        email: "",
+        address: "",
+        linkedin: ""
       },
-      about: "Professionnel passionné avec une solide expérience dans mon domaine. Toujours à la recherche de nouveaux défis et d'opportunités d'apprentissage.",
+      about: "Décrivez votre profil professionnel ici...",
       objective: "",
-      experiences: [
-        {
-          role: "Développeur Frontend",
-          company: "TechCorp Solutions",
-          startDate: "2022",
-          endDate: "Présent",
-          isCurrent: true,
-          description: "• Développement d'applications web modernes avec React et TypeScript\n• Collaboration avec l'équipe UX/UI pour créer des interfaces intuitives\n• Optimisation des performances et amélioration de l'expérience utilisateur"
-        },
-        {
-          role: "Stagiaire Développement",
-          company: "StartupTech",
-          startDate: "2021",
-          endDate: "2022",
-          isCurrent: false,
-          description: "• Participation au développement d'une plateforme e-commerce\n• Apprentissage des bonnes pratiques de développement\n• Contribution aux tests et à la documentation"
-        }
-      ],
-      education: [
-        {
-          degree: "Master en Informatique",
-          school: "Université Paris Tech",
-          startDate: "2019",
-          endDate: "2021",
-          isCurrent: false
-        },
-        {
-          degree: "Licence Informatique",
-          school: "Université Paris Sciences",
-          startDate: "2016",
-          endDate: "2019",
-          isCurrent: false
-        }
-      ],
+      experiences: [],
+      education: [],
       certifications: [],
-      skills: [
-        { name: "JavaScript", level: 90 },
-        { name: "React", level: 85 },
-        { name: "TypeScript", level: 80 },
-        { name: "Node.js", level: 75 },
-        { name: "CSS/Tailwind", level: 85 },
-        { name: "Git", level: 80 }
-      ],
+      skills: [],
       tools: [],
       links: [],
-      languages: [
-        "Français (Natif)",
-        "Anglais (Courant)",
-        "Espagnol (Intermédiaire)"
-      ],
-      hobbies: [
-        "Développement open source",
-        "Lecture tech",
-        "Sport",
-        "Voyages"
-      ],
-      references: [
-        {
-          name: "Marie Dubois",
-          contact: "marie.dubois@techcorp.com - Manager Technique"
-        },
-        {
-          name: "Jean Martin",
-          contact: "jean.martin@startuptech.fr - Lead Developer"
-        }
-      ],
+      languages: [],
+      hobbies: [],
+      references: [],
       strategicPitch: "",
       isOptimized: false,
       sectionsOrder: {
