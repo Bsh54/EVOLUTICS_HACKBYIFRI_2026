@@ -748,8 +748,8 @@ RÈGLES DE COMPORTEMENT :
         </div>
       </div>
 
-      {/* MOBILE APP BAR - 3 ONGLETS */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--theme-bg-primary)] border-t border-[var(--theme-border-primary)] z-[999] grid grid-cols-3 items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] backdrop-blur-xl">
+      {/* MOBILE APP BAR - 4 ONGLETS */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--theme-bg-primary)] border-t border-[var(--theme-border-primary)] z-[999] grid grid-cols-4 items-center shadow-[0_-4px_20px_rgba(0,0,0,0.1)] backdrop-blur-xl">
         <button
           onClick={() => navigateToTab('opportunities')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
