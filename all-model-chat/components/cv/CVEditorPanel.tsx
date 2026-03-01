@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Trash2, X, ImageIcon } from "lucide-react";
 import type { CVData } from "../../types/cvTypes";
+import { SyncFieldLabel } from "./SyncIndicator";
+import { SyncInfoBanner } from "./SyncInfoBanner";
 
 interface CVEditorPanelProps {
   data: CVData;
@@ -49,6 +51,9 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
 
   return (
     <div className="space-y-6">
+      {/* Banner d'information sur la synchronisation */}
+      <SyncInfoBanner />
+
       {/* Accordéon simplifié pour EVOLUTICS */}
       <div className="space-y-6">
 
@@ -75,7 +80,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs uppercase font-bold text-[var(--theme-text-secondary)]">Nom Complet</label>
+              <SyncFieldLabel label="Nom Complet" fieldName="fullName" required />
               <input
                 className="w-full border border-[var(--theme-border-primary)] rounded-md px-3 py-2 text-sm bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
                 value={data.fullName}
@@ -83,7 +88,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs uppercase font-bold text-[var(--theme-text-secondary)]">Titre du poste</label>
+              <SyncFieldLabel label="Titre du poste" fieldName="title" required />
               <input
                 className="w-full border border-[var(--theme-border-primary)] rounded-md px-3 py-2 text-sm bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
                 value={data.title}
@@ -91,7 +96,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs uppercase font-bold text-[var(--theme-text-secondary)]">Email</label>
+              <SyncFieldLabel label="Email" fieldName="contact.email" required />
               <input
                 className="w-full border border-[var(--theme-border-primary)] rounded-md px-3 py-2 text-sm bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
                 value={data.contact.email}
@@ -99,7 +104,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs uppercase font-bold text-[var(--theme-text-secondary)]">Téléphone</label>
+              <SyncFieldLabel label="Téléphone" fieldName="contact.phone" />
               <input
                 className="w-full border border-[var(--theme-border-primary)] rounded-md px-3 py-2 text-sm bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
                 value={data.contact.phone}
@@ -115,7 +120,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs uppercase font-bold text-[var(--theme-text-secondary)]">Profil / Résumé</label>
+              <SyncFieldLabel label="Profil / Résumé" fieldName="about" />
               <textarea
                 className="w-full border border-[var(--theme-border-primary)] rounded px-3 py-2 text-sm h-20 outline-none focus:border-[var(--theme-bg-accent)] bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
                 value={data.about}
@@ -187,7 +192,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
           <div className="space-y-6">
             {/* FORMATION */}
             <div className="space-y-3">
-              <label className="text-xs font-bold uppercase text-[var(--theme-bg-accent)]">Formation</label>
+              <SyncFieldLabel label="Formation" fieldName="education" />
               {data.education.map((edu, i) => (
                 <div key={i} className="flex gap-2 items-center bg-[var(--theme-bg-secondary)] p-2 border border-[var(--theme-border-primary)] rounded">
                   <input
@@ -211,7 +216,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
 
             {/* COMPÉTENCES */}
             <div className="space-y-3">
-              <label className="text-xs font-bold uppercase text-[var(--theme-bg-accent)]">Compétences (%)</label>
+              <SyncFieldLabel label="Compétences (%)" fieldName="skills" />
               {data.skills.map((s, i) => (
                 <div key={i} className="flex gap-2 items-center bg-[var(--theme-bg-secondary)] p-2 border border-[var(--theme-border-primary)] rounded">
                   <input

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Sparkles, Download, Loader2, Save } from 'lucide-react';
+import { ArrowLeft, Sparkles, Download, Loader2, Save, Sync } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { CVData } from '../../types/cvTypes';
 import { getCVData, setCVData } from '../../lib/cvStore';
+import ProfileCVSyncService from '../../services/profileCVSyncService';
 import CVTemplateSelector from './CVTemplateSelector';
 import CVEditorPanel from './CVEditorPanel';
 import CVTemplate from '../../templates/moderne/Moderne01';
@@ -23,54 +24,36 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   themeId,
   onThemeChange
 }) => {
-  const { profile } = useAuth();
+  const { profile, updateProfile } = useAuth();
   const [currentStep, setCurrentStep] = useState<CVBuilderStep>('template-selection');
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [cvData, setCvDataState] = useState<CVData | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
 
-  // Fonction pour obtenir les données par défaut à partir du profil EVOLUTICS
-  const getDefaultCVData = (): CVData => ({
-    fullName: profile?.fullName || "Votre Nom",
-    title: profile?.title || "Votre Titre Professionnel",
-    color: "#00a99d",
-    profileImage: "",
-    contact: {
-      phone: profile?.phone || "",
-      email: profile?.email || "",
-      address: profile?.location || "",
-      linkedin: ""
-    },
-    about: profile?.bio || "Décrivez votre profil professionnel ici...",
-    objective: "",
-    experiences: [],
-    education: [],
-    certifications: [],
-    skills: [],
-    tools: [],
-    links: [],
-    languages: [],
-    hobbies: [],
-    references: [],
-    strategicPitch: "",
-    isOptimized: false,
-    sectionsOrder: {
-      sidebar: ["contact", "skills", "languages", "hobbies"],
-      main: ["about", "experiences", "education", "references"]
-    }
-  });
-
-  // Initialisation des données CV
+  // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
     if (profile && currentStep === 'form-filling') {
-      // Récupérer ou créer les données CV
+      console.log('🔄 Initialisation CV avec synchronisation profil...');
+
+      // Récupérer les données CV existantes
       let existingData = getCVData();
-      if (!existingData) {
-        existingData = getDefaultCVData();
-        setCVData(existingData);
-      }
-      setCvDataState(existingData);
+
+      // Synchroniser avec le profil (auto-remplissage intelligent)
+      const syncedData = ProfileCVSyncService.syncProfileToCV(profile, existingData);
+
+      // Sauvegarder et définir les données
+      setCVData(syncedData);
+      setCvDataState(syncedData);
+
+      console.log('✅ CV initialisé avec données profil:', {
+        fullName: syncedData.fullName,
+        title: syncedData.title,
+        email: syncedData.contact.email,
+        skillsCount: syncedData.skills.length,
+        educationCount: syncedData.education.length
+      });
     }
   }, [profile, currentStep]);
 
@@ -80,10 +63,34 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     setCurrentStep('form-filling');
   };
 
-  // Fonction pour mettre à jour les données CV
-  const handleCVDataChange = (newData: CVData) => {
+  // Fonction pour mettre à jour les données CV avec synchronisation automatique
+  const handleCVDataChange = async (newData: CVData) => {
     setCvDataState(newData);
     setCVData(newData);
+
+    // Synchronisation automatique vers le profil (debounced)
+    if (profile) {
+      // Utiliser un délai pour éviter trop d'appels API
+      clearTimeout((window as any).cvSyncTimeout);
+      (window as any).cvSyncTimeout = setTimeout(async () => {
+        try {
+          setIsSyncing(true);
+          await ProfileCVSyncService.autoSaveCVToProfile(newData, profile);
+
+          // Rafraîchir le profil pour refléter les changements
+          if (updateProfile) {
+            const profileUpdates = ProfileCVSyncService.syncCVToProfile(newData, profile);
+            if (Object.keys(profileUpdates).length > 0) {
+              await updateProfile(profileUpdates);
+            }
+          }
+        } catch (error) {
+          console.error('Erreur synchronisation:', error);
+        } finally {
+          setIsSyncing(false);
+        }
+      }, 2000); // Délai de 2 secondes
+    }
   };
 
   // Fonction de sauvegarde
@@ -255,6 +262,14 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {/* Indicateur de synchronisation */}
+              {isSyncing && (
+                <div className="flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-600 text-sm">
+                  <Sync className="w-4 h-4 animate-spin" />
+                  <span>Synchronisation...</span>
+                </div>
+              )}
+
               <button
                 onClick={handleSave}
                 disabled={isSaving}
