@@ -31,6 +31,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   const [isExporting, setIsExporting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
+  const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
 
   // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
@@ -73,19 +74,77 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     setCurrentStep('form-filling');
   };
 
-  // Fonction pour mettre à jour les données CV (sans auto-sauvegarde)
+  // Fonction pour mettre à jour les données CV et tracker les modifications
   const handleCVDataChange = (newData: CVData) => {
     setCvDataState(newData);
-    // Pas d'auto-sauvegarde - seulement mise à jour de l'état local
+
+    // Tracker les champs modifiés en comparant avec les valeurs par défaut
+    const defaultValues = {
+      fullName: "Votre Nom",
+      title: "Votre Titre Professionnel",
+      about: "Décrivez votre profil professionnel ici...",
+      objective: "Votre objectif de carrière",
+      "contact.email": "votre.email@exemple.com",
+      "contact.phone": "+33 6 12 34 56 78",
+      "contact.address": "Votre Adresse, Ville",
+      "contact.linkedin": "linkedin.com/in/votre-profil"
+    };
+
+    const newModifiedFields = new Set(modifiedFields);
+
+    // Vérifier les champs simples
+    Object.entries(defaultValues).forEach(([key, defaultValue]) => {
+      let currentValue;
+      if (key.includes('.')) {
+        const [parent, child] = key.split('.');
+        currentValue = (newData as any)[parent]?.[child];
+      } else {
+        currentValue = (newData as any)[key];
+      }
+
+      if (currentValue && currentValue !== defaultValue) {
+        newModifiedFields.add(key);
+      }
+    });
+
+    // Vérifier les tableaux (expériences, formation, etc.)
+    if (newData.experiences.some(exp =>
+      exp.role !== "Poste Actuel" && exp.role !== "Poste Précédent" ||
+      exp.company !== "Entreprise Actuelle" && exp.company !== "Entreprise Précédente"
+    )) {
+      newModifiedFields.add('experiences');
+    }
+
+    if (newData.education.some(edu =>
+      edu.degree !== "Master en Informatique" ||
+      edu.school !== "Université/École"
+    )) {
+      newModifiedFields.add('education');
+    }
+
+    if (newData.skills.some(skill =>
+      !["JavaScript", "React", "Node.js", "Python"].includes(skill.name)
+    )) {
+      newModifiedFields.add('skills');
+    }
+
+    setModifiedFields(newModifiedFields);
+    console.log('🔄 Champs modifiés:', Array.from(newModifiedFields));
   };
 
-  // Fonction de sauvegarde manuelle
+  // Fonction de sauvegarde manuelle - ne sauvegarde que les champs modifiés
   const handleSave = async () => {
     console.log('🔄 Début sauvegarde, cvData:', cvData);
     console.log('🔄 Profile:', profile);
+    console.log('🔄 Champs modifiés:', Array.from(modifiedFields));
 
     if (!cvData || !profile) {
       console.log('❌ Données manquantes - cvData:', !!cvData, 'profile:', !!profile);
+      return;
+    }
+
+    if (modifiedFields.size === 0) {
+      toast.warning("Aucune modification à sauvegarder");
       return;
     }
 
@@ -93,50 +152,17 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     const toastId = toast.loading("Sauvegarde en cours...");
 
     try {
-      // Vérifier si les données contiennent encore des valeurs par défaut (données de test)
-      const hasDefaultData =
-        cvData.fullName === "Votre Nom" ||
-        cvData.title === "Votre Titre Professionnel" ||
-        cvData.about === "Décrivez votre profil professionnel ici..." ||
-        cvData.contact.email === "votre.email@exemple.com" ||
-        cvData.contact.phone === "+33 6 12 34 56 78" ||
-        cvData.experiences.some(exp =>
-          exp.role === "Poste Actuel" ||
-          exp.role === "Poste Précédent" ||
-          exp.company === "Entreprise Actuelle" ||
-          exp.company === "Entreprise Précédente"
-        ) ||
-        cvData.education.some(edu =>
-          edu.degree === "Master en Informatique" ||
-          edu.school === "Université/École"
-        );
+      // Créer un objet avec seulement les données modifiées
+      const dataToSave = createFilteredCVData(cvData, modifiedFields);
 
-      console.log('🔍 Vérification données par défaut:', {
-        fullName: cvData.fullName,
-        title: cvData.title,
-        email: cvData.contact.email,
-        hasDefaultData
-      });
-
-      if (hasDefaultData) {
-        console.log('⚠️ Données par défaut détectées, arrêt sauvegarde');
-        toast.update(toastId, {
-          render: "⚠️ Veuillez modifier les données par défaut avant de sauvegarder",
-          type: "warning",
-          isLoading: false,
-          autoClose: 3000
-        });
-        return;
-      }
-
-      console.log('✅ Données validées, début sauvegarde en base');
+      console.log('✅ Données filtrées à sauvegarder:', dataToSave);
 
       // Sauvegarder en base de données
-      await CVDatabaseService.saveCVData(profile.id, cvData, selectedTemplate || 'moderne-01');
+      await CVDatabaseService.saveCVData(profile.id, dataToSave, selectedTemplate || 'moderne-01');
 
       // Synchroniser vers le profil si nécessaire
       if (updateProfile) {
-        const profileUpdates = ProfileCVSyncService.syncCVToProfile(cvData, profile);
+        const profileUpdates = ProfileCVSyncService.syncCVToProfile(dataToSave, profile);
         if (Object.keys(profileUpdates).length > 0) {
           await updateProfile(profileUpdates);
         }
@@ -144,7 +170,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
       console.log('✅ Sauvegarde terminée avec succès');
       toast.update(toastId, {
-        render: "✅ CV sauvegardé avec succès !",
+        render: `✅ CV sauvegardé ! (${modifiedFields.size} champs modifiés)`,
         type: "success",
         isLoading: false,
         autoClose: 2000
@@ -160,6 +186,39 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     } finally {
       setIsSaving(false);
     }
+  };
+
+  // Fonction pour créer les données CV filtrées (seulement les champs modifiés)
+  const createFilteredCVData = (fullData: CVData, modifiedFields: Set<string>): CVData => {
+    // Commencer avec une structure CV minimale
+    const filteredData: CVData = {
+      fullName: modifiedFields.has('fullName') ? fullData.fullName : "",
+      title: modifiedFields.has('title') ? fullData.title : "",
+      color: fullData.color, // Toujours sauvegarder la couleur
+      profileImage: fullData.profileImage || "",
+      contact: {
+        phone: modifiedFields.has('contact.phone') ? fullData.contact.phone : "",
+        email: modifiedFields.has('contact.email') ? fullData.contact.email : "",
+        address: modifiedFields.has('contact.address') ? fullData.contact.address : "",
+        linkedin: modifiedFields.has('contact.linkedin') ? fullData.contact.linkedin : ""
+      },
+      about: modifiedFields.has('about') ? fullData.about : "",
+      objective: modifiedFields.has('objective') ? fullData.objective : "",
+      experiences: modifiedFields.has('experiences') ? fullData.experiences : [],
+      education: modifiedFields.has('education') ? fullData.education : [],
+      certifications: modifiedFields.has('certifications') ? fullData.certifications : [],
+      skills: modifiedFields.has('skills') ? fullData.skills : [],
+      tools: modifiedFields.has('tools') ? fullData.tools : [],
+      links: modifiedFields.has('links') ? fullData.links : [],
+      languages: modifiedFields.has('languages') ? fullData.languages : [],
+      hobbies: modifiedFields.has('hobbies') ? fullData.hobbies : [],
+      references: modifiedFields.has('references') ? fullData.references : [],
+      strategicPitch: modifiedFields.has('strategicPitch') ? fullData.strategicPitch : "",
+      isOptimized: fullData.isOptimized || false,
+      sectionsOrder: fullData.sectionsOrder
+    };
+
+    return filteredData;
   };
 
   // Fonction d'export PDF
