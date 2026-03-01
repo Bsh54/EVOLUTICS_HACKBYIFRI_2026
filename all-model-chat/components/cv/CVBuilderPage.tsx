@@ -81,7 +81,13 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
   // Fonction de sauvegarde manuelle
   const handleSave = async () => {
-    if (!cvData || !profile) return;
+    console.log('🔄 Début sauvegarde, cvData:', cvData);
+    console.log('🔄 Profile:', profile);
+
+    if (!cvData || !profile) {
+      console.log('❌ Données manquantes - cvData:', !!cvData, 'profile:', !!profile);
+      return;
+    }
 
     setIsSaving(true);
     const toastId = toast.loading("Sauvegarde en cours...");
@@ -105,7 +111,15 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
           edu.school === "Université/École"
         );
 
+      console.log('🔍 Vérification données par défaut:', {
+        fullName: cvData.fullName,
+        title: cvData.title,
+        email: cvData.contact.email,
+        hasDefaultData
+      });
+
       if (hasDefaultData) {
+        console.log('⚠️ Données par défaut détectées, arrêt sauvegarde');
         toast.update(toastId, {
           render: "⚠️ Veuillez modifier les données par défaut avant de sauvegarder",
           type: "warning",
@@ -114,6 +128,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         });
         return;
       }
+
+      console.log('✅ Données validées, début sauvegarde en base');
 
       // Sauvegarder en base de données
       await CVDatabaseService.saveCVData(profile.id, cvData, selectedTemplate || 'moderne-01');
@@ -126,6 +142,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         }
       }
 
+      console.log('✅ Sauvegarde terminée avec succès');
       toast.update(toastId, {
         render: "✅ CV sauvegardé avec succès !",
         type: "success",
@@ -133,7 +150,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         autoClose: 2000
       });
     } catch (error) {
-      console.error('Erreur sauvegarde:', error);
+      console.error('❌ Erreur sauvegarde:', error);
       toast.update(toastId, {
         render: "❌ Erreur lors de la sauvegarde",
         type: "error",
