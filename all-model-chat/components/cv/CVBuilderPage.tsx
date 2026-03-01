@@ -389,8 +389,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
             </div>
           ) : cvData ? (
             <>
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)]">
+              {/* Header - Responsive */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)] gap-4 sm:gap-0">
                 <div className="flex items-center gap-4">
                   <button
                     onClick={handleBackToTemplates}
@@ -399,24 +399,33 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                     <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
                   </button>
                   <div>
-                    <h1 className="text-2xl font-bold text-[var(--theme-text-primary)]">
+                    <h1 className="text-xl sm:text-2xl font-bold text-[var(--theme-text-primary)]">
                       ✏️ Remplissez votre CV
                     </h1>
-                    <p className="text-[var(--theme-text-secondary)]">
+                    <p className="text-sm text-[var(--theme-text-secondary)]">
                       Template: Moderne Professionnel
                     </p>
                   </div>
                 </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-accent)]/10 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] rounded-xl transition-colors"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-accent)]/10 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] rounded-xl transition-colors text-sm sm:text-base flex-1 sm:flex-none justify-center"
               >
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                Sauvegarder
+                <span className="hidden sm:inline">Sauvegarder</span>
+                <span className="sm:hidden">Sauver</span>
               </button>
               <button
+                onClick={handlePreview}
+                className="flex items-center gap-2 px-4 sm:px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span className="hidden sm:inline">Prévisualiser</span>
+                <span className="sm:hidden">Aperçu</span>
+              </button>
+            </div>
                 onClick={handlePreview}
                 className="flex items-center gap-2 px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
               >
@@ -426,10 +435,10 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
             </div>
           </div>
 
-          {/* Contenu principal */}
-          <div className="flex-1 flex overflow-hidden">
-            {/* Panel d'édition - Réduit de 450px à 380px */}
-            <div className="w-[380px] bg-[var(--theme-bg-secondary)] border-r border-[var(--theme-border-primary)] overflow-y-auto p-4">
+          {/* Contenu principal - Layout responsive */}
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+            {/* Panel d'édition - Responsive */}
+            <div className="w-full lg:w-[380px] bg-[var(--theme-bg-secondary)] border-b lg:border-b-0 lg:border-r border-[var(--theme-border-primary)] overflow-y-auto p-4 max-h-[50vh] lg:max-h-none">
               <div className="mb-6 text-center border-b pb-3">
                 <h2 className="text-lg font-black text-[var(--theme-text-primary)] uppercase leading-none mb-1">
                   Informations CV
@@ -441,8 +450,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               <CVEditorPanel data={cvData} onChange={handleCVDataChange} />
             </div>
 
-            {/* Prévisualisation en temps réel - Padding réduit */}
-            <div className="flex-1 bg-gray-200 overflow-y-auto p-3 md:p-6 flex justify-center">
+            {/* Prévisualisation en temps réel - Responsive */}
+            <div className="flex-1 bg-gray-200 overflow-y-auto p-2 sm:p-3 md:p-6 flex justify-center min-h-[50vh] lg:min-h-0">
               <div className="w-full max-w-[700px]">
                 <CVTemplate data={cvData} />
               </div>
@@ -456,8 +465,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       {/* Étape 3: Prévisualisation finale */}
       {currentStep === 'preview' && cvData && (
         <div className="h-full flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)]">
+          {/* Header - Responsive */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)] gap-4 sm:gap-0">
             <div className="flex items-center gap-4">
               <button
                 onClick={handleBackToForm}
@@ -466,34 +475,35 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                 <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-[var(--theme-text-primary)]">
+                <h1 className="text-xl sm:text-2xl font-bold text-[var(--theme-text-primary)]">
                   👁️ Prévisualisation finale
                 </h1>
-                <p className="text-[var(--theme-text-secondary)]">
+                <p className="text-sm text-[var(--theme-text-secondary)]">
                   Votre CV est prêt à être téléchargé
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
               <button
                 onClick={handleBackToForm}
-                className="px-4 py-2 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors"
+                className="px-3 sm:px-4 py-2 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors text-sm sm:text-base flex-1 sm:flex-none justify-center"
               >
                 Modifier
               </button>
               <button
                 onClick={handleExportPDF}
                 disabled={isExporting}
-                className="flex items-center gap-2 px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
+                className="flex items-center gap-2 px-4 sm:px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center"
               >
                 {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                Télécharger PDF
+                <span className="hidden sm:inline">Télécharger PDF</span>
+                <span className="sm:hidden">PDF</span>
               </button>
             </div>
           </div>
 
-          {/* Prévisualisation */}
-          <div className="flex-1 bg-gray-200 overflow-y-auto p-3 md:p-6 flex justify-center">
+          {/* Prévisualisation - Responsive */}
+          <div className="flex-1 bg-gray-200 overflow-y-auto p-2 sm:p-3 md:p-6 flex justify-center">
             <div id="cv-preview" className="w-full max-w-[700px]">
               <CVTemplate data={cvData} />
             </div>
