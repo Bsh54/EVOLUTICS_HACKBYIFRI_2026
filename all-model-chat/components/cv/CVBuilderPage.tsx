@@ -423,7 +423,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               >
                 <Sparkles className="w-4 h-4" />
                 <span className="hidden sm:inline">Prévisualiser</span>
-                <span className="sm:hidden">Aperçu</span>
+                <span className="sm:hidden">Voir CV</span>
               </button>
             </div>
           </div>
@@ -431,7 +431,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
           {/* Contenu principal - Layout responsive */}
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
             {/* Panel d'édition - Responsive */}
-            <div className="w-full lg:w-[380px] bg-[var(--theme-bg-secondary)] border-b lg:border-b-0 lg:border-r border-[var(--theme-border-primary)] overflow-y-auto p-4 max-h-[50vh] lg:max-h-none">
+            <div className="w-full lg:w-[380px] bg-[var(--theme-bg-secondary)] border-b lg:border-b-0 lg:border-r border-[var(--theme-border-primary)] overflow-y-auto p-4">
               <div className="mb-6 text-center border-b pb-3">
                 <h2 className="text-lg font-black text-[var(--theme-text-primary)] uppercase leading-none mb-1">
                   Informations CV
@@ -443,8 +443,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               <CVEditorPanel data={cvData} onChange={handleCVDataChange} />
             </div>
 
-            {/* Prévisualisation en temps réel - Responsive */}
-            <div className="flex-1 bg-gray-200 overflow-y-auto p-2 sm:p-3 md:p-6 flex justify-center min-h-[50vh] lg:min-h-0">
+            {/* Prévisualisation en temps réel - MASQUÉE SUR MOBILE */}
+            <div className="hidden lg:flex flex-1 bg-gray-200 overflow-y-auto p-6 justify-center">
               <div className="w-full max-w-[700px]">
                 <CVTemplate data={cvData} />
               </div>
