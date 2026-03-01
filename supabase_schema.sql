@@ -125,3 +125,85 @@ create policy "Users can delete their own chat sessions" on chat_sessions for de
 create extension if not exists moddatetime schema extensions;
 create trigger handle_updated_at before update on chat_sessions
   for each row execute procedure moddatetime (updated_at);
+
+-- ==========================================
+-- GESTION DES DONNÉES CV UTILISATEUR
+-- ==========================================
+
+-- Table pour stocker les données CV complètes des utilisateurs
+CREATE TABLE user_cv_profiles (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  experiences JSONB DEFAULT '[]'::jsonb NOT NULL,
+  education JSONB DEFAULT '[]'::jsonb NOT NULL,
+  skills JSONB DEFAULT '[]'::jsonb NOT NULL,
+  languages TEXT[] DEFAULT '{}',
+  references JSONB DEFAULT '[]'::jsonb NOT NULL,
+  tools JSONB DEFAULT '[]'::jsonb NOT NULL,
+  certifications JSONB DEFAULT '[]'::jsonb NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Index pour optimiser la recherche par utilisateur
+CREATE INDEX idx_user_cv_profiles_user_id ON user_cv_profiles(user_id);
+
+-- Sécurité RLS
+ALTER TABLE user_cv_profiles ENABLE ROW LEVEL SECURITY;
+
+-- Politiques : L'utilisateur ne peut voir/modifier que SES propres données CV
+CREATE POLICY "Users can view their own CV profiles"
+  ON user_cv_profiles FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own CV profiles"
+  ON user_cv_profiles FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own CV profiles"
+  ON user_cv_profiles FOR UPDATE
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own CV profiles"
+  ON user_cv_profiles FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- Trigger pour mettre à jour automatiquement "updated_at"
+CREATE TRIGGER handle_user_cv_profiles_updated_at
+  BEFORE UPDATE ON user_cv_profiles
+  FOR EACH ROW EXECUTE PROCEDURE moddatetime (updated_at);
+
+-- ==========================================
+-- HISTORIQUE DES CV GÉNÉRÉS
+-- ==========================================
+
+-- Table pour l'historique des CV générés par opportunité
+CREATE TABLE generated_cvs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  opportunity_id TEXT REFERENCES opportunities(id) ON DELETE CASCADE,
+  cv_data JSONB NOT NULL,
+  pdf_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Index pour optimiser les requêtes
+CREATE INDEX idx_generated_cvs_user_id ON generated_cvs(user_id);
+CREATE INDEX idx_generated_cvs_opportunity_id ON generated_cvs(opportunity_id);
+CREATE INDEX idx_generated_cvs_created_at ON generated_cvs(created_at DESC);
+
+-- Sécurité RLS
+ALTER TABLE generated_cvs ENABLE ROW LEVEL SECURITY;
+
+-- Politiques : L'utilisateur ne peut voir que SES propres CV générés
+CREATE POLICY "Users can view their own generated CVs"
+  ON generated_cvs FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own generated CVs"
+  ON generated_cvs FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own generated CVs"
+  ON generated_cvs FOR DELETE
+  USING (auth.uid() = user_id);
