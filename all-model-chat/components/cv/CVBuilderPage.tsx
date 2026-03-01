@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Sparkles, Download, Loader2, Save, Sync } from 'lucide-react';
+import { ArrowLeft, Sparkles, Download, Loader2, Save, RefreshCw } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { CVData } from '../../types/cvTypes';
 import { getCVData, setCVData } from '../../lib/cvStore';
@@ -265,7 +265,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               {/* Indicateur de synchronisation */}
               {isSyncing && (
                 <div className="flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-600 text-sm">
-                  <Sync className="w-4 h-4 animate-spin" />
+                  <RefreshCw className="w-4 h-4 animate-spin" />
                   <span>Synchronisation...</span>
                 </div>
               )}
@@ -290,10 +290,10 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
           {/* Contenu principal */}
           <div className="flex-1 flex overflow-hidden">
-            {/* Panel d'édition */}
-            <div className="w-[450px] bg-[var(--theme-bg-secondary)] border-r border-[var(--theme-border-primary)] overflow-y-auto p-6">
-              <div className="mb-8 text-center border-b pb-4">
-                <h2 className="text-xl font-black text-[var(--theme-text-primary)] uppercase leading-none mb-1">
+            {/* Panel d'édition - Réduit de 450px à 380px */}
+            <div className="w-[380px] bg-[var(--theme-bg-secondary)] border-r border-[var(--theme-border-primary)] overflow-y-auto p-4">
+              <div className="mb-6 text-center border-b pb-3">
+                <h2 className="text-lg font-black text-[var(--theme-text-primary)] uppercase leading-none mb-1">
                   Informations CV
                 </h2>
                 <p className="text-xs text-[var(--theme-text-secondary)]">
@@ -303,9 +303,9 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               <CVEditorPanel data={cvData} onChange={handleCVDataChange} />
             </div>
 
-            {/* Prévisualisation en temps réel */}
-            <div className="flex-1 bg-gray-200 overflow-y-auto p-4 md:p-12 flex justify-center">
-              <div className="w-full max-w-[850px]">
+            {/* Prévisualisation en temps réel - Padding réduit */}
+            <div className="flex-1 bg-gray-200 overflow-y-auto p-3 md:p-6 flex justify-center">
+              <div className="w-full max-w-[700px]">
                 <CVTemplate data={cvData} />
               </div>
             </div>
@@ -353,8 +353,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
           </div>
 
           {/* Prévisualisation */}
-          <div className="flex-1 bg-gray-200 overflow-y-auto p-4 md:p-12 flex justify-center">
-            <div id="cv-preview" className="w-full max-w-[850px]">
+          <div className="flex-1 bg-gray-200 overflow-y-auto p-3 md:p-6 flex justify-center">
+            <div id="cv-preview" className="w-full max-w-[700px]">
               <CVTemplate data={cvData} />
             </div>
           </div>

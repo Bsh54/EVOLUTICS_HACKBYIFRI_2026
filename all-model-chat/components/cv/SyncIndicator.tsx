@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sync, User } from 'lucide-react';
+import { RefreshCw, User } from 'lucide-react';
 
 interface SyncIndicatorProps {
   isSync: boolean;
@@ -24,7 +24,7 @@ export const SyncIndicator: React.FC<SyncIndicatorProps> = ({
       className={`inline-flex items-center gap-1 text-blue-500 ${className}`}
       title="Ce champ est synchronisé avec votre profil EVOLUTICS"
     >
-      <Sync className={`${sizeClasses[size]} opacity-70`} />
+      <RefreshCw className={`${sizeClasses[size]} opacity-70`} />
       {size === 'md' && (
         <span className="text-xs font-medium opacity-70">Sync</span>
       )}

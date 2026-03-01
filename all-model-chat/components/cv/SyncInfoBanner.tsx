@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Info, X, Sync } from 'lucide-react';
+import { Info, X, RefreshCw } from 'lucide-react';
 
 interface SyncInfoBannerProps {
   className?: string;
@@ -14,14 +14,14 @@ export const SyncInfoBanner: React.FC<SyncInfoBannerProps> = ({ className = '' }
     <div className={`bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 ${className}`}>
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 p-1 bg-blue-100 rounded-lg">
-          <Sync className="w-4 h-4 text-blue-600" />
+          <RefreshCw className="w-4 h-4 text-blue-600" />
         </div>
         <div className="flex-1">
           <h4 className="text-sm font-bold text-blue-900 mb-1">
             Synchronisation Intelligente Activée
           </h4>
           <p className="text-xs text-blue-700 leading-relaxed">
-            Les champs marqués avec <Sync className="w-3 h-3 inline mx-1 text-blue-600" />
+            Les champs marqués avec <RefreshCw className="w-3 h-3 inline mx-1 text-blue-600" />
             sont automatiquement remplis depuis votre profil EVOLUTICS.
             Vos modifications seront sauvegardées dans votre profil pour les prochains CV.
           </p>

@@ -50,35 +50,35 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Banner d'information sur la synchronisation */}
       <SyncInfoBanner />
 
       {/* Accordéon simplifié pour EVOLUTICS */}
-      <div className="space-y-6">
+      <div className="space-y-4">
 
         {/* 1. INFOS & PHOTO */}
-        <div className="bg-[var(--theme-bg-primary)] p-4 rounded-lg border border-[var(--theme-border-primary)]">
-          <h3 className="font-bold text-[var(--theme-text-primary)] mb-4">1. État Civil & Photo</h3>
+        <div className="bg-[var(--theme-bg-primary)] p-3 rounded-lg border border-[var(--theme-border-primary)]">
+          <h3 className="font-bold text-[var(--theme-text-primary)] mb-3">1. État Civil & Photo</h3>
 
-          <div className="flex flex-col items-center gap-4 p-4 border-2 border-dashed rounded-xl bg-[var(--theme-bg-secondary)] mb-4">
+          <div className="flex flex-col items-center gap-3 p-3 border-2 border-dashed rounded-xl bg-[var(--theme-bg-secondary)] mb-3">
             {data.profileImage ? (
               <div className="relative">
-                <img src={data.profileImage} className="w-24 h-24 rounded-full object-cover border-2 border-white shadow-md" alt="Profil" />
+                <img src={data.profileImage} className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md" alt="Profil" />
                 <button onClick={() => handleChange("profileImage", "")} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 shadow-md">
                   <X className="w-3 h-3"/>
                 </button>
               </div>
             ) : (
               <button onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center text-[var(--theme-text-tertiary)] hover:text-[var(--theme-bg-accent)] transition-colors">
-                <ImageIcon className="w-10 h-10 mb-2" />
+                <ImageIcon className="w-8 h-8 mb-2" />
                 <span className="text-xs font-bold uppercase">Ajouter une photo</span>
               </button>
             )}
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="space-y-2">
               <SyncFieldLabel label="Nom Complet" fieldName="fullName" required />
               <input
@@ -131,12 +131,12 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
         </div>
 
         {/* 2. EXPÉRIENCES */}
-        <div className="bg-[var(--theme-bg-primary)] p-4 rounded-lg border border-[var(--theme-border-primary)]">
-          <h3 className="font-bold text-[var(--theme-text-primary)] mb-4">2. Expériences Professionnelles</h3>
+        <div className="bg-[var(--theme-bg-primary)] p-3 rounded-lg border border-[var(--theme-border-primary)]">
+          <h3 className="font-bold text-[var(--theme-text-primary)] mb-3">2. Expériences Professionnelles</h3>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {data.experiences.map((exp, i) => (
-              <div key={i} className="border border-[var(--theme-border-primary)] p-4 rounded-lg bg-[var(--theme-bg-secondary)] space-y-3 relative group">
+              <div key={i} className="border border-[var(--theme-border-primary)] p-3 rounded-lg bg-[var(--theme-bg-secondary)] space-y-2 relative group">
                 <button onClick={() => removeItem("experiences", i)} className="absolute top-2 right-2 text-[var(--theme-text-tertiary)] hover:text-red-500 transition-colors">
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -170,14 +170,14 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
                 </div>
                 <textarea
                   placeholder="Missions et réalisations..."
-                  className="w-full text-xs border border-[var(--theme-border-primary)] rounded p-2 h-20 outline-none bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
+                  className="w-full text-xs border border-[var(--theme-border-primary)] rounded p-2 h-16 outline-none bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]"
                   value={exp.description}
                   onChange={(e) => updateItem("experiences", i, "description", e.target.value)}
                 />
               </div>
             ))}
             <button
-              className="w-full border-2 border-dashed border-[var(--theme-border-primary)] rounded-lg py-3 text-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent)]/10 transition-colors font-medium"
+              className="w-full border-2 border-dashed border-[var(--theme-border-primary)] rounded-lg py-2 text-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent)]/10 transition-colors font-medium text-sm"
               onClick={() => addItem("experiences", { role: "", company: "", startDate: "", endDate: "", isCurrent: true, description: "" })}
             >
               + Ajouter Expérience
@@ -186,12 +186,12 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
         </div>
 
         {/* 3. AUTRES RUBRIQUES */}
-        <div className="bg-[var(--theme-bg-primary)] p-4 rounded-lg border border-[var(--theme-border-primary)]">
-          <h3 className="font-bold text-[var(--theme-text-primary)] mb-4">3. Autres rubriques</h3>
+        <div className="bg-[var(--theme-bg-primary)] p-3 rounded-lg border border-[var(--theme-border-primary)]">
+          <h3 className="font-bold text-[var(--theme-text-primary)] mb-3">3. Autres rubriques</h3>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* FORMATION */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <SyncFieldLabel label="Formation" fieldName="education" />
               {data.education.map((edu, i) => (
                 <div key={i} className="flex gap-2 items-center bg-[var(--theme-bg-secondary)] p-2 border border-[var(--theme-border-primary)] rounded">
@@ -215,7 +215,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
             </div>
 
             {/* COMPÉTENCES */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <SyncFieldLabel label="Compétences (%)" fieldName="skills" />
               {data.skills.map((s, i) => (
                 <div key={i} className="flex gap-2 items-center bg-[var(--theme-bg-secondary)] p-2 border border-[var(--theme-border-primary)] rounded">
@@ -244,11 +244,11 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
             </div>
 
             {/* LANGUES & LOISIRS */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase text-[var(--theme-text-secondary)]">Langues</label>
                 <textarea
-                  className="w-full border border-[var(--theme-border-primary)] rounded text-xs p-2 h-16 outline-none bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)]"
+                  className="w-full border border-[var(--theme-border-primary)] rounded text-xs p-2 h-12 outline-none bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)]"
                   placeholder="Une langue par ligne"
                   value={data.languages.join("\n")}
                   onChange={(e) => handleChange("languages", e.target.value.split("\n"))}
@@ -257,7 +257,7 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase text-[var(--theme-text-secondary)]">Loisirs</label>
                 <textarea
-                  className="w-full border border-[var(--theme-border-primary)] rounded text-xs p-2 h-16 outline-none bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)]"
+                  className="w-full border border-[var(--theme-border-primary)] rounded text-xs p-2 h-12 outline-none bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)]"
                   placeholder="Un loisir par ligne"
                   value={data.hobbies.join("\n")}
                   onChange={(e) => handleChange("hobbies", e.target.value.split("\n"))}
@@ -266,10 +266,10 @@ const CVEditorPanel: React.FC<CVEditorPanelProps> = ({ data, onChange }) => {
             </div>
 
             {/* RÉFÉRENCES */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <label className="text-xs font-bold uppercase text-[var(--theme-bg-accent)]">Références</label>
               {data.references.map((ref, i) => (
-                <div key={i} className="space-y-2 p-3 border border-[var(--theme-border-primary)] rounded bg-[var(--theme-bg-secondary)] relative group">
+                <div key={i} className="space-y-2 p-2 border border-[var(--theme-border-primary)] rounded bg-[var(--theme-bg-secondary)] relative group">
                   <button onClick={() => removeItem("references", i)} className="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
                     <X className="w-3 h-3"/>
                   </button>
