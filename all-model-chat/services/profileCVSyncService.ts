@@ -218,17 +218,34 @@ export class ProfileCVSyncService {
   }
 
   /**
-   * Synchronise les données du CV vers le profil
+   * Synchronise les données du CV vers le profil (seulement les vraies données)
    */
   static syncCVToProfile(cvData: CVData, currentProfile: UserProfile): Partial<UserProfile> {
     const profileUpdates: Partial<UserProfile> = {};
+
+    // Valeurs par défaut à ignorer lors de la synchronisation
+    const defaultValues = {
+      fullName: "Votre Nom",
+      title: "Votre Titre Professionnel",
+      about: "Décrivez votre profil professionnel ici...",
+      "contact.email": "votre.email@exemple.com",
+      "contact.phone": "+33 6 12 34 56 78",
+      "contact.linkedin": "linkedin.com/in/votre-profil"
+    };
 
     PROFILE_CV_MAPPING.forEach(mapping => {
       const cvValue = mapping.cvField.includes('.')
         ? getNestedValue(cvData, mapping.cvField)
         : (cvData as any)[mapping.cvField];
 
-      if (cvValue !== undefined && cvValue !== null && cvValue !== '') {
+      // Vérifier si c'est une vraie valeur (pas une valeur par défaut)
+      const defaultValue = defaultValues[mapping.cvField as keyof typeof defaultValues];
+      const isRealValue = cvValue &&
+                         cvValue !== '' &&
+                         cvValue !== defaultValue &&
+                         (Array.isArray(cvValue) ? cvValue.length > 0 : true);
+
+      if (isRealValue) {
         let transformedValue = cvValue;
 
         // Appliquer la transformation si elle existe
@@ -239,8 +256,11 @@ export class ProfileCVSyncService {
         // Ne mettre à jour que si la valeur a changé
         const currentValue = currentProfile[mapping.profileField];
         if (currentValue !== transformedValue) {
+          console.log(`🔄 Synchronisation ${mapping.cvField} → ${mapping.profileField}:`, transformedValue);
           (profileUpdates as any)[mapping.profileField] = transformedValue;
         }
+      } else {
+        console.log(`⏭️ Ignoré ${mapping.cvField} (valeur par défaut ou vide):`, cvValue);
       }
     });
 

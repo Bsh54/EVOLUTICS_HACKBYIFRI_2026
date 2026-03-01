@@ -161,10 +161,13 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       // Sauvegarder en base de données
       await CVDatabaseService.saveCVData(profile.id, dataToSave, selectedTemplate || 'moderne-01');
 
-      // Synchroniser vers le profil si nécessaire
+      // Synchroniser vers le profil si nécessaire - UTILISER LES DONNÉES COMPLÈTES
       if (updateProfile) {
-        const profileUpdates = ProfileCVSyncService.syncCVToProfile(dataToSave, profile);
+        // ⚠️ IMPORTANT: Utiliser cvData (données complètes affichées)
+        // et non dataToSave (données filtrées) pour éviter les incohérences
+        const profileUpdates = ProfileCVSyncService.syncCVToProfile(cvData, profile);
         if (Object.keys(profileUpdates).length > 0) {
+          console.log('🔄 Synchronisation profil avec données complètes:', profileUpdates);
           await updateProfile(profileUpdates);
         }
       }
