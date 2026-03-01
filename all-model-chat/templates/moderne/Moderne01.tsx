@@ -18,7 +18,7 @@ interface CVTemplateProps {
 }
 
 export default function CVTemplate({ data }: CVTemplateProps) {
-  const primaryColor = "#00a99d"; // Vert Teal exact de la photo
+  const primaryColor = data.color || "#3b82f6"; // Utiliser la couleur du CV ou bleu par défaut
 
   return (
     <PdfSafeWrapper>
