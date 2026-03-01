@@ -770,6 +770,20 @@ RÈGLES DE COMPORTEMENT :
         </button>
 
         <button
+          onClick={() => navigateToTab('tools')}
+          className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
+            activeTab === 'tools'
+              ? 'text-[var(--theme-text-primary)]'
+              : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
+          }`}
+        >
+          <div className="p-2 rounded-xl transition-all duration-300">
+            <Palette className="w-5 h-5" />
+          </div>
+          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Outils</span>
+        </button>
+
+        <button
           onClick={() => navigateToTab('profile')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'profile'
