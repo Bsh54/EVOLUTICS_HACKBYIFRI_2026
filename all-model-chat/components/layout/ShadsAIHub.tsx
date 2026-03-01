@@ -21,6 +21,7 @@ import { ChatArea } from './ChatArea';
 import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
 import ProfilePage from '../auth/ProfilePage';
+import ToolsPage from '../tools/ToolsPage';
 import { useAuth } from '../../contexts/AuthContext';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -736,6 +737,14 @@ RÈGLES DE COMPORTEMENT :
               onNavigateToTab={(tab) => navigateToTab(tab)}
             />
           )}
+        </div>
+
+        {/* PAGE OUTILS — rendu comme un onglet */}
+        <div className={`absolute inset-0 overflow-y-auto bg-[var(--theme-bg-primary)] pb-16 md:pb-0 ${activeTab === 'tools' ? 'block z-40' : 'hidden'}`}>
+          <ToolsPage
+            themeId={themeId}
+            onThemeChange={onThemeChange}
+          />
         </div>
       </div>
 
