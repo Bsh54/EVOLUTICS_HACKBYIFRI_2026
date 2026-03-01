@@ -1,5 +1,5 @@
-import type { CVData } from "@/types";
-import { PdfSafeWrapper } from "@/components/cv/PdfSafeWrapper";
+import type { CVData } from "../../types/cvTypes";
+import { PdfSafeWrapper } from "../../components/cv/PdfSafeWrapper";
 import {
   Mail,
   Phone,
