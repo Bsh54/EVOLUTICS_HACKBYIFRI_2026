@@ -159,43 +159,6 @@ const CVTemplateSelector: React.FC<CVTemplateSelectorProps> = ({
           ))}
         </div>
 
-        {/* Info section */}
-        <div className="mt-12 max-w-4xl mx-auto">
-          <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-2xl p-8">
-            <h2 className="text-xl font-bold text-[var(--theme-text-primary)] mb-4">
-              ✨ Pourquoi choisir nos templates ?
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Check className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="font-bold text-[var(--theme-text-primary)] mb-2">Optimisés ATS</h3>
-                <p className="text-sm text-[var(--theme-text-secondary)]">
-                  Compatibles avec les systèmes de tri automatique des recruteurs
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <ArrowRight className="w-6 h-6 text-purple-500" />
-                </div>
-                <h3 className="font-bold text-[var(--theme-text-primary)] mb-2">Personnalisables</h3>
-                <p className="text-sm text-[var(--theme-text-secondary)]">
-                  Adaptez les couleurs, sections et mise en page selon vos besoins
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <ArrowRight className="w-6 h-6 text-green-500" />
-                </div>
-                <h3 className="font-bold text-[var(--theme-text-primary)] mb-2">Export PDF</h3>
-                <p className="text-sm text-[var(--theme-text-secondary)]">
-                  Téléchargement haute qualité prêt pour l'impression
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
