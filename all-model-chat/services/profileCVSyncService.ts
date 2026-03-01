@@ -101,7 +101,7 @@ export class ProfileCVSyncService {
     const defaultCVData: CVData = {
       fullName: "Votre Nom",
       title: "Votre Titre Professionnel",
-      color: "#00a99d",
+      color: "#3b82f6", // Bleu de la plateforme au lieu du vert
       profileImage: "",
       contact: {
         phone: "+33 6 12 34 56 78",
