@@ -426,13 +426,6 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                 <span className="sm:hidden">Aperçu</span>
               </button>
             </div>
-                onClick={handlePreview}
-                className="flex items-center gap-2 px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
-              >
-                <Sparkles className="w-4 h-4" />
-                Prévisualiser
-              </button>
-            </div>
           </div>
 
           {/* Contenu principal - Layout responsive */}
