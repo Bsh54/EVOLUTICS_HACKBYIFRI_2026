@@ -317,7 +317,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
       </div>
 
       {/* Styles CSS pour les animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in-up {
           0% {
             opacity: 0;

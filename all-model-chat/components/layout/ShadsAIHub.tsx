@@ -820,7 +820,7 @@ RÈGLES DE COMPORTEMENT :
       </nav>
 
       {/* Styles CSS pour les animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in-up {
           0% {
             opacity: 0;
