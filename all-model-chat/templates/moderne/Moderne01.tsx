@@ -25,7 +25,7 @@ export default function CVTemplate({ data }: CVTemplateProps) {
       <div className="w-full min-h-[1123px] bg-white text-gray-800 font-sans flex shadow-2xl overflow-hidden border-[12px]" style={{ borderColor: primaryColor }}>
 
         {/* COLONNE GAUCHE (SIDEBAR) */}
-        <aside className="w-[38%] bg-[#f0f7f7] p-8 flex flex-col border-r border-gray-200">
+        <aside className="w-[38%] bg-blue-50 p-8 flex flex-col border-r border-gray-200">
           <div className="mb-8">
             <h1 className="text-3xl font-black text-slate-800 tracking-tighter leading-none mb-2">{data.fullName}</h1>
             <p className="text-xs font-bold tracking-[0.2em] uppercase" style={{ color: primaryColor }}>{data.title}</p>
