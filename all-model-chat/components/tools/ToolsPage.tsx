@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface ToolsPageProps {
   themeId: string;
@@ -24,28 +24,36 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange }) => {
         </p>
       </div>
 
-      {/* Tools Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      {/* Tools Grid - Style des cartes d'opportunités */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {/* CV Builder Card */}
         <div
           onClick={handleCVBuilderClick}
-          className="bg-[var(--theme-bg-secondary)] rounded-xl p-6 border border-[var(--theme-border-primary)] hover:border-[var(--theme-border-focus)] transition-all duration-300 cursor-pointer hover:shadow-lg hover:scale-105 group"
+          className="group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-[var(--theme-bg-accent)]/40 transition-all duration-500 relative animate-fade-in-up"
         >
-          <div className="flex items-center justify-center w-12 h-12 bg-[var(--theme-bg-accent)] rounded-lg mb-4 group-hover:scale-110 transition-transform duration-300">
-            <FileText className="w-6 h-6 text-[var(--theme-text-accent)]" />
+          <div className="h-64 relative overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=2070"
+              className="w-full h-full object-cover transition-transform duration-700 scale-100 group-hover:scale-110"
+              alt="CV Builder"
+            />
           </div>
 
-          <h3 className="text-lg font-semibold text-[var(--theme-text-primary)] mb-2">
-            Création de CV
-          </h3>
+          <div className="p-8 flex-1 flex flex-col">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="text-xl font-black text-[var(--theme-text-primary)] mb-2 group-hover:text-[var(--theme-bg-accent)] transition-colors">
+                  Création de CV
+                </h3>
+                <p className="text-[var(--theme-text-secondary)] text-sm leading-relaxed">
+                  Créez votre CV professionnel en quelques clics avec nos templates modernes et personnalisables
+                </p>
+              </div>
+            </div>
 
-          <p className="text-[var(--theme-text-secondary)] mb-4 text-sm">
-            Créez votre CV professionnel en quelques clics avec nos templates modernes
-          </p>
-
-          <div className="flex items-center text-[var(--theme-text-accent)] font-medium text-sm group-hover:translate-x-1 transition-transform duration-300">
-            Commencer
-            <ArrowRight className="w-4 h-4 ml-2" />
+            <div className="flex items-center justify-between mt-auto">
+              <ArrowRight className="w-5 h-5 text-[var(--theme-text-tertiary)] group-hover:text-[var(--theme-bg-accent)] group-hover:translate-x-1 transition-all ml-auto" />
+            </div>
           </div>
         </div>
       </div>
