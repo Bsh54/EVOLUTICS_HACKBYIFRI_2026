@@ -30,11 +30,13 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   const [cvData, setCvDataState] = useState<CVData | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
 
   // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
     const initializeCVData = async () => {
       if (profile && currentStep === 'form-filling') {
+        setIsInitializing(true);
         console.log('🔄 Initialisation CV avec synchronisation profil...');
 
         try {
@@ -56,6 +58,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
           // Fallback vers synchronisation profil
           const syncedData = ProfileCVSyncService.syncProfileToCV(profile);
           setCvDataState(syncedData);
+        } finally {
+          setIsInitializing(false);
         }
       }
     };
@@ -262,26 +266,43 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       )}
 
       {/* Étape 2: Formulaire de saisie */}
-      {currentStep === 'form-filling' && cvData && (
+      {currentStep === 'form-filling' && (
         <div className="h-full flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)]">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleBackToTemplates}
-                className="p-2 hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-[var(--theme-text-primary)]">
-                  ✏️ Remplissez votre CV
-                </h1>
+          {/* État de chargement pendant l'initialisation */}
+          {isInitializing ? (
+            <div className="h-full flex items-center justify-center bg-[var(--theme-bg-primary)]">
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-4">
+                  <Loader2 className="w-8 h-8 animate-spin text-[var(--theme-bg-accent)]" />
+                </div>
+                <h2 className="text-xl font-semibold text-[var(--theme-text-primary)] mb-2">
+                  Initialisation de votre CV
+                </h2>
                 <p className="text-[var(--theme-text-secondary)]">
-                  Template: Moderne Professionnel
+                  Récupération de vos données...
                 </p>
               </div>
             </div>
+          ) : cvData ? (
+            <>
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)]">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleBackToTemplates}
+                    className="p-2 hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors"
+                  >
+                    <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
+                  </button>
+                  <div>
+                    <h1 className="text-2xl font-bold text-[var(--theme-text-primary)]">
+                      ✏️ Remplissez votre CV
+                    </h1>
+                    <p className="text-[var(--theme-text-secondary)]">
+                      Template: Moderne Professionnel
+                    </p>
+                  </div>
+                </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={handleSave}
@@ -323,6 +344,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               </div>
             </div>
           </div>
+            </>
+          ) : null}
         </div>
       )}
 
