@@ -11,8 +11,7 @@ import {
   Plus,
   Search,
   Heart,
-  User,
-  FileText
+  User
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -24,7 +23,6 @@ import ProfilePage from '../auth/ProfilePage';
 import { useAuth } from '../../contexts/AuthContext';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { ThemeToggle } from '../ui/ThemeToggle';
-import CVGeneratorModal from '../cv/CVGeneratorModal';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -57,13 +55,12 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   } = props;
 
   const { profile, signOut, updateProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState<'chat' | 'opportunities' | 'profile'>('opportunities');
+  const [activeTab, setActiveTab] = useState<'chat' | 'opportunities' | 'tools' | 'profile'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
   const [filterType, setFilterType] = useState<string>('Tous');
   const [searchQuery, setSearchQuery] = useState('');
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showCVGenerator, setShowCVGenerator] = useState(false);
 
   // --- Initialisation du tab depuis l'URL (une seule fois) ---
   useEffect(() => {
@@ -74,6 +71,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
       setActiveTab('chat');
     } else if (tabParam === 'profile') {
       setActiveTab('profile');
+    } else if (tabParam === 'tools') {
+      setActiveTab('tools');
     } else {
       setActiveTab('opportunities');
     }
@@ -109,7 +108,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   }, [opportunities]);
 
   // Fonctions de navigation wrapper
-  const navigateToTab = (tab: 'chat' | 'opportunities' | 'profile') => {
+  const navigateToTab = (tab: 'chat' | 'opportunities' | 'tools' | 'profile') => {
     setActiveTab(tab);
     const url = new URL(window.location.href);
     url.searchParams.set('tab', tab);
@@ -711,18 +710,6 @@ RÈGLES DE COMPORTEMENT :
                       >
                         PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
-
-                      {/* Bouton Générer CV - Affiché pour les emplois, stages et bourses */}
-                      {(selectedOpp.type === 'Emploi' || selectedOpp.type === 'Stage' || selectedOpp.type === 'Bourse') && (
-                        <button
-                          onClick={() => setShowCVGenerator(true)}
-                          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
-                        >
-                          <FileText className="w-5 h-5 md:w-6 h-6" />
-                          GÉNÉRER UN CV OPTIMISÉ
-                          <Sparkles className="w-4 h-4 text-yellow-300" />
-                        </button>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -789,16 +776,6 @@ RÈGLES DE COMPORTEMENT :
           <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Profil</span>
         </button>
       </nav>
-
-      {/* CV Generator Modal */}
-      {selectedOpp && (
-        <CVGeneratorModal
-          isOpen={showCVGenerator}
-          onClose={() => setShowCVGenerator(false)}
-          opportunity={selectedOpp}
-          themeId={themeId}
-        />
-      )}
 
       {/* Styles CSS pour les animations */}
       <style jsx>{`
