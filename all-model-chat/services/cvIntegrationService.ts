@@ -101,7 +101,7 @@ class CVIntegrationService {
         education: data.education || [],
         skills: data.skills || [],
         languages: data.languages || [],
-        references: data.references || []
+        references: data.cv_references || []
       };
     } catch (error) {
       console.error('Erreur lors de la récupération des données CV:', error);
@@ -120,7 +120,7 @@ class CVIntegrationService {
         education: cvData.education || [],
         skills: cvData.skills || [],
         languages: cvData.languages || [],
-        references: cvData.references || [],
+        cv_references: cvData.references || [],
         updated_at: new Date().toISOString()
       };
 

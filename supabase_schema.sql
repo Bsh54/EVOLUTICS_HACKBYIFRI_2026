@@ -138,7 +138,7 @@ CREATE TABLE user_cv_profiles (
   education JSONB DEFAULT '[]'::jsonb NOT NULL,
   skills JSONB DEFAULT '[]'::jsonb NOT NULL,
   languages TEXT[] DEFAULT '{}',
-  references JSONB DEFAULT '[]'::jsonb NOT NULL,
+  cv_references JSONB DEFAULT '[]'::jsonb NOT NULL,
   tools JSONB DEFAULT '[]'::jsonb NOT NULL,
   certifications JSONB DEFAULT '[]'::jsonb NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
