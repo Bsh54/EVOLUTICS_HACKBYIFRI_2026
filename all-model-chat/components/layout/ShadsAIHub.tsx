@@ -766,7 +766,7 @@ RÈGLES DE COMPORTEMENT :
           onClick={() => navigateToTab('opportunities')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'opportunities'
-              ? 'text-[var(--theme-text-primary)]'
+              ? 'text-[var(--theme-bg-accent)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
@@ -780,7 +780,7 @@ RÈGLES DE COMPORTEMENT :
           onClick={() => navigateToTab('chat')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'chat'
-              ? 'text-[var(--theme-text-primary)]'
+              ? 'text-[var(--theme-bg-accent)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
@@ -794,7 +794,7 @@ RÈGLES DE COMPORTEMENT :
           onClick={() => navigateToTab('tools')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'tools'
-              ? 'text-[var(--theme-text-primary)]'
+              ? 'text-[var(--theme-bg-accent)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
@@ -808,7 +808,7 @@ RÈGLES DE COMPORTEMENT :
           onClick={() => navigateToTab('profile')}
           className={`h-full flex flex-col items-center justify-center transition-all duration-300 active:scale-95 relative group ${
             activeTab === 'profile'
-              ? 'text-[var(--theme-text-primary)]'
+              ? 'text-[var(--theme-bg-accent)]'
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
