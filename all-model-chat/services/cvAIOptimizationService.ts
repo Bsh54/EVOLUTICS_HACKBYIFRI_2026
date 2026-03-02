@@ -138,7 +138,18 @@ RÉPONSE ATTENDUE (FORMAT JSON STRICT):
   "recommendations": ["recommandations pour améliorer encore le CV"]
 }
 
-IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte supplémentaire avant ou après.`;
+IMPORTANT: Tu dois répondre UNIQUEMENT avec un JSON valide, strictement formaté comme ci-dessous. AUCUN texte avant ou après le JSON. AUCUN markdown. AUCUN commentaire.
+
+FORMAT DE RÉPONSE OBLIGATOIRE (COPIE EXACTEMENT CETTE STRUCTURE):
+{"optimizedCV":{"fullName":"${cvData.fullName || 'Nom à compléter'}","title":"titre optimisé","about":"description optimisée","experiences":[],"skills":[],"education":[],"color":"${cvData.color}","profileImage":"${cvData.profileImage}","contact":${JSON.stringify(cvData.contact)},"objective":"objectif optimisé","certifications":${JSON.stringify(cvData.certifications)},"tools":${JSON.stringify(cvData.tools)},"links":${JSON.stringify(cvData.links)},"languages":${JSON.stringify(cvData.languages)},"hobbies":${JSON.stringify(cvData.hobbies)},"references":${JSON.stringify(cvData.references)},"strategicPitch":"pitch optimisé","isOptimized":true,"sectionsOrder":${JSON.stringify(cvData.sectionsOrder)}},"changes":["changement 1","changement 2"],"matchScore":85,"recommendations":["recommandation 1"]}
+
+RÈGLES STRICTES:
+- Commence directement par { et termine par }
+- Pas de texte explicatif
+- Pas de balises markdown
+- JSON valide uniquement
+- Utilise des guillemets doubles partout
+- Pas de virgules en trop`;
   }
 
   /**
@@ -146,39 +157,40 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte supplémentaire avant ou
    */
   private static parseAIResponse(aiResponse: string, originalCV: CVData): OptimizationResult {
     try {
-      // Nettoyer la réponse pour extraire le JSON - amélioration du regex
+      console.log('🔍 Réponse brute IA:', aiResponse.substring(0, 200) + '...');
+
+      // Nettoyage ultra-strict de la réponse
       let cleanedResponse = aiResponse.trim();
 
-      // Supprimer les balises markdown si présentes
+      // Supprimer tout ce qui n'est pas JSON
       cleanedResponse = cleanedResponse.replace(/```json\s*/g, '').replace(/```\s*$/g, '');
+      cleanedResponse = cleanedResponse.replace(/^[^{]*/, ''); // Supprimer tout avant le premier {
+      cleanedResponse = cleanedResponse.replace(/[^}]*$/, '}'); // Garder seulement jusqu'au dernier }
 
-      // Chercher le JSON principal - pattern plus robuste
-      const jsonMatch = cleanedResponse.match(/\{[\s\S]*?\}(?=\s*$|\s*```|\s*\n\s*[^{])/);
+      // Trouver le JSON principal avec regex ultra-strict
+      const jsonMatch = cleanedResponse.match(/^\s*\{[\s\S]*\}\s*$/);
       if (!jsonMatch) {
-        console.warn('⚠️ JSON non trouvé, tentative de parsing direct');
-        // Essayer de parser directement si c'est déjà du JSON propre
-        try {
-          const directParse = JSON.parse(cleanedResponse);
-          if (directParse.optimizedCV) {
-            cleanedResponse = JSON.stringify(directParse);
-          } else {
-            throw new Error('Format de réponse invalide: JSON non trouvé');
-          }
-        } catch {
-          throw new Error('Format de réponse invalide: JSON non trouvé');
-        }
-      } else {
-        cleanedResponse = jsonMatch[0];
+        console.error('❌ Aucun JSON valide trouvé dans la réponse');
+        throw new Error('Format de réponse invalide: JSON non trouvé');
       }
 
-      // Nettoyer le JSON des caractères problématiques
+      cleanedResponse = jsonMatch[0].trim();
+
+      // Nettoyage des erreurs JSON communes
       cleanedResponse = cleanedResponse
-        .replace(/,(\s*[}\]])/g, '$1') // Supprimer les virgules avant } ou ]
-        .replace(/([{,]\s*)"([^"]+)"\s*:\s*"([^"]*)"([^,}\]]*)/g, (match, prefix, key, value, suffix) => {
-          // Nettoyer les valeurs de chaîne avec des caractères d'échappement problématiques
-          const cleanValue = value.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
-          return `${prefix}"${key}": "${cleanValue}"${suffix}`;
+        .replace(/,(\s*[}\]])/g, '$1') // Supprimer virgules avant } ou ]
+        .replace(/([{,]\s*)"([^"]+)"\s*:\s*"([^"\\]*(\\.[^"\\]*)*)"/g, (match, prefix, key, value) => {
+          // Nettoyer les valeurs avec échappement correct
+          const cleanValue = value
+            .replace(/\\/g, '\\\\')
+            .replace(/"/g, '\\"')
+            .replace(/\n/g, '\\n')
+            .replace(/\r/g, '\\r')
+            .replace(/\t/g, '\\t');
+          return `${prefix}"${key}": "${cleanValue}"`;
         });
+
+      console.log('🧹 JSON nettoyé:', cleanedResponse.substring(0, 200) + '...');
 
       const parsedResponse = JSON.parse(cleanedResponse);
 

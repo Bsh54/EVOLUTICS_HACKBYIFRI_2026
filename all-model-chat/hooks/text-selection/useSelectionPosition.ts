@@ -16,8 +16,8 @@ export const useSelectionPosition = ({ containerRef, isAudioActive, toolbarRef }
     // Monitor selection changes
     useEffect(() => {
         const handleSelectionChange = () => {
-            // Vérification de sécurité pour containerRef
-            if (!containerRef.current || isAudioActive) return;
+            // Vérifications de sécurité complètes
+            if (!containerRef?.current || !selectionBoundsRef?.current || isAudioActive) return;
 
             const selection = window.getSelection();
             if (!selection || selection.isCollapsed || !selection.rangeCount) {
