@@ -18,7 +18,7 @@ interface CVBuilderPageProps {
   onThemeChange: (themeId: string) => void;
 }
 
-type CVBuilderStep = 'template-selection' | 'form-filling' | 'preview' | 'ai-optimization';
+type CVBuilderStep = 'template-selection' | 'form-filling' | 'ai-optimization';
 
 const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   onBack,
@@ -277,7 +277,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
       toast.success("✅ CV optimisé sauvegardé avec succès !");
       setShowOptimizationResults(false);
-      setCurrentStep('preview');
+      setCurrentStep('form-filling');
 
     } catch (error) {
       console.error('❌ Erreur sauvegarde CV optimisé:', error);
@@ -447,16 +447,6 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     setSelectedTemplate('');
   };
 
-  const handlePreview = () => {
-    if (cvData) {
-      setCurrentStep('preview');
-    }
-  };
-
-  const handleBackToForm = () => {
-    setCurrentStep('form-filling');
-  };
-
   return (
     <div className={`h-full overflow-hidden bg-[var(--theme-bg-primary)] theme-${themeId}`}>
       {/* Étape 1: Sélection de template */}
@@ -517,12 +507,21 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                 <span className="sm:hidden">Sauver</span>
               </button>
               <button
-                onClick={handlePreview}
-                className="flex items-center gap-2 px-4 sm:px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center"
+                onClick={handleExportPDF}
+                disabled={isExporting}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors text-sm sm:text-base flex-1 sm:flex-none justify-center"
               >
-                <Sparkles className="w-4 h-4" />
-                <span className="hidden sm:inline">Prévisualiser</span>
-                <span className="sm:hidden">Voir CV</span>
+                {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                <span className="hidden sm:inline">Télécharger PDF</span>
+                <span className="sm:hidden">PDF</span>
+              </button>
+              <button
+                onClick={() => setCurrentStep('ai-optimization')}
+                className="flex items-center gap-2 px-4 sm:px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl transition-all font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center shadow-lg"
+              >
+                <Wand2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Optimiser avec IA</span>
+                <span className="sm:hidden">IA</span>
               </button>
             </div>
           </div>
@@ -554,71 +553,14 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         </div>
       )}
 
-      {/* Étape 3: Prévisualisation finale */}
-      {currentStep === 'preview' && cvData && (
-        <div className="h-full flex flex-col">
-          {/* Header - Responsive */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)] gap-4 sm:gap-0">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleBackToForm}
-                className="p-2 hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
-              </button>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-[var(--theme-text-primary)]">
-                  👁️ Prévisualisation finale
-                </h1>
-                <p className="text-sm text-[var(--theme-text-secondary)]">
-                  Votre CV est prêt à être téléchargé
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
-              <button
-                onClick={handleBackToForm}
-                className="px-3 sm:px-4 py-2 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors text-sm sm:text-base flex-1 sm:flex-none justify-center"
-              >
-                Modifier
-              </button>
-              <button
-                onClick={() => setCurrentStep('ai-optimization')}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl transition-all font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center shadow-lg"
-              >
-                <Wand2 className="w-4 h-4" />
-                <span className="hidden sm:inline">Optimiser avec IA</span>
-                <span className="sm:hidden">IA</span>
-              </button>
-              <button
-                onClick={handleExportPDF}
-                disabled={isExporting}
-                className="flex items-center gap-2 px-4 sm:px-6 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium text-sm sm:text-base flex-1 sm:flex-none justify-center"
-              >
-                {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                <span className="hidden sm:inline">Télécharger PDF</span>
-                <span className="sm:hidden">PDF</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Prévisualisation - Responsive */}
-          <div className="flex-1 bg-gray-200 overflow-y-auto p-2 sm:p-3 md:p-6 flex justify-center">
-            <div id="cv-preview" className="w-full max-w-[700px]">
-              <CVTemplate data={cvData} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Étape 4: Optimisation IA */}
+      {/* Étape 3: Optimisation IA */}
       {currentStep === 'ai-optimization' && cvData && (
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)] gap-4 sm:gap-0">
             <div className="flex items-center gap-4">
               <button
-                onClick={() => setCurrentStep('preview')}
+                onClick={() => setCurrentStep('form-filling')}
                 className="p-2 hover:bg-[var(--theme-bg-secondary)] rounded-xl transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-[var(--theme-text-primary)]" />
@@ -708,10 +650,10 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                 {/* Boutons d'action */}
                 <div className="flex flex-col sm:flex-row gap-3 mt-6">
                   <button
-                    onClick={() => setCurrentStep('preview')}
+                    onClick={() => setCurrentStep('form-filling')}
                     className="px-6 py-3 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] rounded-xl transition-colors font-medium"
                   >
-                    Retour à la prévisualisation
+                    Retour au formulaire
                   </button>
                   <button
                     onClick={handleAIOptimization}
@@ -796,11 +738,11 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                           Sauvegarder le CV optimisé
                         </button>
                         <button
-                          onClick={() => setCurrentStep('preview')}
+                          onClick={() => setCurrentStep('form-filling')}
                           className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
                         >
                           <Sparkles className="w-4 h-4" />
-                          Voir le résultat
+                          Voir le CV optimisé
                         </button>
                       </div>
                     </div>
