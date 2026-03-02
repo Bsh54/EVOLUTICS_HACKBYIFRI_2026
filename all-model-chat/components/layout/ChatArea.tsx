@@ -114,7 +114,7 @@ export const ChatArea: React.FC<ChatAreaProps> = (props) => {
         language={language}
         chatInputHeight={chatInputHeight}
         appSettings={appSettings}
-        currentModelId={currentChatSettings.modelId} 
+        currentModelId={currentChatSettings.modelId}
         onOpenSidePanel={onOpenSidePanel}
         onUpdateMessageFile={onUpdateMessageFile}
         onQuote={handleQuote}
@@ -122,9 +122,9 @@ export const ChatArea: React.FC<ChatAreaProps> = (props) => {
         activeSessionId={activeSessionId}
       />
 
-      <div ref={chatInputContainerRef} className="absolute bottom-0 left-0 right-0 z-30 pointer-events-none">
-        <div className="pointer-events-auto">
-          <ChatInput
+      {/* Champ de saisie dans le flux normal, pas en absolute */}
+      <div ref={chatInputContainerRef} className="flex-shrink-0 border-t border-[var(--theme-border-primary)]/10">
+        <ChatInput
             appSettings={appSettings}
             currentChatSettings={currentChatSettings}
             setAppFileError={setAppFileError}
@@ -189,7 +189,6 @@ export const ChatArea: React.FC<ChatAreaProps> = (props) => {
             isGuideModeActive={isGuideModeActive}
             themeId={themeId}
           />
-        </div>
       </div>
     </div>
   );

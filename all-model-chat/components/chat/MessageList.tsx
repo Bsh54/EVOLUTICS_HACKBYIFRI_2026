@@ -14,7 +14,6 @@ import { isGemini3Model } from '../../utils/appUtils';
 import { TextSelectionToolbar } from './message-list/TextSelectionToolbar';
 import { useMessageListUI } from '../../hooks/useMessageListUI';
 import { useMessageListScroll } from './message-list/hooks/useMessageListScroll';
-import { MessageListFooter } from './message-list/MessageListFooter';
 
 export interface MessageListProps {
   messages: ChatMessage[];
@@ -112,14 +111,12 @@ export const MessageList: React.FC<MessageListProps> = ({
             data={messages}
             scrollerRef={setInternalScrollerRef}
             atBottomStateChange={setAtBottom}
-            followOutput="smooth" // Active l'auto-scroll natif de Virtuoso
+            followOutput={true} // Force l'auto-scroll pour les nouveaux messages
+            alignToBottom={true} // Aligne toujours vers le bas
             rangeChanged={onRangeChanged}
             increaseViewportBy={800}
             className="custom-scrollbar"
             onScroll={onScrollContainerScroll} // Pass scroll event to parent handler
-            components={{
-                Footer: () => <MessageListFooter messages={messages} chatInputHeight={chatInputHeight} />
-            }}
             itemContent={(index, msg) => (
                 <div className="px-1.5 sm:px-2 md:px-3 max-w-7xl mx-auto w-full">
                     <Message

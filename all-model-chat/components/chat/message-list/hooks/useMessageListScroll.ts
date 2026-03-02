@@ -122,7 +122,11 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
             // Auto-scroll pendant le streaming SAUF si l'utilisateur a scrollé manuellement vers le haut
             if (!userScrolledUpRef.current) {
                 // Force le maintien en bas à chaque mise à jour du contenu
-                scrollerRef.scrollTop = scrollerRef.scrollHeight;
+                // Utiliser scrollTo pour plus de fiabilité
+                scrollerRef.scrollTo({
+                    top: scrollerRef.scrollHeight,
+                    behavior: 'auto'
+                });
             }
         }
     }, [lastMessage?.content, isStreaming, scrollerRef]);
