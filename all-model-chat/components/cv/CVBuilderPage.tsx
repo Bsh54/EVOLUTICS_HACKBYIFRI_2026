@@ -781,6 +781,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               )}
             </div>
           </div>
+          </>
           )}
         </div>
       )}
