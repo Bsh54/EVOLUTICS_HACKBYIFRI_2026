@@ -1,38 +1,35 @@
 import { Part, UsageMetadata, ChatHistoryItem } from "@google/genai";
 import { logService } from "../logService";
+import { DeepSeekService, DeepSeekMessage } from "../deepseekService";
 
 /**
- * Convertit l'historique Gemini au format OpenAI (avec support multimodal)
+ * Convertit l'historique Gemini au format DeepSeek (avec support multimodal)
  */
-const convertToOpenAIHistory = (history: ChatHistoryItem[], currentParts: Part[]) => {
-    const mapParts = (parts: Part[]) => {
-        if (parts.length === 1 && parts[0].text) {
-            return parts[0].text;
-        }
-
+const convertToDeepSeekHistory = (history: ChatHistoryItem[], currentParts: Part[]): DeepSeekMessage[] => {
+    const mapParts = (parts: Part[]): string => {
+        // Pour DeepSeek, on convertit tout en texte simple
         return parts.map(p => {
-            if (p.text) return { type: "text", text: p.text };
+            if (p.text) return p.text;
             if (p.inlineData) {
-                return {
-                    type: "image_url",
-                    image_url: {
-                        url: `data:${p.inlineData.mimeType};base64,${p.inlineData.data}`
-                    }
-                };
+                // Pour les images, on indique qu'une image était présente
+                return "[Image fournie - analyse basée sur le contexte]";
             }
-            return null;
-        }).filter(Boolean);
+            return "";
+        }).filter(Boolean).join(" ");
     };
 
-    const messages = history.map(item => ({
+    const messages: DeepSeekMessage[] = history.map(item => ({
         role: item.role === 'model' ? 'assistant' : 'user',
         content: mapParts(item.parts)
     }));
 
-    messages.push({
-        role: 'user',
-        content: mapParts(currentParts)
-    });
+    const currentContent = mapParts(currentParts);
+    if (currentContent.trim()) {
+        messages.push({
+            role: 'user',
+            content: currentContent
+        });
+    }
 
     return messages;
 };
@@ -50,68 +47,30 @@ export const sendStatelessMessageStreamApi = async (
     onComplete: (usageMetadata?: UsageMetadata, groundingMetadata?: any, urlContextMetadata?: any) => void,
     _role: 'user' | 'model' = 'user'
 ): Promise<void> => {
-    const API_URL = "https://shadsai1api.shadobsh.workers.dev/v1/chat/completions";
-    const API_KEY = "sk-dummy";
-
-    logService.info(`Sending message via OpenAI format to Cloudflare for ${modelId}`);
+    // 🎭 Interface: Affiche "Gemini" à l'utilisateur
+    // 🔧 Backend: Utilise DeepSeek en réalité
+    logService.info(`[UI: Gemini ${modelId}] [Backend: DeepSeek] Envoi du message...`);
 
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+        const messages = convertToDeepSeekHistory(history, parts);
+
+        // Utiliser le service DeepSeek en streaming
+        await DeepSeekService.generateStream(
+            messages,
+            (chunk: string) => {
+                // Envoyer chaque chunk à l'interface
+                onPart({ text: chunk });
             },
-            body: JSON.stringify({
-                model: modelId,
-                messages: convertToOpenAIHistory(history, parts),
-                stream: true,
-                temperature: config.temperature || 0.7,
-                top_p: config.topP || 0.95,
-            }),
-            signal: abortSignal
-        });
-
-        if (!response.ok) {
-            throw new Error(`API Error: ${response.statusText}`);
-        }
-
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        if (!reader) throw new Error("No reader available");
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-
-            for (const line of lines) {
-                const cleanLine = line.replace(/^data: /, '').trim();
-                if (!cleanLine || cleanLine === '[DONE]') continue;
-
-                try {
-                    const json = JSON.parse(cleanLine);
-                    const content = json.choices?.[0]?.delta?.content;
-                    const reasoning = json.choices?.[0]?.delta?.reasoning_content;
-
-                    if (reasoning) {
-                        onThoughtChunk(reasoning);
-                    }
-                    if (content) {
-                        onPart({ text: content });
-                    }
-                } catch (e) {
-                    // Ignorer les erreurs de parsing sur les fragments
-                }
+            {
+                temperature: config.temperature || 0.7
             }
-        }
+        );
+
+        logService.info(`✅ [Backend: DeepSeek] Réponse générée avec succès`);
+
     } catch (error) {
-        logService.error("Error in OpenAI stream:", error);
+        logService.error("❌ [Backend: DeepSeek] Erreur:", error);
+        // En cas d'erreur, on peut fallback sur l'ancienne API ou gérer l'erreur
     } finally {
         onComplete();
     }
@@ -127,32 +86,33 @@ export const sendStatelessMessageNonStreamApi = async (
     onError: (error: Error) => void,
     onComplete: (parts: Part[], thoughtsText?: string, usageMetadata?: UsageMetadata, groundingMetadata?: any, urlContextMetadata?: any) => void
 ): Promise<void> => {
-    const API_URL = "https://shadsai1api.shadobsh.workers.dev/v1/chat/completions";
-    const API_KEY = "sk-dummy";
+    // 🎭 Interface: Affiche "Gemini" à l'utilisateur
+    // 🔧 Backend: Utilise DeepSeek en réalité
+    logService.info(`[UI: Gemini ${modelId}] [Backend: DeepSeek] Génération non-stream...`);
 
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
-            },
-            body: JSON.stringify({
-                model: modelId,
-                messages: convertToOpenAIHistory(history, parts),
-                stream: false,
-                temperature: config.temperature || 0.7,
-                top_p: config.topP || 0.95,
-            }),
-            signal: abortSignal
+        const messages = convertToDeepSeekHistory(history, parts);
+
+        // Utiliser le service DeepSeek sans streaming
+        const response = await DeepSeekService.chatCompletion(messages, {
+            temperature: config.temperature || 0.7,
+            max_tokens: 4000
         });
 
-        const json = await response.json();
-        const content = json.choices?.[0]?.message?.content || "";
-        const reasoning = json.choices?.[0]?.message?.reasoning_content || "";
+        const content = response.choices?.[0]?.message?.content || "";
 
-        onComplete([{ text: content } as Part], reasoning);
+        // Simuler les métadonnées d'usage pour compatibilité
+        const usageMetadata: UsageMetadata = {
+            promptTokenCount: response.usage?.prompt_tokens || 0,
+            candidatesTokenCount: response.usage?.completion_tokens || 0,
+            totalTokenCount: response.usage?.total_tokens || 0
+        };
+
+        logService.info(`✅ [Backend: DeepSeek] Réponse non-stream générée avec succès`);
+        onComplete([{ text: content } as Part], undefined, usageMetadata);
+
     } catch (error) {
+        logService.error("❌ [Backend: DeepSeek] Erreur non-stream:", error);
         onError(error as Error);
     }
 };

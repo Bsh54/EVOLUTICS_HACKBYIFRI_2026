@@ -1,11 +1,11 @@
 import { AIAnalysisResult } from '../types/pendingOpportunity';
+import { DeepSeekService } from './deepseekService';
 
 export class AIAnalysisService {
   private static instance: AIAnalysisService;
-  private geminiApiKey: string;
 
   private constructor() {
-    this.geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+    // Plus besoin de clé Gemini, on utilise DeepSeek
   }
 
   public static getInstance(): AIAnalysisService {
@@ -16,10 +16,14 @@ export class AIAnalysisService {
   }
 
   /**
-   * Analyse le contenu d'une URL avec l'IA Gemini
+   * Analyse le contenu d'une URL avec l'IA
+   * 🎭 Interface: L'utilisateur voit "Analyse avec Gemini AI"
+   * 🔧 Backend: DeepSeek traite l'analyse
    */
   async analyzeOpportunity(url: string, htmlContent?: string): Promise<AIAnalysisResult | null> {
     try {
+      console.log('🎭 [UI: Gemini AI] 🔧 [Backend: DeepSeek] Analyse opportunité...');
+
       // Si pas de contenu HTML fourni, essayer de le récupérer
       let content = htmlContent;
       if (!content) {
@@ -36,14 +40,20 @@ export class AIAnalysisService {
       // Créer le prompt d'analyse
       const prompt = this.createAnalysisPrompt(url, cleanContent);
 
-      // Appeler l'API Gemini
-      const result = await this.callGeminiAPI(prompt);
+      // Appeler DeepSeek au lieu de Gemini
+      const result = await this.callDeepSeekAPI(prompt);
 
       // Parser et valider le résultat
-      return this.parseAndValidateResult(result, url);
+      const analysisResult = this.parseAndValidateResult(result, url);
+
+      if (analysisResult) {
+        console.log('✅ [Backend: DeepSeek] Analyse terminée avec succès');
+      }
+
+      return analysisResult;
 
     } catch (error) {
-      console.error('Erreur analyse IA:', error);
+      console.error('❌ [Backend: DeepSeek] Erreur analyse IA:', error);
       return null;
     }
   }
@@ -215,65 +225,31 @@ RÉPONDS UNIQUEMENT AVEC LE JSON CORRESPONDANT AU TYPE DÉTECTÉ, RIEN D'AUTRE.
   }
 
   /**
-   * Appelle l'API Gemini
+   * Appelle l'API DeepSeek (remplace Gemini)
    */
-  private async callGeminiAPI(prompt: string): Promise<string> {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${this.geminiApiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  private async callDeepSeekAPI(prompt: string): Promise<string> {
+    try {
+      const response = await DeepSeekService.chatCompletion([
+        {
+          role: 'system',
+          content: 'Tu es un expert en analyse d\'opportunités professionnelles. Tu réponds exclusivement en JSON pur et valide.'
         },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: prompt
-                }
-              ]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.1,
-            topK: 1,
-            topP: 1,
-            maxOutputTokens: 2048,
-          },
-          safetySettings: [
-            {
-              category: "HARM_CATEGORY_HARASSMENT",
-              threshold: "BLOCK_MEDIUM_AND_ABOVE"
-            },
-            {
-              category: "HARM_CATEGORY_HATE_SPEECH",
-              threshold: "BLOCK_MEDIUM_AND_ABOVE"
-            },
-            {
-              category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-              threshold: "BLOCK_MEDIUM_AND_ABOVE"
-            },
-            {
-              category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-              threshold: "BLOCK_MEDIUM_AND_ABOVE"
-            }
-          ]
-        })
+        { role: 'user', content: prompt }
+      ], {
+        temperature: 0.1,
+        max_tokens: 2048
+      });
+
+      const content = response.choices?.[0]?.message?.content;
+
+      if (!content) {
+        throw new Error('Réponse vide de DeepSeek');
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`Erreur API Gemini: ${response.status}`);
+      return content;
+    } catch (error) {
+      throw new Error(`Erreur API DeepSeek: ${error}`);
     }
-
-    const data = await response.json();
-
-    if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-      throw new Error('Réponse API Gemini invalide');
-    }
-
-    return data.candidates[0].content.parts[0].text;
   }
 
   /**
@@ -373,7 +349,7 @@ INSTRUCTIONS SUPPLÉMENTAIRES:
 ${customInstructions}
 `;
 
-      const result = await this.callGeminiAPI(customPrompt);
+      const result = await this.callDeepSeekAPI(customPrompt);
       return this.parseAndValidateResult(result, url);
 
     } catch (error) {

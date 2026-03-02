@@ -38,10 +38,11 @@ export const ThinkingHeader: React.FC<ThinkingHeaderProps> = ({
 
     return (
         <div className="flex items-center gap-2 min-w-0 overflow-hidden flex-grow">
-            {/* Icon Area */}
+            {/* Icon Area - Suppression du spinner animé */}
             {isLoading && (
                 <div className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg transition-colors duration-300 bg-[var(--theme-bg-accent)]/10`}>
-                    <GoogleSpinner size={20} />
+                    {/* Icône statique au lieu du spinner */}
+                    <div className="w-5 h-5 rounded-full bg-[var(--theme-bg-accent)]/30"></div>
                 </div>
             )}
 
@@ -57,9 +58,9 @@ export const ThinkingHeader: React.FC<ThinkingHeaderProps> = ({
                                 {thinkingTimeMs !== undefined ? (
                                     t('thinking_took_time').replace('{duration}', formatDuration(Math.round(finalDuration / 1000)))
                                 ) : (
-                                    effectiveTimerStart 
-                                        ? <ThinkingTimer startTime={effectiveTimerStart} t={t} /> 
-                                        : <span className="animate-pulse">{t('thinking_text')}</span>
+                                    effectiveTimerStart
+                                        ? <ThinkingTimer startTime={effectiveTimerStart} t={t} />
+                                        : <span>{t('thinking_text')}</span>
                                 )}
                                 {firstTokenTimeMs !== undefined && (
                                     <span className="ml-1 opacity-75">

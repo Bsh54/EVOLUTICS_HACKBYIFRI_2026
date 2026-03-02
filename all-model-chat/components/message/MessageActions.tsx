@@ -72,8 +72,8 @@ export const MessageActions: React.FC<MessageActionsProps> = ({
     const actionButtonClasses = "p-1.5 rounded-lg text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-border-focus)] opacity-80 hover:opacity-100 hover:scale-105 active:scale-95";
 
     return (
-        <div className="flex-shrink-0 w-8 sm:w-10 flex flex-col items-center sticky top-2 sm:top-4 self-start z-10 h-full">
-            <div className="h-7 sm:h-8 flex items-center justify-center">
+        <div className="flex-shrink-0 w-8 sm:w-10 flex flex-col items-center self-start z-10 h-full">
+            <div className="h-7 sm:h-8 flex items-center justify-center mt-1">
                 {!isGrouped && (
                     <>
                         {message.role === 'user' && (

@@ -27,10 +27,8 @@ export const useSuggestions = ({
     const prevIsLoadingRef = useRef(isLoading);
 
     const generateAndAttachSuggestions = useCallback(async (sessionId: string, messageId: string, userContent: string, modelContent: string, sessionSettings: IndividualChatSettings) => {
-        // Show loading state
-        updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
-            ...s, messages: s.messages.map(m => m.id === messageId ? {...m, isGeneratingSuggestions: true} : m)
-        } : s));
+        // Suppression de l'état de chargement des suggestions
+        // Plus d'animation "isGeneratingSuggestions"
 
         // Sticky Key Logic: Prefer key used in the last turn
         const stickyKey = sessionKeyMapRef?.current?.get(sessionId);
@@ -43,10 +41,6 @@ export const useSuggestions = ({
             const keyResult = getKeyForRequest(appSettings, sessionSettings, { skipIncrement: true });
             if ('error' in keyResult) {
                 logService.error('Cannot generate suggestions: API key not configured.');
-                // Hide loading state on error
-                updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
-                    ...s, messages: s.messages.map(m => m.id === messageId ? {...m, isGeneratingSuggestions: false} : m)
-                } : s));
                 return;
             }
             keyToUse = keyResult.key;
@@ -56,20 +50,11 @@ export const useSuggestions = ({
             const suggestions = await geminiServiceInstance.generateSuggestions(keyToUse, userContent, modelContent, language);
             if (suggestions && suggestions.length > 0) {
                 updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
-                    ...s, messages: s.messages.map(m => m.id === messageId ? {...m, suggestions, isGeneratingSuggestions: false} : m)
-                } : s));
-            } else {
-                 // Hide loading state if no suggestions are returned
-                updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
-                    ...s, messages: s.messages.map(m => m.id === messageId ? {...m, isGeneratingSuggestions: false} : m)
+                    ...s, messages: s.messages.map(m => m.id === messageId ? {...m, suggestions} : m)
                 } : s));
             }
         } catch (error) {
             logService.error('Suggestion generation failed in handler', { error });
-             // Hide loading state on error
-            updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
-                ...s, messages: s.messages.map(m => m.id === messageId ? {...m, isGeneratingSuggestions: false} : m)
-            } : s));
         }
     }, [appSettings, language, updateAndPersistSessions, sessionKeyMapRef]);
 

@@ -224,9 +224,13 @@ export const finalizeMessages = (
     
     let finalMessages = messages.map(m => {
         // Identify message by exact object match on timestamp
-        if (m.generationStartTime && m.generationStartTime.getTime() === generationStartTime.getTime() && m.isLoading) {
+        if (m.generationStartTime &&
+            ((m.generationStartTime instanceof Date && generationStartTime instanceof Date &&
+              m.generationStartTime.getTime() === generationStartTime.getTime()) ||
+             (m.generationStartTime === generationStartTime)) &&
+            m.isLoading) {
             let thinkingTime = m.thinkingTimeMs;
-            if (thinkingTime === undefined && firstContentPartTime) {
+            if (thinkingTime === undefined && firstContentPartTime && generationStartTime instanceof Date) {
                 thinkingTime = firstContentPartTime.getTime() - generationStartTime.getTime();
             }
             const isLastMessageOfRun = m.id === Array.from(newModelMessageIds).pop();

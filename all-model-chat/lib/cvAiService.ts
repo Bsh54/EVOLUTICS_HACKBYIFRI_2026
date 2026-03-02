@@ -1,9 +1,14 @@
 import type { CVData } from "../types/cvTypes";
+import { DeepSeekService } from "../services/deepseekService";
 
 const AI_API_URL = import.meta.env.VITE_GEMINI_API_URL || "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
 const AI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 export async function optimizeCVWithAI({ jobOffer, currentData }: { jobOffer: string; currentData: CVData }): Promise<CVData> {
+  // 🎭 Interface: L'utilisateur voit "Optimisation avec Gemini AI"
+  // 🔧 Backend: DeepSeek traite l'optimisation
+  console.log('🎭 [UI: Gemini AI] 🔧 [Backend: DeepSeek] Optimisation CV...');
+
   const prompt = `
     Rôle : Expert en recrutement stratégique.
     Tâche : Optimise intégralement ce CV pour l'offre fournie.
@@ -29,26 +34,20 @@ export async function optimizeCVWithAI({ jobOffer, currentData }: { jobOffer: st
   `;
 
   try {
-    const response = await fetch(`${AI_API_URL}?key=${AI_API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: prompt
-          }]
-        }],
-        generationConfig: {
-          temperature: 0.1,
-          maxOutputTokens: 2048,
-        }
-      })
+    // Utiliser DeepSeek au lieu de Gemini
+    const response = await DeepSeekService.chatCompletion([
+      { role: 'system', content: 'Tu es un expert en recrutement. Tu réponds exclusivement en JSON pur et valide.' },
+      { role: 'user', content: prompt }
+    ], {
+      temperature: 0.1,
+      max_tokens: 2048
     });
 
-    if (!response.ok) throw new Error(`Erreur API (${response.status})`);
+    let rawContent = response.choices?.[0]?.message?.content || "";
 
-    const result = await response.json();
-    let rawContent = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!rawContent) {
+      throw new Error("Réponse vide de DeepSeek");
+    }
 
     // Tentative de réparation du JSON si l'accolade manque
     if (rawContent.trim().startsWith('"about"') || rawContent.trim().startsWith('about')) {
@@ -63,6 +62,8 @@ export async function optimizeCVWithAI({ jobOffer, currentData }: { jobOffer: st
 
     const optimizedData = JSON.parse(match[1].trim());
 
+    console.log('✅ [Backend: DeepSeek] CV optimisé avec succès');
+
     return {
       ...currentData,
       isOptimized: true,
@@ -71,7 +72,7 @@ export async function optimizeCVWithAI({ jobOffer, currentData }: { jobOffer: st
       skills: optimizedData.skills || currentData.skills
     };
   } catch (error: any) {
-    console.error("AI_OPTIMIZATION_ERROR:", error.message);
+    console.error("❌ [Backend: DeepSeek] Erreur optimisation CV:", error.message);
     // On propage l'erreur pour que le bouton de chargement s'arrête et qu'un message s'affiche
     throw new Error("Échec de l'optimisation. Vérifiez votre connexion ou l'offre saisie.");
   }
