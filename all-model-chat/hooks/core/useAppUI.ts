@@ -4,7 +4,7 @@ import React, { useState, useCallback, useRef } from 'react';
 export const useAppUI = () => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState<boolean>(false);
   const [isPreloadedMessagesModalOpen, setIsPreloadedMessagesModalOpen] = useState<boolean>(false);
-  const [isHistorySidebarOpen, setIsHistorySidebarOpen] = useState<boolean>(window.innerWidth >= 768);
+  const [isHistorySidebarOpen, setIsHistorySidebarOpen] = useState<boolean>(false);
   const [isLogViewerOpen, setIsLogViewerOpen] = useState<boolean>(false);
 
   const touchStartRef = useRef({ x: 0, y: 0 });

@@ -4,6 +4,7 @@ import { AppSettings, SavedChatSession, ChatGroup, UploadedFile, ChatSettings, C
 import { DEFAULT_CHAT_SETTINGS, ACTIVE_CHAT_SESSION_ID_KEY } from '../../../constants/appConstants';
 import { createNewSession, rehydrateSessionFiles, logService } from '../../../utils/appUtils';
 import { dbService } from '../../../utils/db';
+import { sessionManagerService } from '../../../services/sessionManagerService';
 
 interface UseSessionLoaderProps {
     appSettings: AppSettings;
@@ -41,7 +42,13 @@ export const useSessionLoader = ({
     savedSessions,
 }: UseSessionLoaderProps) => {
 
-    const startNewChat = useCallback((explicitTemplateSession?: SavedChatSession) => {
+    const startNewChat = useCallback(async (explicitTemplateSession?: SavedChatSession) => {
+        // Vérifier s'il existe déjà une session vide réutilisable
+        const existingEmptySession = sessionManagerService.findExistingSession(savedSessions, {
+            isEmpty: true,
+            hasSystemInstruction: false
+        });
+
         // If we are already on an empty chat, just focus input and don't create a duplicate
         if (activeChat && activeChat.messages.length === 0 && !activeChat.systemInstruction && !explicitTemplateSession) {
             logService.info('Already on an empty chat, reusing session.');
@@ -54,6 +61,19 @@ export const useSessionLoader = ({
             setTimeout(() => {
                 document.querySelector<HTMLTextAreaElement>('textarea[aria-label="Chat message input"]')?.focus();
             }, 0);
+            return;
+        }
+
+        // Si une session vide existe déjà et qu'aucun template n'est demandé, la réutiliser
+        if (existingEmptySession && !explicitTemplateSession) {
+            logService.info('Reusing existing empty session:', existingEmptySession.id);
+            setActiveMessages(existingEmptySession.messages);
+            setActiveSessionId(existingEmptySession.id);
+
+            // Clear input state
+            setCommandedInput({ text: '', id: Date.now(), mode: 'replace' });
+            setSelectedFiles([]);
+            setEditingMessageId(null);
             return;
         }
 
@@ -90,7 +110,8 @@ export const useSessionLoader = ({
             }
         }
 
-        const newSession = createNewSession(
+        // Créer la nouvelle session de manière thread-safe
+        const newSession = await sessionManagerService.createSessionSafely(
             settingsForNewChat,
             templateSession?.messages || [], // Use messages if provided (e.g. greeting)
             templateSession?.title || "New Chat"
@@ -100,7 +121,11 @@ export const useSessionLoader = ({
         setActiveMessages(newSession.messages);
         setActiveSessionId(newSession.id);
 
-        updateAndPersistSessions(prev => [newSession, ...prev]);
+        // Nettoyer les sessions vides en double avant d'ajouter la nouvelle
+        updateAndPersistSessions(prev => {
+            const cleanedSessions = sessionManagerService.cleanupDuplicateEmptySessions(prev);
+            return [newSession, ...cleanedSessions];
+        });
 
         // Clear files for new chat
         setSelectedFiles([]);

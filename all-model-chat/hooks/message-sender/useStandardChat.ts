@@ -6,6 +6,7 @@ import { UploadedFile, ChatMessage } from '../../types';
 import { StandardChatProps } from './types';
 import { useSessionUpdate } from './standard/useSessionUpdate';
 import { useApiInteraction } from './standard/useApiInteraction';
+import { sessionManagerService } from '../../services/sessionManagerService';
 
 export const useStandardChat = ({
     appSettings,
