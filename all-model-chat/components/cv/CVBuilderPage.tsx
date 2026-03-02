@@ -234,10 +234,10 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       setModifiedFields(allFields);
 
       toast.update(toastId, {
-        render: `✅ CV optimisé ! Score de correspondance: ${result.matchScore}%`,
+        render: `✅ CV optimisé ! Score de correspondance: ${result.matchScore}% - Vous pouvez maintenant éditer les modifications`,
         type: "success",
         isLoading: false,
-        autoClose: 3000
+        autoClose: 4000
       });
 
     } catch (error) {
@@ -274,6 +274,17 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         optimizationResult.optimizedCV,
         selectedTemplate || 'moderne-01'
       );
+
+      // Marquer tous les champs optimisés comme modifiés pour permettre la sauvegarde future
+      const optimizedFields = new Set([
+        'fullName', 'title', 'about', 'objective', 'experiences',
+        'education', 'skills', 'certifications', 'tools', 'links',
+        'languages', 'hobbies', 'references', 'strategicPitch'
+      ]);
+      setModifiedFields(optimizedFields);
+
+      // S'assurer que les données optimisées sont visibles dans le formulaire
+      setCvDataState(optimizationResult.optimizedCV);
 
       toast.success("✅ CV optimisé sauvegardé avec succès !");
       setShowOptimizationResults(false);
@@ -738,11 +749,21 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                           Sauvegarder le CV optimisé
                         </button>
                         <button
-                          onClick={() => setCurrentStep('form-filling')}
+                          onClick={() => {
+                            // Charger les données optimisées dans le formulaire pour permettre l'édition
+                            setCvDataState(optimizationResult.optimizedCV);
+                            // Marquer les champs optimisés comme modifiés
+                            const optimizedFields = new Set([
+                              'fullName', 'title', 'about', 'objective', 'experiences',
+                              'education', 'skills', 'certifications'
+                            ]);
+                            setModifiedFields(optimizedFields);
+                            setCurrentStep('form-filling');
+                          }}
                           className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
                         >
                           <Sparkles className="w-4 h-4" />
-                          Voir le CV optimisé
+                          Éditer le CV optimisé
                         </button>
                       </div>
                     </div>

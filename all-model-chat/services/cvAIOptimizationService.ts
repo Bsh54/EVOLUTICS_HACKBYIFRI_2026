@@ -159,7 +159,15 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte supplémentaire avant ou
       const optimizedCV: CVData = {
         ...originalCV,
         ...parsedResponse.optimizedCV,
-        isOptimized: true
+        isOptimized: true,
+        // Forcer la mise à jour des champs optimisés même s'ils sont vides
+        fullName: parsedResponse.optimizedCV.fullName || originalCV.fullName,
+        title: parsedResponse.optimizedCV.title || originalCV.title,
+        about: parsedResponse.optimizedCV.about || originalCV.about,
+        objective: parsedResponse.optimizedCV.objective || originalCV.objective,
+        experiences: parsedResponse.optimizedCV.experiences || originalCV.experiences,
+        skills: parsedResponse.optimizedCV.skills || originalCV.skills,
+        education: parsedResponse.optimizedCV.education || originalCV.education
       };
 
       return {
