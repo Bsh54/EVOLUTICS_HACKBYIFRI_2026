@@ -5,6 +5,7 @@ import { CVData } from '../../types/cvTypes';
 import ProfileCVSyncService from '../../services/profileCVSyncService';
 import CVDatabaseService from '../../services/cvDatabaseService';
 import CVAIOptimizationService, { JobOffer, OptimizationResult } from '../../services/cvAIOptimizationService';
+import CVRenderService from '../../services/cvRenderService';
 import CVTemplateSelector from './CVTemplateSelector';
 import CVEditorPanel from './CVEditorPanel';
 import CVTemplate from '../../templates/moderne/Moderne01';
@@ -395,94 +396,133 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     return filteredData;
   };
 
-  // Fonction d'export PDF
+  // Fonction d'export PDF améliorée (inspirée de mon-cv-local-main)
   const handleExportPDF = async () => {
-    const element = document.querySelector("#cv-preview") as HTMLElement;
-    if (!element || !cvData) return;
+    if (!cvData) return;
 
     setIsExporting(true);
     const toastId = toast.loading("Génération du PDF haute fidélité...");
 
     try {
+      // Option 1: Utiliser le rendu HTML optimisé (nouveau)
+      const optimizedHTML = CVRenderService.renderCVToHTML(cvData);
+      const filename = CVRenderService.generatePDFFilename(cvData.fullName);
+
+      // Créer un élément temporaire pour le rendu
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = optimizedHTML;
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.left = '-9999px';
+      tempDiv.style.top = '-9999px';
+      document.body.appendChild(tempDiv);
+
+      const cvElement = tempDiv.querySelector('.cv-container') as HTMLElement;
+      if (!cvElement) {
+        throw new Error('Élément CV non trouvé');
+      }
+
       const opt = {
         margin: 0,
-        filename: `CV_${cvData.fullName.replace(/\s+/g, "_")}_EVOLUTICS.pdf`,
+        filename: filename,
         image: { type: "jpeg", quality: 1.0 },
         html2canvas: {
-          scale: 4,
+          scale: 3, // Qualité optimisée
           useCORS: true,
           letterRendering: true,
           logging: false,
           backgroundColor: "#ffffff",
+          width: 794,
+          height: 1122,
           onclone: (clonedDoc: Document) => {
             try {
+              // Nettoyage des styles pour PDF
               const styles = clonedDoc.querySelectorAll("style");
               styles.forEach(s => {
                 s.innerHTML = s.innerHTML.replace(/oklch\([^)]+\)/g, "#1e293b");
               });
 
-              clonedDoc.querySelectorAll("*").forEach(el => {
-                const element = el as HTMLElement;
-                if (element.style) {
-                  const computedStyle = window.getComputedStyle(element);
-                  if (computedStyle.color.includes("oklch")) element.style.color = "#1e293b";
-                  if (computedStyle.backgroundColor.includes("oklch")) element.style.backgroundColor = "#ffffff";
-                  if (computedStyle.borderColor.includes("oklch")) element.style.borderColor = "#1e293b";
-                }
-              });
+              // Fix des éléments SVG et images
+              const clonedContainer = clonedDoc.querySelector('.cv-container') as HTMLElement;
+              if (clonedContainer) {
+                clonedContainer.style.width = "794px";
+                clonedContainer.style.height = "1122px";
+                clonedContainer.style.overflow = "hidden";
+
+                // Fix des icônes et images
+                clonedContainer.querySelectorAll("img").forEach(img => {
+                  img.style.objectFit = "cover";
+                  img.style.display = "block";
+                });
+              }
             } catch (err) {
               console.warn("Style cleanup warning:", err);
             }
-
-            const clonedElement = clonedDoc.querySelector(".pdf-export-mode") as HTMLElement;
-            if (clonedElement) {
-              clonedElement.style.width = "794px";
-              clonedElement.style.height = "1122px";
-              clonedElement.style.minHeight = "1122px";
-              clonedElement.style.maxHeight = "1122px";
-              clonedElement.style.overflow = "hidden";
-              clonedElement.style.position = "relative";
-
-              clonedElement.querySelectorAll("svg").forEach(svg => {
-                const color = window.getComputedStyle(svg).color;
-                svg.setAttribute("stroke", color);
-                svg.style.stroke = color;
-                svg.querySelectorAll("path, circle, line, polyline, rect").forEach(path => {
-                  const p = path as SVGElement;
-                  p.setAttribute("stroke", color);
-                  p.style.stroke = color;
-                });
-              });
-
-              clonedElement.querySelectorAll("img").forEach(img => {
-                img.style.objectFit = "cover";
-                img.style.display = "block";
-              });
-            }
           }
         },
-        jsPDF: { unit: "px", format: [794, 1122], orientation: "portrait", hotfixes: ["px_scaling"] }
+        jsPDF: {
+          unit: "px",
+          format: [794, 1122],
+          orientation: "portrait",
+          hotfixes: ["px_scaling"]
+        }
       };
 
-      element.classList.add("pdf-export-mode");
       // @ts-ignore
-      await html2pdf().set(opt).from(element).save();
-      element.classList.remove("pdf-export-mode");
+      await html2pdf().set(opt).from(cvElement).save();
+
+      // Nettoyer l'élément temporaire
+      document.body.removeChild(tempDiv);
 
       toast.update(toastId, {
-        render: "✅ PDF téléchargé !",
+        render: "✅ PDF téléchargé avec succès !",
         type: "success",
         isLoading: false,
         autoClose: 2000
       });
-    } catch (e) {
-      console.error("PDF_ERROR:", e);
-      toast.update(toastId, {
-        render: "❌ Erreur de génération",
-        type: "error",
-        isLoading: false,
-        autoClose: 2000
-      });
+
+    } catch (error) {
+      console.error("PDF_ERROR:", error);
+
+      // Fallback vers l'ancienne méthode si la nouvelle échoue
+      try {
+        const element = document.querySelector("#cv-preview") as HTMLElement;
+        if (element) {
+          const opt = {
+            margin: 0,
+            filename: `CV_${cvData.fullName.replace(/\s+/g, "_")}_EVOLUTICS.pdf`,
+            image: { type: "jpeg", quality: 1.0 },
+            html2canvas: {
+              scale: 4,
+              useCORS: true,
+              letterRendering: true,
+              logging: false,
+              backgroundColor: "#ffffff"
+            },
+            jsPDF: { unit: "px", format: [794, 1122], orientation: "portrait", hotfixes: ["px_scaling"] }
+          };
+
+          element.classList.add("pdf-export-mode");
+          // @ts-ignore
+          await html2pdf().set(opt).from(element).save();
+          element.classList.remove("pdf-export-mode");
+
+          toast.update(toastId, {
+            render: "✅ PDF téléchargé (mode fallback) !",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000
+          });
+        } else {
+          throw new Error("Aucune méthode de génération PDF disponible");
+        }
+      } catch (fallbackError) {
+        toast.update(toastId, {
+          render: "❌ Erreur de génération PDF",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000
+        });
+      }
     } finally {
       setIsExporting(false);
     }
