@@ -14,8 +14,9 @@ export interface OptimizationResult {
 }
 
 export class CVAIOptimizationService {
-  private static readonly PROXY_API_URL = 'https://shadsai1api.shadobsh.workers.dev/v1/models/gemini-2.5-flash:generateContent';
-  private static readonly API_KEY = 'sk-dummy';
+  private static readonly DEEPSEEK_API_URL = 'https://shads229-personnal-aiv2.hf.space/v1/chat/completions';
+  private static readonly DEEPSEEK_API_KEY = 'Shadobsh';
+  private static readonly MODEL = 'deepseek-chat';
 
   /**
    * Optimise un CV en fonction d'une offre d'emploi spécifique
@@ -24,14 +25,14 @@ export class CVAIOptimizationService {
     try {
       console.log('🤖 Début de l\'optimisation IA du CV...');
 
-      // Utiliser le proxy Cloudflare configuré
-      const apiUrl = this.PROXY_API_URL;
-      const apiKey = this.API_KEY;
+      // Utiliser l'API DeepSeek
+      const apiUrl = this.DEEPSEEK_API_URL;
+      const apiKey = this.DEEPSEEK_API_KEY;
 
       // Préparer le prompt d'optimisation
       const optimizationPrompt = this.buildOptimizationPrompt(cvData, jobOffer);
 
-      // Appel à l'API via le proxy
+      // Appel à l'API DeepSeek (format OpenAI compatible)
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -39,30 +40,28 @@ export class CVAIOptimizationService {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: optimizationPrompt
-            }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 4096,
-          }
+          model: this.MODEL,
+          messages: [
+            {
+              role: 'user',
+              content: optimizationPrompt
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 4096,
         })
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(`Erreur API Gemini: ${response.status} - ${errorData.error?.message || 'Erreur inconnue'}`);
+        throw new Error(`Erreur API DeepSeek: ${response.status} - ${errorData.error?.message || 'Erreur inconnue'}`);
       }
 
       const result = await response.json();
-      const aiResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      const aiResponse = result.choices?.[0]?.message?.content;
 
       if (!aiResponse) {
-        throw new Error('Réponse vide de l\'API Gemini');
+        throw new Error('Réponse vide de l\'API DeepSeek');
       }
 
       // Parser la réponse de l'IA
