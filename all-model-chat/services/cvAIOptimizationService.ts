@@ -14,7 +14,8 @@ export interface OptimizationResult {
 }
 
 export class CVAIOptimizationService {
-  private static readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
+  private static readonly PROXY_API_URL = 'https://shadsai1api.shadobsh.workers.dev/v1/models/gemini-2.0-flash-exp:generateContent';
+  private static readonly API_KEY = 'sk-dummy';
 
   /**
    * Optimise un CV en fonction d'une offre d'emploi spécifique
@@ -23,19 +24,19 @@ export class CVAIOptimizationService {
     try {
       console.log('🤖 Début de l\'optimisation IA du CV...');
 
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error('Clé API Gemini manquante. Veuillez configurer VITE_GEMINI_API_KEY.');
-      }
+      // Utiliser le proxy Cloudflare configuré
+      const apiUrl = this.PROXY_API_URL;
+      const apiKey = this.API_KEY;
 
       // Préparer le prompt d'optimisation
       const optimizationPrompt = this.buildOptimizationPrompt(cvData, jobOffer);
 
-      // Appel à l'API Gemini
-      const response = await fetch(`${this.GEMINI_API_URL}?key=${apiKey}`, {
+      // Appel à l'API via le proxy
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           contents: [{
