@@ -14,7 +14,7 @@ export interface OptimizationResult {
 }
 
 export class CVAIOptimizationService {
-  private static readonly PROXY_API_URL = 'https://shadsai1api.shadobsh.workers.dev/v1/models/gemini-2.0-flash-exp:generateContent';
+  private static readonly PROXY_API_URL = 'https://shadsai1api.shadobsh.workers.dev/v1/models/gemini-2.5-flash:generateContent';
   private static readonly API_KEY = 'sk-dummy';
 
   /**
