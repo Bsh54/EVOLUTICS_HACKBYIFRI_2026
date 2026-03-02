@@ -592,7 +592,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
                   <div className="lg:col-span-1">
                     {/* PC: Reste centré et fixe au scroll dans sa colonne | Mobile: Suit le flux du texte */}
-                    <div className="lg:sticky lg:top-[40%] space-y-4 w-full max-w-sm mx-auto lg:ml-auto mt-12 lg:mt-0 z-50">
+                    <div className="lg:sticky lg:top-[25%] space-y-4 w-full max-w-sm mx-auto lg:ml-auto mt-12 lg:mt-0 z-50">
                       <button
                         onClick={(e) => toggleFavorite(e, selectedOpp.id)}
                         className={`w-full flex items-center justify-center gap-3 py-4 rounded-[2rem] font-black uppercase tracking-widest transition-all border-2 ${favorites.includes(selectedOpp.id) ? 'bg-red-500 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]' : 'bg-transparent border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] hover:border-red-500 hover:text-red-500'}`}
