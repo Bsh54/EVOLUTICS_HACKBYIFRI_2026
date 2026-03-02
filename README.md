@@ -3,17 +3,27 @@
 <div align="center">
   <img src="./EVOLUTICS WITH NAME.png" alt="EVOLUTICS Logo" width="250" />
   <br/><br/>
+
   <img src="https://img.shields.io/badge/HACKBYIFRI-2026-FF6600?style=for-the-badge&logo=target&logoColor=white" alt="Hackathon">
-  <img src="https://img.shields.io/badge/Thème-Insertion_Pro-blue?style=for-the-badge" alt="Thème">
+  <img src="https://img.shields.io/badge/Statut-Production_Ready-success?style=for-the-badge" alt="Statut">
+  <img src="https://img.shields.io/badge/Version-1.8.6-blue?style=for-the-badge" alt="Version">
+  <br/>
   <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React">
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
   <br/>
   <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase">
   <img src="https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini AI">
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
 
   <br/>
-  <p><strong>La plateforme intelligente qui connecte les étudiants aux opportunités et les prépare à réussir grâce à l'Intelligence Artificielle.</strong></p>
+  <p><strong>Trouvez toutes vos opportunités au même endroit. Candidatez mieux grâce à l'IA. Réussissez plus.</strong></p>
+
+  <p>
+    <a href="#à-propos-devolutics">À propos</a> •
+    <a href="#guide-dinstallation">Installation</a> •
+    <a href="#léquipe-evolutics">Équipe</a>
+  </p>
 </div>
 
 ---
@@ -32,85 +42,83 @@
 
 ---
 
-##  Présentation du Projet
+## À propos d'EVOLUTICS
 
-**EVOLUTICS** est née d'un constat simple : les étudiants ont souvent du mal à trouver des offres qui leur correspondent et se sentent parfois démunis face aux recruteurs.
+**Le problème :** Les étudiants perdent du temps à chercher des opportunités sur des dizaines de sites différents. Ils ratent des offres, ne savent pas comment bien candidater, et se sentent perdus face aux termes techniques du monde professionnel.
 
-Notre solution est un véritable **compagnon de carrière**. Elle ne se contente pas d'afficher des offres (stages, emplois, bourses, concours, conférences), elle intègre un **Coach IA personnel** . Cet assistant aide l'étudiant à rédiger son CV, préparer ses lettres de motivation, simuler des entretiens en se basant spécifiquement sur l'offre qui l'intéresse et bien d'autres  .
+**Notre solution :** EVOLUTICS centralise toutes les opportunités (stages, emplois, bourses, concours, conférences) en un seul endroit. Plus besoin de naviguer entre 10 sites web différents.
 
-###  Ce que propose EVOLUTICS :
+### Ce qu'EVOLUTICS vous apporte
 
-- **Un hub d'opportunités ** : Trouvez facilement des stages, emplois, bourses, concours et conférences adaptés à votre profil
-- **Un Coach Carrière IA disponible 24/7** : Assistant conversationnel qui conseille
-- **Une expérience moderne et fluide** : Interface  responsive avec animations soignées et navigation intuitive
-- **Authentification sécurisée** : Connexion par email/mot de passe ou Google OAuth
+**📍 Hub d'opportunités centralisé**
+- Agrégation automatique d'offres depuis plusieurs sources
+- Filtrage intelligent par profil et préférences
+- Alertes personnalisées pour ne rien manquer
 
----
+**🤖 Assistant IA personnel**
+- Aide à la rédaction de CV adaptés à chaque offre
+- Explication des termes techniques et jargon professionnel
+- Conseils personnalisés pour améliorer vos candidatures
 
-## Technologies utilisées
+**🛠️ Outils professionnels intégrés**
+- Générateur de CV avec templates modernes
+- Optimisation automatique selon l'offre visée
+- Préparation aux entretiens (bientôt disponible)
 
-- **Frontend :** React 18 + TypeScript + Tailwind CSS + Vite
-- **Backend :** Supabase (PostgreSQL + Auth + Storage)
-- **Intelligence Artificielle :** Google Gemini 2.5 Flash API
 ---
 
 ## Guide d'Installation
 
-### 1. Préparer le terrain
-Assurez-vous d'avoir installé sur votre ordinateur :
-- **Node.js 18+**
-- Un compte **Supabase** 
-- Une clé **Google Gemini API** 
+### Prérequis
+- **Node.js 18+** installé sur votre machine
+- Compte **Supabase** (gratuit)
+- Clé API **Google Gemini** (gratuite)
 
-### 2. Récupérer le projet
-Ouvrez votre terminal (ou invite de commande) et tapez :
+### Installation rapide
+
 ```bash
+# 1. Cloner le repository
 git clone https://github.com/Bsh54/EVOLUTICS_HACKBYIFRI_2026.git
 cd EVOLUTICS_HACKBYIFRI_2026/all-model-chat
-```
 
-### 3. Installer les composants
-Lancez l'installation des éléments nécessaires au projet :
-```bash
+# 2. Installer les dépendances
 npm install
-```
 
-### 4. Connecter vos services (Base de données & IA)
-Dans le dossier `all-model-chat`, créez un fichier nommé `.env.local` et collez-y vos liens et clés API :
-```env
-VITE_SUPABASE_URL=votre_lien_supabase_ici
-VITE_SUPABASE_ANON_KEY=votre_cle_supabase_ici
-VITE_GEMINI_API_KEY=votre_cle_gemini_ici
-```
+# 3. Configuration des variables d'environnement
+# Créer le fichier .env.local avec :
+VITE_SUPABASE_URL=votre_url_supabase
+VITE_SUPABASE_ANON_KEY=votre_cle_supabase
+VITE_GEMINI_API_KEY=votre_cle_gemini
 
-*Note : Pour que tout fonctionne, n'oubliez pas de configurer votre base de données Supabase en copiant/collant le contenu du fichier `supabase_schema.sql` dans l'éditeur SQL de votre tableau de bord Supabase.*
+# 4. Configurer la base de données
+# Copier le contenu de supabase_schema.sql dans l'éditeur SQL Supabase
 
-### 5. Démarrer l'application !
-Il ne vous reste plus qu'à lancer le site avec cette commande :
-```bash
+# 5. Lancer l'application
 npm run dev
 ```
- Ouvrez votre navigateur internet et tapez l'adresse indiquée dans la console (généralement `http://localhost:5173`) pour découvrir EVOLUTICS.
+
+L'application sera accessible sur `http://localhost:5173`
 
 ---
 
+## L'équipe EVOLUTICS
 
+**Projet réalisé dans le cadre du HACKBYIFRI 2026**
 
-## L'équipe EVOLUTICS (HACKBYIFRI 2026)
+<div align="center">
 
-- **Shadrak BESSANH** - Chef d'équipe - SEIOT Licence 2 - shadrakbsh@gmail.com
-- **Marlyse BOUKARI** - Sécurité Informatique Licence 2 - marlyseboukari@gmail.com
-- **Othniel AGUIDI** - Intelligence Artificielle Licence 2 - aguidiothiniel17@gmail.com
+| Membre | Rôle | Spécialité | Contact |
+|--------|------|------------|---------|
+| **Shadrak BESSANH** | Chef d'équipe | SEIOT Licence 2 | shadrakbsh@gmail.com |
+| **Marlyse BOUKARI** | Développeuse | Sécurité Informatique Licence 2 | marlyseboukari@gmail.com |
+| **Othniel AGUIDI** | Développeur IA | Intelligence Artificielle Licence 2 | aguidiothiniel17@gmail.com |
 
 **École :** Institut de Formation et de Recherche en Informatique (IFRI)
-
-
-
-
 
 ---
 
 <div align="center">
-
   ⭐ **N'oubliez pas de mettre une étoile si ce projet vous plaît !** ⭐
+</div>
+
 </div>
