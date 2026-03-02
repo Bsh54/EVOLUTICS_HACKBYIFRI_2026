@@ -159,8 +159,12 @@ RÈGLES STRICTES:
     try {
       console.log('🔍 Réponse brute IA:', aiResponse.substring(0, 200) + '...');
 
-      // Approche radicale : trouver le JSON complet entre les premières { et dernières }
       let cleanedResponse = aiResponse.trim();
+
+      // Cas spécial : si la réponse commence par "optimizedCV": au lieu de {"optimizedCV":
+      if (cleanedResponse.startsWith('"optimizedCV":')) {
+        cleanedResponse = '{' + cleanedResponse;
+      }
 
       // Trouver la première accolade ouvrante
       const firstBrace = cleanedResponse.indexOf('{');
