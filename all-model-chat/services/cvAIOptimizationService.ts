@@ -112,27 +112,6 @@ RÉPONSE (JSON UNIQUEMENT):
 {"optimizedCV":{"fullName":"${cvData.fullName}","title":"titre amélioré","about":"description améliorée","experiences":${JSON.stringify(cvData.experiences)},"skills":${JSON.stringify(cvData.skills)},"education":${JSON.stringify(cvData.education)},"color":"${cvData.color}","profileImage":"${cvData.profileImage}","contact":${JSON.stringify(cvData.contact)},"objective":"${cvData.objective}","certifications":${JSON.stringify(cvData.certifications)},"tools":${JSON.stringify(cvData.tools)},"links":${JSON.stringify(cvData.links)},"languages":${JSON.stringify(cvData.languages)},"hobbies":${JSON.stringify(cvData.hobbies)},"references":${JSON.stringify(cvData.references)},"strategicPitch":"${cvData.strategicPitch}","isOptimized":true,"sectionsOrder":${JSON.stringify(cvData.sectionsOrder)}},"changes":["changement 1","changement 2"],"matchScore":75,"recommendations":["conseil 1"]}
 
 IMPORTANT: Réponds UNIQUEMENT avec le JSON, rien d'autre.`;
-    "strategicPitch": "pitch stratégique optimisé",
-    "isOptimized": true,
-    "sectionsOrder": ${JSON.stringify(cvData.sectionsOrder)}
-  },
-  "changes": ["liste des améliorations apportées aux vraies données"],
-  "matchScore": 85,
-  "recommendations": ["recommandations pour améliorer encore le CV"]
-}
-
-IMPORTANT: Tu dois répondre UNIQUEMENT avec un JSON valide, strictement formaté comme ci-dessous. AUCUN texte avant ou après le JSON. AUCUN markdown. AUCUN commentaire.
-
-FORMAT DE RÉPONSE OBLIGATOIRE (COPIE EXACTEMENT CETTE STRUCTURE):
-{"optimizedCV":{"fullName":"${cvData.fullName || 'Nom à compléter'}","title":"titre optimisé","about":"description optimisée","experiences":[],"skills":[],"education":[],"color":"${cvData.color}","profileImage":"${cvData.profileImage}","contact":${JSON.stringify(cvData.contact)},"objective":"objectif optimisé","certifications":${JSON.stringify(cvData.certifications)},"tools":${JSON.stringify(cvData.tools)},"links":${JSON.stringify(cvData.links)},"languages":${JSON.stringify(cvData.languages)},"hobbies":${JSON.stringify(cvData.hobbies)},"references":${JSON.stringify(cvData.references)},"strategicPitch":"pitch optimisé","isOptimized":true,"sectionsOrder":${JSON.stringify(cvData.sectionsOrder)}},"changes":["changement 1","changement 2"],"matchScore":85,"recommendations":["recommandation 1"]}
-
-RÈGLES STRICTES:
-- Commence directement par { et termine par }
-- Pas de texte explicatif
-- Pas de balises markdown
-- JSON valide uniquement
-- Utilise des guillemets doubles partout
-- Pas de virgules en trop`;
   }
 
   /**
