@@ -565,8 +565,17 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       )}
 
       {/* Étape 3: Optimisation IA */}
-      {currentStep === 'ai-optimization' && cvData && (
+      {currentStep === 'ai-optimization' && (
         <div className="h-full flex flex-col">
+          {!cvData ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center">
+                <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-purple-600" />
+                <p className="text-[var(--theme-text-secondary)]">Chargement des données CV...</p>
+              </div>
+            </div>
+          ) : (
+            <>
           {/* Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-primary)] gap-4 sm:gap-0">
             <div className="flex items-center gap-4">
@@ -772,6 +781,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
               )}
             </div>
           </div>
+          </>
+          )}
         </div>
       )}
     </div>
