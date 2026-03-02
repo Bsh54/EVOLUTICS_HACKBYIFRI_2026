@@ -100,32 +100,29 @@ export class CVRenderService {
 
     .cv-container {
       width: 794px;
-      min-height: 1122px;
-      max-height: 1122px;
+      height: 1122px;
       background: white;
-      display: flex;
+      display: block;
       border: 12px solid ${primaryColor};
       position: relative;
-      overflow: hidden;
       box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
     }
 
     .sidebar {
       width: 38%;
       background: #f0f7f7;
       padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      float: left;
+      height: 1098px;
       box-sizing: border-box;
     }
 
     .main-content {
       width: 62%;
       padding: 30px 24px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      float: right;
+      height: 1098px;
       box-sizing: border-box;
     }
 
@@ -239,10 +236,8 @@ export class CVRenderService {
       font-size: 9px;
       line-height: 1.4;
       color: #64748b;
-      white-space: pre-line;
-      max-height: 60px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      word-wrap: break-word;
     }
 
     .about-text {
@@ -250,9 +245,7 @@ export class CVRenderService {
       line-height: 1.5;
       color: #475569;
       font-weight: 500;
-      max-height: 80px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      word-wrap: break-word;
     }
 
     .education-item {
@@ -283,9 +276,18 @@ export class CVRenderService {
     }
 
     .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 30px;
+      width: 100%;
+    }
+
+    .skill-item {
+      margin-bottom: 10px;
+      width: 48%;
+      float: left;
+      margin-right: 4%;
+    }
+
+    .skill-item:nth-child(even) {
+      margin-right: 0;
     }
 
     .skill-item {
@@ -315,16 +317,23 @@ export class CVRenderService {
     }
 
     .languages-hobbies {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
+      width: 100%;
+      clear: both;
+    }
+
+    .languages-hobbies .section {
+      width: 48%;
+      float: left;
+      margin-right: 4%;
+    }
+
+    .languages-hobbies .section:last-child {
+      margin-right: 0;
     }
 
     .list-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
       margin-bottom: 6px;
+      clear: both;
     }
 
     .list-bullet {
@@ -332,7 +341,9 @@ export class CVRenderService {
       height: 4px;
       background: ${primaryColor};
       border-radius: 50%;
-      flex-shrink: 0;
+      float: left;
+      margin-top: 6px;
+      margin-right: 6px;
     }
 
     .list-text {
@@ -341,6 +352,8 @@ export class CVRenderService {
       color: #64748b;
       text-transform: uppercase;
       line-height: 1.2;
+      display: block;
+      margin-left: 12px;
     }
 
     .references-item {
@@ -359,19 +372,28 @@ export class CVRenderService {
       font-size: 9px;
       color: #64748b;
       line-height: 1.3;
-      white-space: pre-line;
-      max-height: 40px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
+      word-wrap: break-word;
     }
 
     @media print {
       .cv-container {
         width: 794px !important;
         height: 1122px !important;
-        max-height: 1122px !important;
-        overflow: hidden !important;
       }
+
+      .sidebar, .main-content {
+        page-break-inside: avoid;
+      }
+    }
+
+    /* Clearfix pour les floats */
+    .skills-grid:after,
+    .languages-hobbies:after,
+    .cv-container:after {
+      content: "";
+      display: table;
+      clear: both;
     }
   </style>
 </head>
