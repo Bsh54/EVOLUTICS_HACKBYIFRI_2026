@@ -198,6 +198,65 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
     }
   };
 
+  // Fonction pour filtrer les vraies données utilisateur (exclure les données de test)
+  const filterRealUserData = (cvData: CVData): CVData => {
+    const defaultValues = {
+      fullName: "Votre Nom",
+      title: "Votre Titre Professionnel",
+      about: "Décrivez votre profil professionnel ici...",
+      objective: "Votre objectif de carrière",
+      "contact.email": "votre.email@exemple.com",
+      "contact.phone": "+33 6 12 34 56 78",
+      "contact.address": "Votre Adresse, Ville",
+      "contact.linkedin": "linkedin.com/in/votre-profil"
+    };
+
+    // Créer une copie des données CV avec seulement les vraies données utilisateur
+    const filteredData: CVData = {
+      ...cvData,
+      fullName: cvData.fullName !== defaultValues.fullName ? cvData.fullName : "",
+      title: cvData.title !== defaultValues.title ? cvData.title : "",
+      about: cvData.about !== defaultValues.about ? cvData.about : "",
+      objective: cvData.objective !== defaultValues.objective ? cvData.objective : "",
+      contact: {
+        ...cvData.contact,
+        email: cvData.contact.email !== defaultValues["contact.email"] ? cvData.contact.email : "",
+        phone: cvData.contact.phone !== defaultValues["contact.phone"] ? cvData.contact.phone : "",
+        address: cvData.contact.address !== defaultValues["contact.address"] ? cvData.contact.address : "",
+        linkedin: cvData.contact.linkedin !== defaultValues["contact.linkedin"] ? cvData.contact.linkedin : ""
+      },
+      // Filtrer les expériences de test
+      experiences: cvData.experiences.filter(exp =>
+        exp.role !== "Poste Actuel" &&
+        exp.role !== "Poste Précédent" &&
+        exp.company !== "Entreprise Actuelle" &&
+        exp.company !== "Entreprise Précédente"
+      ),
+      // Filtrer l'éducation de test
+      education: cvData.education.filter(edu =>
+        edu.degree !== "Master en Informatique" &&
+        edu.school !== "Université/École"
+      ),
+      // Filtrer les certifications de test
+      certifications: cvData.certifications.filter(cert =>
+        cert.name !== "Certification Professionnelle" &&
+        cert.issuer !== "Organisme Certificateur"
+      ),
+      // Filtrer les compétences de test (garder seulement celles avec des niveaux réalistes ou modifiées)
+      skills: cvData.skills.filter(skill =>
+        !["JavaScript", "React", "Node.js", "Python"].includes(skill.name) ||
+        modifiedFields.has('skills')
+      ),
+      // Filtrer les références de test
+      references: cvData.references.filter(ref =>
+        ref.name !== "Nom du Référent"
+      )
+    };
+
+    console.log('🔍 Données filtrées pour IA (vraies données utilisateur):', filteredData);
+    return filteredData;
+  };
+
   // Fonction d'optimisation IA
   const handleAIOptimization = async () => {
     if (!cvData) {
@@ -211,13 +270,16 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       return;
     }
 
+    // Filtrer pour ne garder que les vraies données utilisateur
+    const realUserData = filterRealUserData(cvData);
+
     setIsOptimizing(true);
     const toastId = toast.loading("🤖 Optimisation IA en cours...");
 
     try {
-      console.log('🤖 Début optimisation IA avec:', jobOffer);
+      console.log('🤖 Début optimisation IA avec vraies données utilisateur:', jobOffer);
 
-      const result = await CVAIOptimizationService.optimizeCV(cvData, jobOffer);
+      const result = await CVAIOptimizationService.optimizeCV(realUserData, jobOffer);
 
       console.log('✅ Optimisation terminée:', result);
 

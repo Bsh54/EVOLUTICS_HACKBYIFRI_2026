@@ -82,43 +82,47 @@ export class CVAIOptimizationService {
   private static buildOptimizationPrompt(cvData: CVData, jobOffer: JobOffer): string {
     return `Tu es un expert en recrutement et optimisation de CV. Ton rôle est d'analyser une offre d'emploi et d'optimiser un CV pour maximiser les chances de succès.
 
+IMPORTANT: Les données CV ci-dessous sont les VRAIES informations de l'utilisateur. Tu dois les AMÉLIORER et les OPTIMISER pour l'offre, PAS les remplacer par du contenu fictif. Si un champ est vide, tu peux le compléter intelligemment basé sur les autres informations réelles.
+
 OFFRE D'EMPLOI À ANALYSER:
 Titre: ${jobOffer.title}
 Entreprise: ${jobOffer.company}
 Description: ${jobOffer.description}
 
-CV ACTUEL À OPTIMISER:
-Nom: ${cvData.fullName}
-Titre actuel: ${cvData.title}
-À propos: ${cvData.about}
-Expériences: ${JSON.stringify(cvData.experiences, null, 2)}
-Compétences: ${JSON.stringify(cvData.skills, null, 2)}
-Formation: ${JSON.stringify(cvData.education, null, 2)}
+CV ACTUEL À OPTIMISER (VRAIES DONNÉES UTILISATEUR):
+Nom: ${cvData.fullName || '[À compléter]'}
+Titre actuel: ${cvData.title || '[À optimiser pour l\'offre]'}
+À propos: ${cvData.about || '[À rédiger basé sur le profil]'}
+Expériences: ${cvData.experiences.length > 0 ? JSON.stringify(cvData.experiences, null, 2) : '[Aucune expérience renseignée - à compléter si nécessaire]'}
+Compétences: ${cvData.skills.length > 0 ? JSON.stringify(cvData.skills, null, 2) : '[Compétences à déduire de l\'offre et du profil]'}
+Formation: ${cvData.education.length > 0 ? JSON.stringify(cvData.education, null, 2) : '[Formation à compléter si nécessaire]'}
+Contact: ${JSON.stringify(cvData.contact, null, 2)}
 
 INSTRUCTIONS:
 1. Analyse l'offre d'emploi pour identifier les mots-clés, compétences et qualifications recherchées
-2. Optimise le CV pour correspondre parfaitement à cette offre en:
-   - Adaptant le titre professionnel
-   - Réécrivant la section "À propos" pour mettre en avant les points pertinents
-   - Réorganisant et reformulant les expériences pour mettre en avant les réalisations pertinentes
-   - Ajustant les compétences pour inclure celles mentionnées dans l'offre
-   - Suggérant des améliorations pour la formation si nécessaire
+2. AMÉLIORE et OPTIMISE les vraies données utilisateur pour correspondre à cette offre en:
+   - Adaptant le titre professionnel pour matcher l'offre
+   - Réécrivant/améliorant la section "À propos" pour mettre en avant les points pertinents
+   - Reformulant les expériences existantes pour mettre en avant les réalisations pertinentes
+   - Ajustant/complétant les compétences pour inclure celles mentionnées dans l'offre
+   - Complétant intelligemment les champs vides basé sur les informations disponibles
 
-3. Calcule un score de correspondance (0-100) entre le CV optimisé et l'offre
+3. Si des informations sont manquantes, complète-les de manière cohérente avec le profil existant
+4. Calcule un score de correspondance (0-100) entre le CV optimisé et l'offre
 
 RÉPONSE ATTENDUE (FORMAT JSON STRICT):
 {
   "optimizedCV": {
-    "fullName": "${cvData.fullName}",
-    "title": "nouveau titre optimisé",
-    "about": "nouvelle description optimisée",
-    "experiences": [array des expériences optimisées],
-    "skills": [array des compétences optimisées],
-    "education": [array de la formation],
+    "fullName": "${cvData.fullName || 'Nom à compléter'}",
+    "title": "titre optimisé pour l'offre",
+    "about": "description optimisée basée sur le profil réel",
+    "experiences": [array des expériences optimisées/complétées],
+    "skills": [array des compétences optimisées/complétées],
+    "education": [array de la formation optimisée/complétée],
     "color": "${cvData.color}",
     "profileImage": "${cvData.profileImage}",
     "contact": ${JSON.stringify(cvData.contact)},
-    "objective": "objectif optimisé",
+    "objective": "objectif optimisé pour l'offre",
     "certifications": ${JSON.stringify(cvData.certifications)},
     "tools": ${JSON.stringify(cvData.tools)},
     "links": ${JSON.stringify(cvData.links)},
@@ -129,9 +133,9 @@ RÉPONSE ATTENDUE (FORMAT JSON STRICT):
     "isOptimized": true,
     "sectionsOrder": ${JSON.stringify(cvData.sectionsOrder)}
   },
-  "changes": ["liste des changements effectués"],
+  "changes": ["liste des améliorations apportées aux vraies données"],
   "matchScore": 85,
-  "recommendations": ["recommandations supplémentaires pour améliorer le CV"]
+  "recommendations": ["recommandations pour améliorer encore le CV"]
 }
 
 IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte supplémentaire avant ou après.`;
