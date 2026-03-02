@@ -44,76 +44,130 @@
 
 ## À propos d'EVOLUTICS
 
-**Le problème :** Les étudiants perdent du temps à chercher des opportunités sur des dizaines de sites différents. Ils ratent des offres, ne savent pas comment bien candidater, et se sentent perdus face aux termes techniques du monde professionnel.
+### 🎯 Le Défi
+Les étudiants perdent un temps précieux à naviguer entre des dizaines de plateformes pour trouver des opportunités. Résultat : ils ratent des offres, peinent à bien candidater et se sentent perdus face au jargon professionnel.
 
-**Notre solution :** EVOLUTICS centralise toutes les opportunités (stages, emplois, bourses, concours, conférences) en un seul endroit. Plus besoin de naviguer entre 10 sites web différents.
-
-### Ce qu'EVOLUTICS vous apporte
-
-**📍 Hub d'opportunités centralisé**
-- Agrégation automatique d'offres depuis plusieurs sources
-- Filtrage intelligent par profil et préférences
-- Alertes personnalisées pour ne rien manquer
-
-**🤖 Assistant IA personnel**
-- Aide à la rédaction de CV adaptés à chaque offre
-- Explication des termes techniques et jargon professionnel
-- Conseils personnalisés pour améliorer vos candidatures
-
-**🛠️ Outils professionnels intégrés**
-- Générateur de CV avec templates modernes
-- Optimisation automatique selon l'offre visée
-- Préparation aux entretiens (bientôt disponible)
+### 💡 Notre Solution
+**EVOLUTICS centralise tout en un seul endroit.** Fini les onglets multiples et la recherche dispersée.
 
 ---
 
-## Guide d'Installation
+## 🚀 Ce qu'EVOLUTICS vous offre
 
-### Prérequis
+<table>
+<tr>
+<td width="33%" valign="top">
+
+### 📍 **Hub Centralisé**
+- **Agrégation multi-sources**
+  Collecte automatique depuis plusieurs plateformes
+- **Filtrage intelligent**
+  Résultats adaptés à votre profil
+- **Alertes personnalisées**
+  Ne ratez plus aucune opportunité
+
+</td>
+<td width="33%" valign="top">
+
+### 🤖 **Assistant IA**
+- **Rédaction optimisée**
+  CV adaptés à chaque offre
+- **Décryptage technique**
+  Explication du jargon professionnel
+- **Conseils sur mesure**
+  Amélioration de vos candidatures
+
+</td>
+<td width="33%" valign="top">
+
+### 🛠️ **Outils Pro**
+- **CV Builder** ✅
+  Templates modernes et optimisés
+- **Lettres de motivation** 🔄
+  Génération personnalisée
+- **Préparation entretiens** 🔄
+  Simulation avec feedback IA
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Guide d'Installation
+
+<details>
+<summary><strong>📋 Prérequis (cliquez pour développer)</strong></summary>
+
 - **Node.js 18+** installé sur votre machine
 - Compte **Supabase** (gratuit)
 - Clé API **Google Gemini** (gratuite)
 
-### Installation rapide
+</details>
+
+### ⚡ Installation en 5 étapes
 
 ```bash
-# 1. Cloner le repository
+# 1️⃣ Cloner le repository
 git clone https://github.com/Bsh54/EVOLUTICS_HACKBYIFRI_2026.git
 cd EVOLUTICS_HACKBYIFRI_2026/all-model-chat
 
-# 2. Installer les dépendances
+# 2️⃣ Installer les dépendances
 npm install
 
-# 3. Configuration des variables d'environnement
+# 3️⃣ Configuration environnement
 # Créer le fichier .env.local avec :
 VITE_SUPABASE_URL=votre_url_supabase
 VITE_SUPABASE_ANON_KEY=votre_cle_supabase
 VITE_GEMINI_API_KEY=votre_cle_gemini
 
-# 4. Configurer la base de données
+# 4️⃣ Configurer la base de données
 # Copier le contenu de supabase_schema.sql dans l'éditeur SQL Supabase
 
-# 5. Lancer l'application
+# 5️⃣ Lancer l'application
 npm run dev
 ```
 
-L'application sera accessible sur `http://localhost:5173`
+> 🌐 **L'application sera accessible sur** `http://localhost:5173`
 
 ---
 
-## L'équipe EVOLUTICS
-
-**Projet réalisé dans le cadre du HACKBYIFRI 2026**
+## 👥 L'équipe EVOLUTICS
 
 <div align="center">
 
-| Membre | Rôle | Spécialité | Contact |
-|--------|------|------------|---------|
-| **Shadrak BESSANH** | Chef d'équipe | SEIOT Licence 2 | shadrakbsh@gmail.com |
-| **Marlyse BOUKARI** | Développeuse | Sécurité Informatique Licence 2 | marlyseboukari@gmail.com |
-| **Othniel AGUIDI** | Développeur IA | Intelligence Artificielle Licence 2 | aguidiothiniel17@gmail.com |
+### 🏆 **HACKBYIFRI 2026** - Institut de Formation et de Recherche en Informatique (IFRI)
 
-**École :** Institut de Formation et de Recherche en Informatique (IFRI)
+<br>
+
+<table align="center">
+<tr>
+<th width="25%">👤 Membre</th>
+<th width="25%">🎯 Rôle</th>
+<th width="25%">🎓 Spécialité</th>
+<th width="25%">📧 Contact</th>
+</tr>
+<tr>
+<td align="center"><strong>Shadrak BESSANH</strong></td>
+<td align="center">Chef d'équipe</td>
+<td align="center">SEIOT Licence 2</td>
+<td align="center"><a href="mailto:shadrakbsh@gmail.com">shadrakbsh@gmail.com</a></td>
+</tr>
+<tr>
+<td align="center"><strong>Marlyse BOUKARI</strong></td>
+<td align="center">Développeuse</td>
+<td align="center">Sécurité Informatique L2</td>
+<td align="center"><a href="mailto:marlyseboukari@gmail.com">marlyseboukari@gmail.com</a></td>
+</tr>
+<tr>
+<td align="center"><strong>Othniel AGUIDI</strong></td>
+<td align="center">Développeur IA</td>
+<td align="center">Intelligence Artificielle L2</td>
+<td align="center"><a href="mailto:aguidiothiniel17@gmail.com">aguidiothiniel17@gmail.com</a></td>
+</tr>
+</table>
+
+<br>
 
 ---
 
