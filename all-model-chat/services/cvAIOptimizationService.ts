@@ -80,55 +80,38 @@ export class CVAIOptimizationService {
    * Construit le prompt d'optimisation pour l'IA
    */
   private static buildOptimizationPrompt(cvData: CVData, jobOffer: JobOffer): string {
-    return `Tu es un expert en recrutement et optimisation de CV. Ton rôle est d'analyser une offre d'emploi et d'optimiser un CV pour maximiser les chances de succès.
+    return `Tu es un expert en recrutement. Optimise ce CV pour cette offre d'emploi.
 
-IMPORTANT: Les données CV ci-dessous sont les VRAIES informations de l'utilisateur. Tu dois les AMÉLIORER et les OPTIMISER pour l'offre, PAS les remplacer par du contenu fictif. Si un champ est vide, tu peux le compléter intelligemment basé sur les autres informations réelles.
+RÈGLES STRICTES:
+- OPTIMISE SEULEMENT les données existantes
+- N'INVENTE RIEN de nouveau
+- Ne crée PAS d'expériences fictives
+- Ne crée PAS de compétences inexistantes
+- AMÉLIORE seulement la formulation des données réelles
 
-OFFRE D'EMPLOI À ANALYSER:
+OFFRE D'EMPLOI:
 Titre: ${jobOffer.title}
 Entreprise: ${jobOffer.company}
 Description: ${jobOffer.description}
 
-CV ACTUEL À OPTIMISER (VRAIES DONNÉES UTILISATEUR):
-Nom: ${cvData.fullName || '[À compléter]'}
-Titre actuel: ${cvData.title || '[À optimiser pour l\'offre]'}
-À propos: ${cvData.about || '[À rédiger basé sur le profil]'}
-Expériences: ${cvData.experiences.length > 0 ? JSON.stringify(cvData.experiences, null, 2) : '[Aucune expérience renseignée - à compléter si nécessaire]'}
-Compétences: ${cvData.skills.length > 0 ? JSON.stringify(cvData.skills, null, 2) : '[Compétences à déduire de l\'offre et du profil]'}
-Formation: ${cvData.education.length > 0 ? JSON.stringify(cvData.education, null, 2) : '[Formation à compléter si nécessaire]'}
-Contact: ${JSON.stringify(cvData.contact, null, 2)}
+CV EXISTANT:
+Nom: ${cvData.fullName || '[Vide]'}
+Titre: ${cvData.title || '[Vide]'}
+À propos: ${cvData.about || '[Vide]'}
+Expériences: ${cvData.experiences.length > 0 ? JSON.stringify(cvData.experiences, null, 2) : '[Aucune]'}
+Compétences: ${cvData.skills.length > 0 ? JSON.stringify(cvData.skills, null, 2) : '[Aucune]'}
+Formation: ${cvData.education.length > 0 ? JSON.stringify(cvData.education, null, 2) : '[Aucune]'}
 
 INSTRUCTIONS:
-1. Analyse l'offre d'emploi pour identifier les mots-clés, compétences et qualifications recherchées
-2. AMÉLIORE et OPTIMISE les vraies données utilisateur pour correspondre à cette offre en:
-   - Adaptant le titre professionnel pour matcher l'offre
-   - Réécrivant/améliorant la section "À propos" pour mettre en avant les points pertinents
-   - Reformulant les expériences existantes pour mettre en avant les réalisations pertinentes
-   - Ajustant/complétant les compétences pour inclure celles mentionnées dans l'offre
-   - Complétant intelligemment les champs vides basé sur les informations disponibles
+1. Améliore SEULEMENT le titre et la description "À propos" pour matcher l'offre
+2. Reformule les expériences existantes pour les valoriser (SANS en inventer)
+3. Ajuste les niveaux des compétences existantes (SANS en ajouter)
+4. Garde tout le reste IDENTIQUE
 
-3. Si des informations sont manquantes, complète-les de manière cohérente avec le profil existant
-4. Calcule un score de correspondance (0-100) entre le CV optimisé et l'offre
+RÉPONSE (JSON UNIQUEMENT):
+{"optimizedCV":{"fullName":"${cvData.fullName}","title":"titre amélioré","about":"description améliorée","experiences":${JSON.stringify(cvData.experiences)},"skills":${JSON.stringify(cvData.skills)},"education":${JSON.stringify(cvData.education)},"color":"${cvData.color}","profileImage":"${cvData.profileImage}","contact":${JSON.stringify(cvData.contact)},"objective":"${cvData.objective}","certifications":${JSON.stringify(cvData.certifications)},"tools":${JSON.stringify(cvData.tools)},"links":${JSON.stringify(cvData.links)},"languages":${JSON.stringify(cvData.languages)},"hobbies":${JSON.stringify(cvData.hobbies)},"references":${JSON.stringify(cvData.references)},"strategicPitch":"${cvData.strategicPitch}","isOptimized":true,"sectionsOrder":${JSON.stringify(cvData.sectionsOrder)}},"changes":["changement 1","changement 2"],"matchScore":75,"recommendations":["conseil 1"]}
 
-RÉPONSE ATTENDUE (FORMAT JSON STRICT):
-{
-  "optimizedCV": {
-    "fullName": "${cvData.fullName || 'Nom à compléter'}",
-    "title": "titre optimisé pour l'offre",
-    "about": "description optimisée basée sur le profil réel",
-    "experiences": [array des expériences optimisées/complétées],
-    "skills": [array des compétences optimisées/complétées],
-    "education": [array de la formation optimisée/complétée],
-    "color": "${cvData.color}",
-    "profileImage": "${cvData.profileImage}",
-    "contact": ${JSON.stringify(cvData.contact)},
-    "objective": "objectif optimisé pour l'offre",
-    "certifications": ${JSON.stringify(cvData.certifications)},
-    "tools": ${JSON.stringify(cvData.tools)},
-    "links": ${JSON.stringify(cvData.links)},
-    "languages": ${JSON.stringify(cvData.languages)},
-    "hobbies": ${JSON.stringify(cvData.hobbies)},
-    "references": ${JSON.stringify(cvData.references)},
+IMPORTANT: Réponds UNIQUEMENT avec le JSON, rien d'autre.`;
     "strategicPitch": "pitch stratégique optimisé",
     "isOptimized": true,
     "sectionsOrder": ${JSON.stringify(cvData.sectionsOrder)}
