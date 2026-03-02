@@ -397,7 +397,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
   // Fonction d'export PDF
   const handleExportPDF = async () => {
-    const element = document.querySelector("#cv-preview > div") as HTMLElement;
+    const element = document.querySelector("#cv-preview") as HTMLElement;
     if (!element || !cvData) return;
 
     setIsExporting(true);
@@ -590,7 +590,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
             {/* Prévisualisation en temps réel - MASQUÉE SUR MOBILE */}
             <div className="hidden lg:flex flex-1 bg-gray-200 overflow-y-auto p-6 justify-center">
-              <div className="w-full max-w-[700px]">
+              <div id="cv-preview" className="w-full max-w-[700px]">
                 <CVTemplate data={cvData} />
               </div>
             </div>
