@@ -5,6 +5,7 @@ import { dbService } from '../../utils/db';
 import { DEEP_SEARCH_SYSTEM_PROMPT } from "../../constants/promptConstants";
 import { SafetySetting, MediaResolution } from "../../types/settings";
 import { isGemini3Model } from "../../utils/appUtils";
+import { PersonalizedPromptService } from '../personalizedPromptService';
 
 
 const POLLING_INTERVAL_MS = 2000; // 2 seconds
@@ -121,9 +122,9 @@ export const buildGenerationConfig = (
          return config;
     }
     
-    let finalSystemInstruction = systemInstruction;
+    let finalSystemInstruction = systemInstruction || PersonalizedPromptService.getSystemPrompt();
     if (isDeepSearchEnabled) {
-        finalSystemInstruction = finalSystemInstruction 
+        finalSystemInstruction = finalSystemInstruction
             ? `${finalSystemInstruction}\n\n${DEEP_SEARCH_SYSTEM_PROMPT}`
             : DEEP_SEARCH_SYSTEM_PROMPT;
     }

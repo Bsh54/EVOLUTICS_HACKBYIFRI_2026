@@ -4,6 +4,8 @@
  * Backend : Utilise DeepSeek
  */
 
+import { PersonalizedPromptService } from './personalizedPromptService';
+
 export interface DeepSeekMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
@@ -83,8 +85,10 @@ export class DeepSeekService {
   static async generateText(prompt: string, systemPrompt?: string): Promise<string> {
     const messages: DeepSeekMessage[] = [];
 
-    if (systemPrompt) {
-      messages.push({ role: 'system', content: systemPrompt });
+    // Utilise le prompt personnalisé si aucun systemPrompt n'est fourni
+    const finalSystemPrompt = systemPrompt || PersonalizedPromptService.getSystemPrompt();
+    if (finalSystemPrompt) {
+      messages.push({ role: 'system', content: finalSystemPrompt });
     }
 
     messages.push({ role: 'user', content: prompt });

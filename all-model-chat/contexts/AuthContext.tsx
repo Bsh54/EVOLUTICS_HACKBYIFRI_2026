@@ -3,6 +3,7 @@ import { authService } from '../services/authService';
 import { chatService } from '../services/chatService';
 import { dbService } from '../utils/db';
 import { UserProfile } from '../types/user';
+import { PersonalizedPromptService } from '../services/personalizedPromptService';
 
 interface AuthContextType {
   user: any | null;
@@ -65,6 +66,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Ne mettre à jour que si on a reçu un profil valide
       if (userProfile) {
         setProfile(userProfile);
+        // Mettre à jour le service de prompt personnalisé
+        PersonalizedPromptService.updateUserProfile(userProfile);
       }
     } catch (error) {
       console.error('Erreur chargement profil:', error);
@@ -143,6 +146,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setProfile(null);
+          // Réinitialiser le service de prompt personnalisé
+          PersonalizedPromptService.reset();
           setIsLoading(false);
         } else if (event === 'TOKEN_REFRESHED' && session?.user) {
           // Juste mettre à jour le user (token), ne PAS recharger le profil
@@ -198,6 +203,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     await authService.signOut();
     setUser(null);
     setProfile(null);
+    // Réinitialiser le service de prompt personnalisé
+    PersonalizedPromptService.reset();
     // Clear local chat DB to prevent mixing histories
     await dbService.clearAllData();
   };
@@ -208,9 +215,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const updatedProfile = await authService.updateProfile(user.id, updates);
       if (updatedProfile) {
         setProfile(updatedProfile);
+        // Mettre à jour le service de prompt personnalisé
+        PersonalizedPromptService.updateUserProfile(updatedProfile);
       } else {
         const freshProfile = await authService.getProfile(user.id);
-        if (freshProfile) setProfile(freshProfile);
+        if (freshProfile) {
+          setProfile(freshProfile);
+          // Mettre à jour le service de prompt personnalisé
+          PersonalizedPromptService.updateUserProfile(freshProfile);
+        }
       }
     } catch (err) {
       console.error('Erreur updateProfile:', err);
