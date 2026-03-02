@@ -142,13 +142,28 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte supplémentaire avant ou
    */
   private static parseAIResponse(aiResponse: string, originalCV: CVData): OptimizationResult {
     try {
-      // Nettoyer la réponse pour extraire le JSON
-      const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+      // Nettoyer la réponse pour extraire le JSON - amélioration du regex
+      let cleanedResponse = aiResponse.trim();
+
+      // Supprimer les balises markdown si présentes
+      cleanedResponse = cleanedResponse.replace(/```json\s*/g, '').replace(/```\s*$/g, '');
+
+      // Chercher le JSON principal - pattern plus robuste
+      const jsonMatch = cleanedResponse.match(/\{[\s\S]*?\}(?=\s*$|\s*```|\s*\n\s*[^{])/);
       if (!jsonMatch) {
-        throw new Error('Format de réponse invalide: JSON non trouvé');
+        console.warn('⚠️ JSON non trouvé, tentative de parsing direct');
+        // Essayer de parser directement si c'est déjà du JSON propre
+        const directParse = JSON.parse(cleanedResponse);
+        if (directParse.optimizedCV) {
+          cleanedResponse = JSON.stringify(directParse);
+        } else {
+          throw new Error('Format de réponse invalide: JSON non trouvé');
+        }
+      } else {
+        cleanedResponse = jsonMatch[0];
       }
 
-      const parsedResponse = JSON.parse(jsonMatch[0]);
+      const parsedResponse = JSON.parse(cleanedResponse);
 
       // Valider la structure de la réponse
       if (!parsedResponse.optimizedCV || !parsedResponse.changes || !parsedResponse.matchScore) {

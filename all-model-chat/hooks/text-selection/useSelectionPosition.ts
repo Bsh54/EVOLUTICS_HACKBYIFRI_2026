@@ -31,7 +31,7 @@ export const useSelectionPosition = ({ containerRef, isAudioActive, toolbarRef }
             
             // Context checks
             const containerEl = containerRef.current;
-            if (containerEl && !containerEl.contains(commonAncestor)) {
+            if (!containerEl || !containerEl.contains(commonAncestor)) {
                 setPosition(null);
                 selectionBoundsRef.current = null;
                 return;

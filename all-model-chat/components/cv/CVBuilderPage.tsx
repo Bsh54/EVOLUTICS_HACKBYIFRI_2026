@@ -42,12 +42,12 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   });
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optimizationResult, setOptimizationResult] = useState<OptimizationResult | null>(null);
-  const [showOptimizationResults, setShowOptimizationResults] = useState(false);
 
   // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
     const initializeCVData = async () => {
-      if (profile && currentStep === 'form-filling') {
+      // Ne pas réinitialiser si on a déjà des données CV (évite la réinitialisation après optimisation IA)
+      if (profile && currentStep === 'form-filling' && !cvData) {
         setIsInitializing(true);
         console.log('🔄 Initialisation CV avec synchronisation profil...');
 
@@ -222,8 +222,6 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
 
       // Mettre à jour les données CV avec la version optimisée
       setCvDataState(result.optimizedCV);
-      setOptimizationResult(result);
-      setShowOptimizationResults(true);
 
       // Marquer tous les champs comme modifiés pour permettre la sauvegarde
       const allFields = new Set([
@@ -233,11 +231,14 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
       ]);
       setModifiedFields(allFields);
 
+      // Redirection automatique vers le formulaire d'édition
+      setCurrentStep('form-filling');
+
       toast.update(toastId, {
-        render: `✅ CV optimisé ! Score de correspondance: ${result.matchScore}% - Vous pouvez maintenant éditer les modifications`,
+        render: `✅ CV optimisé avec succès ! Vous pouvez maintenant modifier les suggestions dans le formulaire.`,
         type: "success",
         isLoading: false,
-        autoClose: 4000
+        autoClose: 3000
       });
 
     } catch (error) {
@@ -264,37 +265,6 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   };
 
   // Fonction pour appliquer les résultats d'optimisation
-  const handleApplyOptimization = async () => {
-    if (!optimizationResult || !profile) return;
-
-    try {
-      // Sauvegarder le CV optimisé
-      await CVDatabaseService.saveCVData(
-        profile.id,
-        optimizationResult.optimizedCV,
-        selectedTemplate || 'moderne-01'
-      );
-
-      // Marquer tous les champs optimisés comme modifiés pour permettre la sauvegarde future
-      const optimizedFields = new Set([
-        'fullName', 'title', 'about', 'objective', 'experiences',
-        'education', 'skills', 'certifications', 'tools', 'links',
-        'languages', 'hobbies', 'references', 'strategicPitch'
-      ]);
-      setModifiedFields(optimizedFields);
-
-      // S'assurer que les données optimisées sont visibles dans le formulaire
-      setCvDataState(optimizationResult.optimizedCV);
-
-      toast.success("✅ CV optimisé sauvegardé avec succès !");
-      setShowOptimizationResults(false);
-      setCurrentStep('form-filling');
-
-    } catch (error) {
-      console.error('❌ Erreur sauvegarde CV optimisé:', error);
-      toast.error("❌ Erreur lors de la sauvegarde du CV optimisé");
-    }
-  };
 
   // Fonction pour fusionner les données sauvegardées avec les données de test par défaut
   const mergeWithDefaults = (savedData: CVData, defaultData: CVData): CVData => {
@@ -690,95 +660,6 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
                 </div>
               </div>
 
-              {/* Résultats de l'optimisation IA */}
-              {showOptimizationResults && optimizationResult && (
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-green-200 dark:border-green-700 rounded-xl p-6 mt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-[var(--theme-text-primary)] mb-2 flex items-center gap-2">
-                        Optimisation terminée !
-                        <span className="text-sm bg-gradient-to-r from-green-600 to-blue-600 text-white px-2 py-1 rounded-full">
-                          {optimizationResult.matchScore}% de correspondance
-                        </span>
-                      </h3>
-
-                      {/* Changements effectués */}
-                      <div className="mb-4">
-                        <h4 className="font-semibold text-[var(--theme-text-primary)] mb-2">
-                          Modifications apportées ({optimizationResult.changes.length}) :
-                        </h4>
-                        <ul className="text-sm text-[var(--theme-text-secondary)] space-y-1">
-                          {optimizationResult.changes.slice(0, 5).map((change, index) => (
-                            <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                              {change}
-                            </li>
-                          ))}
-                          {optimizationResult.changes.length > 5 && (
-                            <li className="text-xs text-[var(--theme-text-tertiary)] italic">
-                              ... et {optimizationResult.changes.length - 5} autres modifications
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-
-                      {/* Recommandations */}
-                      {optimizationResult.recommendations.length > 0 && (
-                        <div className="mb-4">
-                          <h4 className="font-semibold text-[var(--theme-text-primary)] mb-2">
-                            Recommandations supplémentaires :
-                          </h4>
-                          <ul className="text-sm text-[var(--theme-text-secondary)] space-y-1">
-                            {optimizationResult.recommendations.slice(0, 3).map((rec, index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                                {rec}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Actions */}
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <button
-                          onClick={() => setShowOptimizationResults(false)}
-                          className="px-4 py-2 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] rounded-xl transition-colors"
-                        >
-                          Masquer les résultats
-                        </button>
-                        <button
-                          onClick={handleApplyOptimization}
-                          className="flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white rounded-xl transition-all font-medium shadow-lg flex-1 sm:flex-none"
-                        >
-                          <CheckCircle className="w-4 h-4" />
-                          Sauvegarder le CV optimisé
-                        </button>
-                        <button
-                          onClick={() => {
-                            // Charger les données optimisées dans le formulaire pour permettre l'édition
-                            setCvDataState(optimizationResult.optimizedCV);
-                            // Marquer les champs optimisés comme modifiés
-                            const optimizedFields = new Set([
-                              'fullName', 'title', 'about', 'objective', 'experiences',
-                              'education', 'skills', 'certifications'
-                            ]);
-                            setModifiedFields(optimizedFields);
-                            setCurrentStep('form-filling');
-                          }}
-                          className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors font-medium"
-                        >
-                          <Sparkles className="w-4 h-4" />
-                          Éditer le CV optimisé
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
           </>
