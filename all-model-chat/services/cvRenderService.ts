@@ -29,41 +29,41 @@ export class CVRenderService {
   private static optimizeForSinglePage(cvData: CVData): CVData {
     const optimized = { ...cvData };
 
-    // Limiter la description "À propos" - plus généreux
+    // Limiter la description "À propos"
     if (optimized.about) {
-      optimized.about = this.truncateText(optimized.about, 400);
+      optimized.about = this.truncateText(optimized.about, 300);
     }
 
-    // Limiter les descriptions d'expériences - plus généreux
+    // Limiter les descriptions d'expériences
     if (optimized.experiences) {
       optimized.experiences = optimized.experiences.map(exp => ({
         ...exp,
-        description: exp.description ? this.truncateText(exp.description, 250) : exp.description
+        description: exp.description ? this.truncateText(exp.description, 200) : exp.description
       }));
     }
 
-    // Limiter le nombre d'expériences si trop nombreuses - plus généreux
-    if (optimized.experiences && optimized.experiences.length > 5) {
-      optimized.experiences = optimized.experiences.slice(0, 5);
+    // Limiter le nombre d'expériences si trop nombreuses
+    if (optimized.experiences && optimized.experiences.length > 4) {
+      optimized.experiences = optimized.experiences.slice(0, 4);
     }
 
-    // Limiter le nombre de compétences - plus généreux
-    if (optimized.skills && optimized.skills.length > 16) {
-      optimized.skills = optimized.skills.slice(0, 16);
+    // Limiter le nombre de compétences
+    if (optimized.skills && optimized.skills.length > 12) {
+      optimized.skills = optimized.skills.slice(0, 12);
     }
 
-    // Limiter les langues et loisirs - plus généreux
-    if (optimized.languages && optimized.languages.length > 8) {
-      optimized.languages = optimized.languages.slice(0, 8);
+    // Limiter les langues et loisirs
+    if (optimized.languages && optimized.languages.length > 6) {
+      optimized.languages = optimized.languages.slice(0, 6);
     }
 
-    if (optimized.hobbies && optimized.hobbies.length > 8) {
-      optimized.hobbies = optimized.hobbies.slice(0, 8);
+    if (optimized.hobbies && optimized.hobbies.length > 6) {
+      optimized.hobbies = optimized.hobbies.slice(0, 6);
     }
 
-    // Limiter les références - garder 3 au lieu de 2
-    if (optimized.references && optimized.references.length > 3) {
-      optimized.references = optimized.references.slice(0, 3);
+    // Limiter les références
+    if (optimized.references && optimized.references.length > 2) {
+      optimized.references = optimized.references.slice(0, 2);
     }
 
     return optimized;
@@ -130,52 +130,52 @@ export class CVRenderService {
     }
 
     h1 {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 900;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: #0f172a;
       line-height: 1.1;
     }
 
     .title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: ${primaryColor};
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .profile-image {
-      width: 160px;
-      height: 160px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
-      border: 5px solid white;
+      border: 4px solid white;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       object-fit: cover;
-      margin: 0 auto 28px auto;
+      margin: 0 auto 24px auto;
       display: block;
     }
 
     .section {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .section-title {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 900;
       text-transform: uppercase;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       color: #0f172a;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .section-title::before {
       content: '';
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       background: ${primaryColor};
       border-radius: 50%;
       flex-shrink: 0;
@@ -183,26 +183,26 @@ export class CVRenderService {
 
     .main-section-title {
       border-bottom: 2px solid #f1f5f9;
-      padding-bottom: 7px;
+      padding-bottom: 6px;
     }
 
     .contact-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 11px;
-      font-size: 11px;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 10px;
       color: #475569;
     }
 
     .contact-icon {
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       color: #94a3b8;
     }
 
     .experience-item {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       page-break-inside: avoid;
     }
 
@@ -210,11 +210,11 @@ export class CVRenderService {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .experience-role {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
       color: #0f172a;
       text-transform: uppercase;
@@ -222,45 +222,45 @@ export class CVRenderService {
     }
 
     .experience-dates {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: #94a3b8;
       font-style: italic;
     }
 
     .experience-company {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: ${primaryColor};
-      margin-bottom: 7px;
+      margin-bottom: 6px;
     }
 
     .experience-description {
-      font-size: 10px;
-      line-height: 1.5;
+      font-size: 9px;
+      line-height: 1.4;
       color: #64748b;
       white-space: pre-line;
-      max-height: 70px;
+      max-height: 60px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .about-text {
-      font-size: 11px;
+      font-size: 10px;
       line-height: 1.5;
       color: #475569;
       font-weight: 500;
-      max-height: 90px;
+      max-height: 80px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .education-item {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .education-degree {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
       color: #0f172a;
       text-transform: uppercase;
@@ -268,14 +268,14 @@ export class CVRenderService {
     }
 
     .education-school {
-      font-size: 10px;
+      font-size: 9px;
       color: #64748b;
       font-weight: 700;
       font-style: italic;
     }
 
     .education-dates {
-      font-size: 9px;
+      font-size: 8px;
       color: #94a3b8;
       font-weight: 900;
       text-transform: uppercase;
@@ -285,58 +285,58 @@ export class CVRenderService {
     .skills-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px 35px;
+      gap: 12px 30px;
     }
 
     .skill-item {
-      margin-bottom: 11px;
+      margin-bottom: 10px;
     }
 
     .skill-name {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: #374151;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       line-height: 1.2;
     }
 
     .skill-bar {
-      height: 6px;
+      height: 5px;
       background: #e5e7eb;
-      border-radius: 3px;
+      border-radius: 2px;
       overflow: hidden;
     }
 
     .skill-progress {
       height: 100%;
       background: ${primaryColor};
-      border-radius: 3px;
+      border-radius: 2px;
       transition: width 1s ease;
     }
 
     .languages-hobbies {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 35px;
+      gap: 30px;
     }
 
     .list-item {
       display: flex;
       align-items: center;
-      gap: 7px;
-      margin-bottom: 7px;
+      gap: 6px;
+      margin-bottom: 6px;
     }
 
     .list-bullet {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
       background: ${primaryColor};
       border-radius: 50%;
       flex-shrink: 0;
     }
 
     .list-text {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: #64748b;
       text-transform: uppercase;
@@ -344,11 +344,11 @@ export class CVRenderService {
     }
 
     .references-item {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .reference-name {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
       color: #0f172a;
       text-transform: uppercase;
@@ -356,11 +356,11 @@ export class CVRenderService {
     }
 
     .reference-contact {
-      font-size: 10px;
+      font-size: 9px;
       color: #64748b;
-      line-height: 1.4;
+      line-height: 1.3;
       white-space: pre-line;
-      max-height: 50px;
+      max-height: 40px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
