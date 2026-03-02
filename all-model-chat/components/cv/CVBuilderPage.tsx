@@ -33,6 +33,7 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
+  const [isOptimized, setIsOptimized] = useState(false); // Nouveau flag pour éviter la réinitialisation
 
   // États pour l'optimisation IA
   const [jobOffer, setJobOffer] = useState<JobOffer>({
@@ -46,8 +47,8 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
     const initializeCVData = async () => {
-      // Ne pas réinitialiser si on a déjà des données CV (évite la réinitialisation après optimisation IA)
-      if (profile && currentStep === 'form-filling' && !cvData) {
+      // Ne pas réinitialiser si on a déjà des données CV ou si le CV a été optimisé
+      if (profile && currentStep === 'form-filling' && !cvData && !isOptimized) {
         setIsInitializing(true);
         console.log('🔄 Initialisation CV avec synchronisation profil...');
 
@@ -230,6 +231,9 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
         'languages', 'hobbies', 'references', 'strategicPitch'
       ]);
       setModifiedFields(allFields);
+
+      // Marquer comme optimisé pour éviter la réinitialisation
+      setIsOptimized(true);
 
       // Redirection automatique vers le formulaire d'édition
       setCurrentStep('form-filling');

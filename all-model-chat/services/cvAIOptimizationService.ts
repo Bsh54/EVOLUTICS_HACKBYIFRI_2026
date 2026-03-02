@@ -153,15 +153,28 @@ IMPORTANT: Réponds UNIQUEMENT avec le JSON, sans texte supplémentaire avant ou
       if (!jsonMatch) {
         console.warn('⚠️ JSON non trouvé, tentative de parsing direct');
         // Essayer de parser directement si c'est déjà du JSON propre
-        const directParse = JSON.parse(cleanedResponse);
-        if (directParse.optimizedCV) {
-          cleanedResponse = JSON.stringify(directParse);
-        } else {
+        try {
+          const directParse = JSON.parse(cleanedResponse);
+          if (directParse.optimizedCV) {
+            cleanedResponse = JSON.stringify(directParse);
+          } else {
+            throw new Error('Format de réponse invalide: JSON non trouvé');
+          }
+        } catch {
           throw new Error('Format de réponse invalide: JSON non trouvé');
         }
       } else {
         cleanedResponse = jsonMatch[0];
       }
+
+      // Nettoyer le JSON des caractères problématiques
+      cleanedResponse = cleanedResponse
+        .replace(/,(\s*[}\]])/g, '$1') // Supprimer les virgules avant } ou ]
+        .replace(/([{,]\s*)"([^"]+)"\s*:\s*"([^"]*)"([^,}\]]*)/g, (match, prefix, key, value, suffix) => {
+          // Nettoyer les valeurs de chaîne avec des caractères d'échappement problématiques
+          const cleanValue = value.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+          return `${prefix}"${key}": "${cleanValue}"${suffix}`;
+        });
 
       const parsedResponse = JSON.parse(cleanedResponse);
 
