@@ -111,13 +111,16 @@ export const MessageList: React.FC<MessageListProps> = ({
             data={messages}
             scrollerRef={setInternalScrollerRef}
             atBottomStateChange={setAtBottom}
-            followOutput={true} // Force l'auto-scroll pour les nouveaux messages
-            alignToBottom={false} // Les messages commencent en haut, pas en bas
+            followOutput="smooth" // Auto-scroll fluide pour nouveaux messages (comme ChatGPT)
+            alignToBottom={false} // Messages commencent en haut
             rangeChanged={onRangeChanged}
             increaseViewportBy={800}
             className="custom-scrollbar"
-            style={{ paddingBottom: `${chatInputHeight + 20}px` }}
-            onScroll={onScrollContainerScroll} // Pass scroll event to parent handler
+            style={{ 
+              paddingTop: '120px', // Espace respiration en haut (comme ChatGPT)
+              paddingBottom: `${chatInputHeight + 40}px` // Espace avant l'input
+            }}
+            onScroll={onScrollContainerScroll}
             itemContent={(index, msg) => (
                 <div className="px-1.5 sm:px-2 md:px-3 max-w-7xl mx-auto w-full">
                     <Message
