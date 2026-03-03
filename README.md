@@ -28,17 +28,25 @@
 
 ---
 
-## 📋 Cahier des Charges
+## Découvrez EVOLUTICS en action
+
+<div align="center">
+  <img src="./presentation.gif" alt="Démo EVOLUTICS" width="100%" />
+  <br/><br/>
+  <p>
+    <strong>Ceci est un aperçu de 30 secondes</strong><br/>
+    Pour voir toutes les fonctionnalités en détail :<br/>
+    <a href="#"><strong>Regarder la présentation complète (1min40)</strong></a>
+  </p>
+</div>
+
+---
+
+## Cahier des Charges
 
 **Pour consulter le cahier des charges complet du projet EVOLUTICS :**
 
-[📄 Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER__DE_CHARGE.pdf)
-
-## 🎥 Vidéo de Présentation
-
-**Découvrez EVOLUTICS en action :**
-
-[🎬 Vidéo de Présentation EVOLUTICS](./presentation.mp4)
+[Cahier des Charges EVOLUTICS](./EVOLUTICS_CAHIER__DE_CHARGE.pdf)
 
 ---
 
