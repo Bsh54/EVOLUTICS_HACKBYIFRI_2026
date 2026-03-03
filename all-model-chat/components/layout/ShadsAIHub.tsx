@@ -64,6 +64,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [opportunityForCV, setOpportunityForCV] = useState<Opportunity | null>(null);
 
   // --- Initialisation du tab depuis l'URL (une seule fois) ---
   useEffect(() => {
@@ -723,8 +724,8 @@ RÈGLES DE COMPORTEMENT :
                       {(selectedOpp.type === 'Emploi' || selectedOpp.type === 'Stage' || selectedOpp.type === 'Bourse') && (
                         <button
                           onClick={() => {
-                            // TODO: Implémenter la génération de CV
-                            console.log('Générer CV pour:', selectedOpp.title);
+                            // Stocker l'opportunité pour le CV Builder
+                            setOpportunityForCV(selectedOpp);
                             // Naviguer vers l'onglet outils
                             navigateToTab('tools');
                           }}
@@ -759,6 +760,8 @@ RÈGLES DE COMPORTEMENT :
           <ToolsPage
             themeId={themeId}
             onThemeChange={onThemeChange}
+            opportunityForCV={opportunityForCV}
+            onClearOpportunity={() => setOpportunityForCV(null)}
           />
         </div>
       </div>

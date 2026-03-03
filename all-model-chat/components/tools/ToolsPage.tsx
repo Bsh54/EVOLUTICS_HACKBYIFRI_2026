@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { ArrowRight, FileText, MessageSquare, Users, Briefcase } from 'lucide-react';
 import CVBuilderPage from '../cv/CVBuilderPage';
+import { Opportunity } from '../../types/opportunity';
 
 interface ToolsPageProps {
   themeId: string;
   onThemeChange: (themeId: string) => void;
+  opportunityForCV?: Opportunity | null;
+  onClearOpportunity?: () => void;
 }
 
 type ToolStatus = 'active' | 'coming-soon';
@@ -18,8 +21,15 @@ interface Tool {
   image: string;
 }
 
-const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange }) => {
+const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange, opportunityForCV, onClearOpportunity }) => {
   const [currentView, setCurrentView] = useState<'tools-list' | 'cv-builder'>('tools-list');
+
+  // Ouvrir automatiquement le CV Builder si une opportunité est fournie
+  React.useEffect(() => {
+    if (opportunityForCV) {
+      setCurrentView('cv-builder');
+    }
+  }, [opportunityForCV]);
 
   const tools: Tool[] = [
     {
@@ -67,6 +77,10 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange }) => {
 
   const handleBackToTools = () => {
     setCurrentView('tools-list');
+    // Nettoyer l'opportunité quand on revient à la liste
+    if (onClearOpportunity) {
+      onClearOpportunity();
+    }
   };
 
   // Si on est dans le CV Builder, afficher la page dédiée
@@ -76,6 +90,7 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange }) => {
         onBack={handleBackToTools}
         themeId={themeId}
         onThemeChange={onThemeChange}
+        opportunityForCV={opportunityForCV}
       />
     );
   }

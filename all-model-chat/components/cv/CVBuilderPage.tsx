@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Sparkles, Download, Loader2, Save, Wand2, CheckCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { CVData } from '../../types/cvTypes';
+import { Opportunity } from '../../types/opportunity';
 import ProfileCVSyncService from '../../services/profileCVSyncService';
 import CVDatabaseService from '../../services/cvDatabaseService';
 import CVAIOptimizationService, { JobOffer, OptimizationResult } from '../../services/cvAIOptimizationService';
@@ -17,6 +18,7 @@ interface CVBuilderPageProps {
   onBack: () => void;
   themeId: string;
   onThemeChange: (themeId: string) => void;
+  opportunityForCV?: Opportunity | null;
 }
 
 type CVBuilderStep = 'template-selection' | 'form-filling' | 'ai-optimization';
@@ -24,7 +26,8 @@ type CVBuilderStep = 'template-selection' | 'form-filling' | 'ai-optimization';
 const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   onBack,
   themeId,
-  onThemeChange
+  onThemeChange,
+  opportunityForCV
 }) => {
   const { profile, updateProfile } = useAuth();
   const [currentStep, setCurrentStep] = useState<CVBuilderStep>('template-selection');
@@ -44,6 +47,18 @@ const CVBuilderPage: React.FC<CVBuilderPageProps> = ({
   });
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optimizationResult, setOptimizationResult] = useState<OptimizationResult | null>(null);
+
+  // Pré-remplir le formulaire d'optimisation IA si une opportunité est fournie
+  useEffect(() => {
+    if (opportunityForCV && currentStep === 'ai-optimization') {
+      console.log('🎯 Pré-remplissage du formulaire IA avec opportunité:', opportunityForCV.title);
+      setJobOffer({
+        title: opportunityForCV.title || '',
+        company: opportunityForCV.organization || '',
+        description: opportunityForCV.fullContent || opportunityForCV.description || ''
+      });
+    }
+  }, [opportunityForCV, currentStep]);
 
   // Initialisation intelligente des données CV avec synchronisation
   useEffect(() => {
