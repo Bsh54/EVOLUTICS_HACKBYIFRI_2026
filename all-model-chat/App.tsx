@@ -13,6 +13,7 @@ import OnboardingForm from './components/auth/OnboardingForm';
 import LandingPage from './components/layout/LandingPage';
 import { EvoluticsLoader } from './components/icons/EvoluticsLoader';
 import { EvoluticsLogo } from './components/icons/EvoluticsLogo';
+import './utils/diagnostics'; // Import pour exposer les diagnostics dans la console
 
 // Composant interne qui utilise les contextes Auth et AdminAuth
 const AppContent: React.FC = () => {
