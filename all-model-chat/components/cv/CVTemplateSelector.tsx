@@ -26,7 +26,7 @@ const CVTemplateSelector: React.FC<CVTemplateSelectorProps> = ({
       id: 'moderne-01',
       name: 'Moderne Professionnel',
       description: 'Design épuré et moderne, parfait pour les secteurs tech et business',
-      preview: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=400',
+      preview: '/assets/moderne-1.jpg',
       category: 'moderne',
       isAvailable: true
     },
@@ -34,7 +34,7 @@ const CVTemplateSelector: React.FC<CVTemplateSelectorProps> = ({
       id: 'classique-01',
       name: 'Classique Élégant',
       description: 'Template traditionnel et professionnel pour tous secteurs',
-      preview: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=400',
+      preview: 'https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?q=80&w=400',
       category: 'classique',
       isAvailable: false
     },
@@ -42,7 +42,7 @@ const CVTemplateSelector: React.FC<CVTemplateSelectorProps> = ({
       id: 'creatif-01',
       name: 'Créatif Dynamique',
       description: 'Design original pour les métiers créatifs et artistiques',
-      preview: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=400',
+      preview: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=400',
       category: 'creatif',
       isAvailable: false
     }
