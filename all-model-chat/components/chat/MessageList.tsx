@@ -111,7 +111,10 @@ export const MessageList: React.FC<MessageListProps> = ({
             data={messages}
             scrollerRef={setInternalScrollerRef}
             atBottomStateChange={setAtBottom}
-            followOutput="smooth"
+            followOutput={(isAtBottom) => {
+              // Toujours suivre si on est en bas et qu'on n'a pas scrollé manuellement vers le haut
+              return isAtBottom ? 'smooth' : false;
+            }}
             alignToBottom={false}
             rangeChanged={onRangeChanged}
             increaseViewportBy={800}

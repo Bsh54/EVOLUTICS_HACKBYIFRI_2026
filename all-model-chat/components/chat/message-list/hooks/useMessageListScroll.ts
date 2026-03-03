@@ -123,11 +123,18 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
     // --- 3. Auto-scroll "Sticky" pendant le streaming (Comportement ChatGPT) ---
     useLayoutEffect(() => {
         if (isStreaming && scrollerRef && !userScrolledUpRef.current) {
-            // Utiliser requestAnimationFrame pour s'assurer que le DOM est à jour
-            requestAnimationFrame(() => {
+            // Forcer le scroll au maximum pour que le contenu continue à pousser vers le haut
+            // Utiliser un délai minimal pour s'assurer que le DOM est complètement mis à jour
+            const scrollToMax = () => {
                 if (scrollerRef) {
-                    scrollerRef.scrollTop = scrollerRef.scrollHeight;
+                    // Scroll au maximum absolu (scrollHeight peut être plus grand que visible)
+                    scrollerRef.scrollTop = scrollerRef.scrollHeight + 10000;
                 }
+            };
+            
+            // Double requestAnimationFrame pour garantir que le rendu est terminé
+            requestAnimationFrame(() => {
+                requestAnimationFrame(scrollToMax);
             });
         }
     }, [lastMessage?.content, isStreaming, scrollerRef]);
