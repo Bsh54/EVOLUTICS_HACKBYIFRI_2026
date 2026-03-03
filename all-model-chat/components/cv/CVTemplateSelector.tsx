@@ -26,7 +26,7 @@ const CVTemplateSelector: React.FC<CVTemplateSelectorProps> = ({
       id: 'moderne-01',
       name: 'Moderne Professionnel',
       description: 'Design épuré et moderne, parfait pour les secteurs tech et business',
-      preview: '/assets/moderne-1.jpg',
+      preview: '/assets/MODERN.png',
       category: 'moderne',
       isAvailable: true
     },
