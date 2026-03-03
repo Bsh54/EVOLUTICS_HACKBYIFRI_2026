@@ -96,7 +96,7 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   return (
     <>
-      <div className={`relative flex-grow h-full ${themeId === 'pearl' ? 'bg-[var(--theme-bg-primary)]' : 'bg-[var(--theme-bg-secondary)]'}`}>
+      <div className={`relative flex-grow h-full overflow-hidden ${themeId === 'pearl' ? 'bg-[var(--theme-bg-primary)]' : 'bg-[var(--theme-bg-secondary)]'}`}>
         {messages.length === 0 ? (
           <WelcomeScreen 
               t={t}
@@ -111,14 +111,14 @@ export const MessageList: React.FC<MessageListProps> = ({
             data={messages}
             scrollerRef={setInternalScrollerRef}
             atBottomStateChange={setAtBottom}
-            followOutput="smooth" // Auto-scroll fluide pour nouveaux messages (comme ChatGPT)
-            alignToBottom={false} // Messages commencent en haut
+            followOutput="smooth"
+            alignToBottom={false}
             rangeChanged={onRangeChanged}
             increaseViewportBy={800}
             className="custom-scrollbar"
-            style={{ 
-              paddingTop: '120px', // Espace respiration en haut (comme ChatGPT)
-              paddingBottom: `${chatInputHeight + 40}px` // Espace avant l'input
+            components={{
+              Header: () => <div style={{ height: '80px' }} />, // Espace en haut
+              Footer: () => <div style={{ height: `${chatInputHeight + 20}px` }} /> // Espace en bas pour l'input
             }}
             onScroll={onScrollContainerScroll}
             itemContent={(index, msg) => (

@@ -106,28 +106,29 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
 
             // Si c'est l'utilisateur qui parle, on force le scroll down IMMÉDIATEMENT
             if (newMessage.role === 'user') {
-                // Scroll immédiat sans délai pour éviter le saut vers le haut
-                scrollToBottom('auto');
-            } else if (isAtBottom) {
+                // Utiliser requestAnimationFrame pour éviter le saut
+                requestAnimationFrame(() => {
+                    if (scrollerRef) {
+                        scrollerRef.scrollTop = scrollerRef.scrollHeight;
+                    }
+                });
+            } else if (isAtBottom && !userScrolledUpRef.current) {
                 // Pour les réponses IA, scroll smooth seulement si on était déjà en bas
                 scrollToBottom('smooth');
             }
             prevMsgCount.current = messages.length;
         }
-    }, [messages, isAtBottom, scrollToBottom]);
+    }, [messages, isAtBottom, scrollToBottom, scrollerRef]);
 
     // --- 3. Auto-scroll "Sticky" pendant le streaming (Comportement ChatGPT) ---
     useLayoutEffect(() => {
-        if (isStreaming && scrollerRef) {
-            // Auto-scroll pendant le streaming SAUF si l'utilisateur a scrollé manuellement vers le haut
-            if (!userScrolledUpRef.current) {
-                // Force le maintien en bas à chaque mise à jour du contenu
-                // Utiliser scrollTo pour plus de fiabilité
-                scrollerRef.scrollTo({
-                    top: scrollerRef.scrollHeight,
-                    behavior: 'auto'
-                });
-            }
+        if (isStreaming && scrollerRef && !userScrolledUpRef.current) {
+            // Utiliser requestAnimationFrame pour s'assurer que le DOM est à jour
+            requestAnimationFrame(() => {
+                if (scrollerRef) {
+                    scrollerRef.scrollTop = scrollerRef.scrollHeight;
+                }
+            });
         }
     }, [lastMessage?.content, isStreaming, scrollerRef]);
 
