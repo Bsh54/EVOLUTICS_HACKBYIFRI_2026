@@ -122,8 +122,8 @@ export const ChatArea: React.FC<ChatAreaProps> = (props) => {
         activeSessionId={activeSessionId}
       />
 
-      {/* Champ de saisie dans le flux normal, pas en absolute */}
-      <div ref={chatInputContainerRef} className="flex-shrink-0 border-t border-[var(--theme-border-primary)]/10">
+      {/* Champ de saisie en position absolute en bas avec backdrop blur */}
+      <div ref={chatInputContainerRef} className="absolute bottom-0 left-0 right-0 z-10">
         <ChatInput
             appSettings={appSettings}
             currentChatSettings={currentChatSettings}
