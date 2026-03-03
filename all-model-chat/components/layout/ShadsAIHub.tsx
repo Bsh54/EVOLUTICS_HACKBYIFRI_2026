@@ -719,17 +719,20 @@ RÈGLES DE COMPORTEMENT :
                       >
                         PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
-                      <button
-                        onClick={() => {
-                          // TODO: Implémenter la génération de CV
-                          console.log('Générer CV pour:', selectedOpp.title);
-                          // Naviguer vers l'onglet outils
-                          navigateToTab('tools');
-                        }}
-                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
-                      >
-                        GÉNÉRER CV <FileText className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
-                      </button>
+                      {/* Bouton GÉNÉRER CV - Uniquement pour Emploi, Stage et Bourse */}
+                      {(selectedOpp.type === 'Emploi' || selectedOpp.type === 'Stage' || selectedOpp.type === 'Bourse') && (
+                        <button
+                          onClick={() => {
+                            // TODO: Implémenter la génération de CV
+                            console.log('Générer CV pour:', selectedOpp.title);
+                            // Naviguer vers l'onglet outils
+                            navigateToTab('tools');
+                          }}
+                          className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
+                        >
+                          GÉNÉRER CV <FileText className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
