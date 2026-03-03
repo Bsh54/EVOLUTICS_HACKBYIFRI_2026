@@ -121,23 +121,34 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
     }, [messages, isAtBottom, scrollToBottom, scrollerRef]);
 
     // --- 3. Auto-scroll "Sticky" pendant le streaming (Comportement ChatGPT) ---
+    // Utiliser un effet qui se déclenche à chaque frame pendant le streaming
     useLayoutEffect(() => {
-        if (isStreaming && scrollerRef && !userScrolledUpRef.current) {
-            // Forcer le scroll au maximum pour que le contenu continue à pousser vers le haut
-            // Utiliser un délai minimal pour s'assurer que le DOM est complètement mis à jour
-            const scrollToMax = () => {
-                if (scrollerRef) {
-                    // Scroll au maximum absolu (scrollHeight peut être plus grand que visible)
-                    scrollerRef.scrollTop = scrollerRef.scrollHeight + 10000;
-                }
-            };
-            
-            // Double requestAnimationFrame pour garantir que le rendu est terminé
-            requestAnimationFrame(() => {
-                requestAnimationFrame(scrollToMax);
-            });
+        if (!isStreaming || !scrollerRef || userScrolledUpRef.current) {
+            return;
         }
-    }, [lastMessage?.content, isStreaming, scrollerRef]);
+
+        let animationFrameId: number;
+        
+        const autoScroll = () => {
+            if (scrollerRef && !userScrolledUpRef.current) {
+                scrollerRef.scrollTop = scrollerRef.scrollHeight;
+            }
+            
+            // Continuer l'auto-scroll tant qu'on est en streaming
+            if (isStreaming && !userScrolledUpRef.current) {
+                animationFrameId = requestAnimationFrame(autoScroll);
+            }
+        };
+
+        // Démarrer l'auto-scroll
+        animationFrameId = requestAnimationFrame(autoScroll);
+
+        return () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        };
+    }, [isStreaming, scrollerRef]);
 
     // --- Navigation entre les tours (Optionnel, conservé de votre ancien code) ---
     const scrollToPrevTurn = useCallback(() => { /* Logique inchangée mais ignorée ici pour concision, on garde la signature */ }, []);
