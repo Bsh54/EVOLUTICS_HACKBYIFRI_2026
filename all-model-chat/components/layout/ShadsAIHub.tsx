@@ -762,6 +762,7 @@ RÈGLES DE COMPORTEMENT :
             onThemeChange={onThemeChange}
             opportunityForCV={opportunityForCV}
             onClearOpportunity={() => setOpportunityForCV(null)}
+            userProfile={profile}
           />
         </div>
       </div>
