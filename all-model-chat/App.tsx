@@ -87,7 +87,7 @@ const AppContent: React.FC = () => {
       return (
         <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
           <div className="relative flex items-center justify-center">
-            <EvoluticsLogo className="h-24 w-auto sm:h-28 md:h-32 z-10" />
+            <img src="/assets/EVOLUTICS.png" alt="EVOLUTICS" className="h-24 w-auto sm:h-28 md:h-32 z-10 object-contain" />
             <div className="absolute inset-0 flex items-center justify-center">
               <div
                 className="evolutics-loader"
@@ -169,7 +169,7 @@ const AppContent: React.FC = () => {
       <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
         <div className="relative flex items-center justify-center">
           {/* Logo au centre - responsive */}
-          <EvoluticsLogo className="h-24 w-auto sm:h-28 md:h-32 z-10" />
+          <img src="/assets/EVOLUTICS.png" alt="EVOLUTICS" className="h-24 w-auto sm:h-28 md:h-32 z-10 object-contain" />
 
           {/* Loader stylé avec CSS mask - responsive */}
           <div className="absolute inset-0 flex items-center justify-center">

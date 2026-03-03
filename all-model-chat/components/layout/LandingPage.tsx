@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Sparkles,
   Briefcase,
@@ -11,6 +11,10 @@ import {
   MessageSquare,
   ChevronRight,
   TrendingUp,
+  Rocket,
+  Target,
+  Users,
+  Star,
 } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { Footer } from './Footer';
@@ -24,6 +28,28 @@ interface LandingPageProps {
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, themeId, onThemeChange }) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [scrollY, setScrollY] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <div className="h-screen w-full overflow-y-auto overflow-x-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] custom-scrollbar">
 
@@ -37,8 +63,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
         />
       </div>
 
-      {/* ═══════════ HERO SECTION ═══════════ */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
+      {/* ═══════════ HERO SECTION - ULTRA MODERNE ═══════════ */}
+      <section 
+        ref={heroRef}
+        className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 overflow-hidden"
+        style={{
+          transform: `translateY(${scrollY * 0.5}px)`,
+        }}
+      >
         {/* Background photo — career/tech ambiance */}
         <div className="absolute inset-0 z-0">
           <img
