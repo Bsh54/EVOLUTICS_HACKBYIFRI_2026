@@ -94,7 +94,8 @@ export const Header: React.FC<HeaderProps> = ({
             <IconSidebarToggle size={iconSize} strokeWidth={strokeWidth} />
         </button>
         
-        <HeaderModelSelector
+        {/* HeaderModelSelector masqué */}
+        {/* <HeaderModelSelector
             currentModelName={currentModelName}
             availableModels={availableModels}
             selectedModelId={selectedModelId}
@@ -104,14 +105,14 @@ export const Header: React.FC<HeaderProps> = ({
             t={t}
             thinkingLevel={thinkingLevel}
             onSetThinkingLevel={onSetThinkingLevel}
-        />
+        /> */}
       </div>
 
       {/* Right Section: Action Buttons (Redesigned) */}
       <div className="flex items-center gap-1 sm:gap-2.5 justify-end flex-shrink-0">
 
-        {/* 1. Canvas Helper Button (Arc/Wand) */}
-        {showTextTools && (
+        {/* 1. Canvas Helper Button (Arc/Wand) - MASQUÉ */}
+        {/* {showTextTools && (
             <button
             onClick={onLoadCanvasPrompt}
             disabled={isLoading}
@@ -121,17 +122,17 @@ export const Header: React.FC<HeaderProps> = ({
             >
             <Wand2 size={iconSize} strokeWidth={strokeWidth} />
             </button>
-        )}
+        )} */}
 
-        {/* 2. Scenarios Button (Cards/Book) */}
-        <button
+        {/* 2. Scenarios Button (Cards/Book) - MASQUÉ */}
+        {/* <button
           onClick={onOpenScenariosModal}
           className={`${headerButtonBase} ${headerButtonInactive}`}
           aria-label={t('scenariosManage_aria')}
           title={t('scenariosManage_title')}
         >
           <IconScenarios size={iconSize} strokeWidth={strokeWidth} />
-        </button>
+        </button> */}
 
         {/* 3. PiP Button (Expand) */}
         {isPipSupported && (
