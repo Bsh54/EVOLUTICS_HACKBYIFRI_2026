@@ -116,6 +116,7 @@ export const MessageList: React.FC<MessageListProps> = ({
             rangeChanged={onRangeChanged}
             increaseViewportBy={800}
             className="custom-scrollbar"
+            style={{ paddingBottom: `${chatInputHeight + 20}px` }} // Ajouter un padding pour que les messages s'arrêtent avant l'input
             onScroll={onScrollContainerScroll} // Pass scroll event to parent handler
             itemContent={(index, msg) => (
                 <div className="px-1.5 sm:px-2 md:px-3 max-w-7xl mx-auto w-full">
