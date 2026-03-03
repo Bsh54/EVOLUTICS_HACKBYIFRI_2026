@@ -7,10 +7,10 @@ import { useState, useEffect, useRef } from 'react';
  */
 export const useSmoothStreaming = (text: string | undefined | null, isStreaming: boolean) => {
     const safeText = text || '';
-    // If we are mounting with existing text and streaming, start from 0 to type it out
-    const [displayedText, setDisplayedText] = useState(isStreaming ? '' : safeText);
+    // Toujours commencer avec le texte actuel pour éviter les lettres manquantes
+    const [displayedText, setDisplayedText] = useState(safeText);
     
-    const displayedTextRef = useRef(isStreaming ? '' : safeText);
+    const displayedTextRef = useRef(safeText);
     const targetTextRef = useRef(safeText);
     const animationFrameRef = useRef<number | null>(null);
 
