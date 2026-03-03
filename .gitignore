@@ -1,0 +1,32 @@
+# IDE
+.vscode/
+.claude/
+.idea/
+
+# Dependencies
+node_modules/
+all-model-chat/node_modules/
+
+# Build
+dist/
+build/
+all-model-chat/dist/
+
+# Environment
+.env
+.env.local
+.env.production
+all-model-chat/.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+commit_msg.txt
