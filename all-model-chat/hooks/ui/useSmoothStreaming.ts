@@ -7,16 +7,23 @@ import { useState, useEffect, useRef } from 'react';
  */
 export const useSmoothStreaming = (text: string | undefined | null, isStreaming: boolean) => {
     const safeText = text || '';
-    // Toujours commencer avec le texte actuel pour éviter les lettres manquantes
     const [displayedText, setDisplayedText] = useState(safeText);
     
     const displayedTextRef = useRef(safeText);
     const targetTextRef = useRef(safeText);
     const animationFrameRef = useRef<number | null>(null);
+    const isFirstRenderRef = useRef(true);
 
     // Sync target text ref whenever input changes
     useEffect(() => {
         targetTextRef.current = safeText;
+        
+        // Sur le premier rendu avec du contenu, afficher immédiatement
+        if (isFirstRenderRef.current && safeText) {
+            isFirstRenderRef.current = false;
+            displayedTextRef.current = safeText;
+            setDisplayedText(safeText);
+        }
         
         // Critical Fix: If tab is hidden, bypass animation to prevent backlog/crash
         // Browser pauses rAF when hidden, but state updates can pile up or be ignored
@@ -55,13 +62,14 @@ export const useSmoothStreaming = (text: string | undefined | null, isStreaming:
             if (currentLen < targetLen) {
                 const lag = targetLen - currentLen;
                 
-                // Adaptive Typing Speed
+                // Adaptive Typing Speed - Plus rapide au début
                 let charsToAdd = 1;
-                if (lag > 200) charsToAdd = 15;
-                else if (lag > 100) charsToAdd = 8;
-                else if (lag > 50) charsToAdd = 5;
-                else if (lag > 20) charsToAdd = 3;
-                else if (lag > 5) charsToAdd = 2;
+                if (lag > 200) charsToAdd = 20; // Augmenté de 15 à 20
+                else if (lag > 100) charsToAdd = 12; // Augmenté de 8 à 12
+                else if (lag > 50) charsToAdd = 8; // Augmenté de 5 à 8
+                else if (lag > 20) charsToAdd = 5; // Augmenté de 3 à 5
+                else if (lag > 5) charsToAdd = 3; // Augmenté de 2 à 3
+                else charsToAdd = 2; // Augmenté de 1 à 2
 
                 const nextText = targetTextRef.current.slice(0, currentLen + charsToAdd);
                 
