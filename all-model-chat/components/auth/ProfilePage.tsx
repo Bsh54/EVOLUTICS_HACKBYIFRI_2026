@@ -198,6 +198,70 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
 
       <div className="max-w-4xl mx-auto px-6 py-10 space-y-10 pb-32">
 
+        {/* Alerte Profil Incomplet */}
+        {(!profile.university || 
+          !profile.field_of_study || 
+          !profile.education_level || 
+          !profile.graduation_year ||
+          !profile.skills || profile.skills.length === 0 ||
+          !profile.current_position ||
+          profile.experience_years === undefined || profile.experience_years === null) && (
+          <div className="bg-gradient-to-r from-orange-500/10 via-red-500/10 to-pink-500/10 border-2 border-orange-500/30 rounded-[2rem] p-6 md:p-8 space-y-4 shadow-xl">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center shrink-0 shadow-lg">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1 space-y-3">
+                <h3 className="text-xl font-black text-[var(--theme-text-primary)]">
+                  🎯 Complétez votre profil pour une expérience optimale
+                </h3>
+                <p className="text-sm text-[var(--theme-text-secondary)] leading-relaxed">
+                  Pour bénéficier de recommandations personnalisées et d'une assistance IA parfaitement adaptée à votre situation, 
+                  veuillez renseigner les informations suivantes :
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                  <div className={`flex items-center gap-2 ${profile.university ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.university ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Établissement</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${profile.field_of_study ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.field_of_study ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Domaine d'études</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${profile.education_level ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.education_level ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Niveau d'études</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${profile.graduation_year ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.graduation_year ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Année de diplôme</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${profile.skills && profile.skills.length > 0 ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.skills && profile.skills.length > 0 ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Compétences</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${profile.current_position ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.current_position ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Poste actuel</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${profile.experience_years !== undefined && profile.experience_years !== null ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>
+                    {profile.experience_years !== undefined && profile.experience_years !== null ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
+                    <span className="font-medium">Années d'expérience</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-3 border-t border-orange-500/20">
+                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
+                  </div>
+                  <p className="text-xs text-[var(--theme-text-tertiary)] italic">
+                    🔒 Vos données sont sécurisées et ne seront jamais partagées sans votre consentement
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Messages */}
         {error && (
           <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-medium">
