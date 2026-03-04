@@ -25,6 +25,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,12 +88,23 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   const handleGoogleLogin = async () => {
     setError(null);
     
-    // Vérifier l'acceptation des politiques en mode inscription
+    // En mode inscription, afficher le modal de confidentialité
     if (mode === 'register' && !acceptedPrivacy) {
-      setError('Vous devez accepter les politiques de confidentialité pour continuer.');
+      setShowPrivacyModal(true);
       return;
     }
     
+    try {
+      await signInWithGoogle();
+    } catch (err: any) {
+      setError(err?.message || 'Erreur de connexion Google.');
+    }
+  };
+
+  const handleAcceptPrivacy = async () => {
+    setAcceptedPrivacy(true);
+    setShowPrivacyModal(false);
+    // Continuer avec Google après acceptation
     try {
       await signInWithGoogle();
     } catch (err: any) {
@@ -348,6 +360,88 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
           </div>
         </div>
       </div>
+
+      {/* Modal Politiques de Confidentialité */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[var(--theme-bg-primary)] rounded-2xl shadow-2xl max-w-md w-full border border-[var(--theme-border-primary)] animate-in zoom-in-95 duration-300">
+            {/* Header */}
+            <div className="p-6 border-b border-[var(--theme-border-primary)]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-[var(--theme-text-primary)]">
+                  Politiques de Confidentialité
+                </h3>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-[var(--theme-text-secondary)] leading-relaxed">
+                Avant de continuer, veuillez prendre connaissance de nos politiques de confidentialité et accepter les conditions suivantes :
+              </p>
+
+              <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-4 space-y-3 max-h-[200px] overflow-y-auto custom-scrollbar">
+                <div className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
+                  <p className="text-xs text-[var(--theme-text-secondary)]">
+                    Vos données personnelles seront collectées et traitées de manière sécurisée
+                  </p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
+                  <p className="text-xs text-[var(--theme-text-secondary)]">
+                    Nous utilisons vos informations uniquement pour améliorer votre expérience
+                  </p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
+                  <p className="text-xs text-[var(--theme-text-secondary)]">
+                    Vos données ne seront jamais partagées avec des tiers sans votre consentement
+                  </p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
+                  <p className="text-xs text-[var(--theme-text-secondary)]">
+                    Vous pouvez demander la suppression de vos données à tout moment
+                  </p>
+                </div>
+              </div>
+
+              <a 
+                href="/privacy-policy" 
+                target="_blank"
+                className="flex items-center gap-2 text-xs text-[var(--theme-bg-accent)] hover:underline font-semibold"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                Lire les politiques complètes
+              </a>
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-[var(--theme-border-primary)] flex gap-3">
+              <button
+                onClick={() => setShowPrivacyModal(false)}
+                className="flex-1 px-4 py-2.5 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] rounded-xl font-semibold text-sm transition-all"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleAcceptPrivacy}
+                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg"
+              >
+                Accepter et continuer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Styles CSS pour les animations */}
       <style>{`
