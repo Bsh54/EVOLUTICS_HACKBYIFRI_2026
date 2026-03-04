@@ -70,6 +70,17 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [selectedOpportunityForModal, setSelectedOpportunityForModal] = useState<Opportunity | null>(null);
 
+  // Vérifier si le profil est incomplet
+  const isProfileIncomplete = profile && (
+    !profile.university || 
+    !profile.field_of_study || 
+    !profile.education_level || 
+    !profile.graduation_year ||
+    !profile.skills || profile.skills.length === 0 ||
+    !profile.current_position ||
+    profile.experience_years === undefined || profile.experience_years === null
+  );
+
   // --- Initialisation du tab depuis l'URL (une seule fois) ---
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -283,9 +294,13 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           </button>
           <button
             onClick={() => navigateToTab('profile')}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'profile' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 relative ${activeTab === 'profile' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
             <User className="w-4 h-4" /> PROFIL
+            {/* Pastille de notification si profil incomplet */}
+            {isProfileIncomplete && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-[var(--theme-bg-primary)] rounded-full animate-pulse"></span>
+            )}
           </button>
         </nav>
 
@@ -825,8 +840,12 @@ RÈGLES DE COMPORTEMENT :
               : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'
           }`}
         >
-          <div className="p-2 rounded-xl transition-all duration-300">
+          <div className="p-2 rounded-xl transition-all duration-300 relative">
             <User className="w-5 h-5" />
+            {/* Pastille de notification si profil incomplet */}
+            {isProfileIncomplete && (
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 border-2 border-[var(--theme-bg-primary)] rounded-full animate-pulse"></span>
+            )}
           </div>
           <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Profil</span>
         </button>
