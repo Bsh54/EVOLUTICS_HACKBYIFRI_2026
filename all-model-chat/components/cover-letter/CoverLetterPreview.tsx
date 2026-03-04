@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { UserProfile } from '../../types/user';
 
 interface LetterFormData {
@@ -25,18 +25,27 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
   onContentChange
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
-  // Synchroniser le contenu avec le ref
+  // Synchroniser le contenu uniquement quand il change de l'extérieur (génération)
   useEffect(() => {
-    if (contentRef.current && contentRef.current.innerText !== content) {
-      contentRef.current.innerText = content;
+    if (contentRef.current && !isEditing) {
+      contentRef.current.textContent = content;
     }
-  }, [content]);
+  }, [content, isEditing]);
 
   const handleInput = () => {
     if (contentRef.current) {
-      onContentChange(contentRef.current.innerText);
+      onContentChange(contentRef.current.textContent || '');
     }
+  };
+
+  const handleFocus = () => {
+    setIsEditing(true);
+  };
+
+  const handleBlur = () => {
+    setIsEditing(false);
   };
 
   if (!content) {
@@ -61,13 +70,18 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
         contentEditable
         suppressContentEditableWarning
         onInput={handleInput}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        spellCheck={false}
         className="w-full bg-white rounded-lg shadow-2xl p-12 min-h-[297mm] text-black outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text"
         style={{ 
           fontFamily: 'Georgia, serif', 
           fontSize: '14px', 
           lineHeight: '1.8',
           color: '#000000',
-          whiteSpace: 'pre-wrap'
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word'
         }}
       >
         {content}
