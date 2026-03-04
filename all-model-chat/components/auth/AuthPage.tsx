@@ -24,6 +24,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +42,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
       }
       if (password !== confirmPassword) {
         setError('Les mots de passe ne correspondent pas.');
+        return;
+      }
+      if (!acceptedPrivacy) {
+        setError('Vous devez accepter les politiques de confidentialité.');
         return;
       }
     }
@@ -257,6 +262,26 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
                   </div>
               )}
 
+              {/* Case à cocher Politiques de confidentialité */}
+              {mode === 'register' && (
+                <div className="flex items-start gap-3 p-3 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl">
+                  <input
+                    type="checkbox"
+                    id="privacy-policy"
+                    checked={acceptedPrivacy}
+                    onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 text-[var(--theme-bg-accent)] bg-[var(--theme-bg-primary)] border-[var(--theme-border-primary)] rounded focus:ring-2 focus:ring-[var(--theme-bg-accent)]/30 cursor-pointer"
+                  />
+                  <label htmlFor="privacy-policy" className="text-xs text-[var(--theme-text-secondary)] leading-relaxed cursor-pointer">
+                    J'accepte les{' '}
+                    <a href="/privacy-policy" target="_blank" className="text-[var(--theme-bg-accent)] hover:underline font-semibold">
+                      politiques de confidentialité
+                    </a>
+                    {' '}et je comprends que mes données seront traitées de manière sécurisée.
+                  </label>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={isLoading}
@@ -306,6 +331,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
                   setMode(mode === 'login' ? 'register' : 'login');
                   setError(null);
                   setSuccessMessage(null);
+                  setAcceptedPrivacy(false);
                 }}
                 className="w-full bg-transparent border-2 border-[var(--theme-bg-accent)] text-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent)] hover:text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] text-[14px]"
               >
