@@ -17,7 +17,14 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Vérifier si le profil est incomplet
-  const isProfileIncomplete = !profile.education_level || !profile.field_of_study || !profile.university;
+  const isProfileIncomplete = 
+    !profile.university || 
+    !profile.field_of_study || 
+    !profile.education_level || 
+    !profile.graduation_year ||
+    !profile.skills || profile.skills.length === 0 ||
+    !profile.current_position ||
+    profile.experience_years === undefined || profile.experience_years === null;
 
   // Fermer le dropdown au clic extérieur
   useEffect(() => {
@@ -87,7 +94,10 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, onSignOut, o
               <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5 relative z-10" />
               <div className="relative z-10">
                 <p className="text-xs font-bold text-red-600 dark:text-red-400">Profil incomplet !</p>
-                <p className="text-[10px] text-red-600/80 dark:text-red-400/80 mt-0.5 leading-tight pr-2">Renseignez votre université et filière pour débloquer les recommandations d'IA. <span className="font-bold underline decoration-red-500/30 underline-offset-2">Cliquez ici.</span></p>
+                <p className="text-[10px] text-red-600/80 dark:text-red-400/80 mt-0.5 leading-tight pr-2">
+                  Complétez votre profil (formation, établissement, domaine, niveau, année, expérience, compétences, poste) pour une meilleure expérience. 
+                  <span className="font-bold underline decoration-red-500/30 underline-offset-2"> Cliquez ici.</span>
+                </p>
               </div>
             </div>
           )}
