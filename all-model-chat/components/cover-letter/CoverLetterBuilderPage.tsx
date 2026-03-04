@@ -23,6 +23,8 @@ interface LetterFormData {
   companyName: string;
   companyAddress: string;
   jobTitle: string;
+  jobDescription: string;
+  companyInfo: string;
   tone: CoverLetterTone;
   additionalInfo: string;
 }
@@ -44,6 +46,8 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
     companyName: opportunityForLetter?.organization || '',
     companyAddress: '',
     jobTitle: opportunityForLetter?.title || '',
+    jobDescription: opportunityForLetter?.description || '',
+    companyInfo: '',
     tone: 'formal',
     additionalInfo: ''
   });
@@ -54,7 +58,8 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
       setFormData(prev => ({
         ...prev,
         companyName: opportunityForLetter.organization || '',
-        jobTitle: opportunityForLetter.title || ''
+        jobTitle: opportunityForLetter.title || '',
+        jobDescription: opportunityForLetter.description || ''
       }));
     }
   }, [opportunityForLetter]);
@@ -106,7 +111,9 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
               description: formData.additionalInfo
             },
         tone: formData.tone,
-        additionalInfo: formData.additionalInfo
+        additionalInfo: formData.additionalInfo,
+        jobDescription: formData.jobDescription,
+        companyInfo: formData.companyInfo
       });
 
       setGeneratedContent(content);

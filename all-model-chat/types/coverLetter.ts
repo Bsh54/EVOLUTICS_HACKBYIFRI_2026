@@ -44,6 +44,8 @@ export interface CoverLetterGenerationParams {
   };
   tone: CoverLetterTone;
   additionalInfo?: string;
+  jobDescription?: string;
+  companyInfo?: string;
 }
 
 export interface CoverLetterTemplate {

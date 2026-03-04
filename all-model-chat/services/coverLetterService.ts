@@ -98,7 +98,7 @@ class CoverLetterService {
    * Générer une lettre de motivation avec l'IA
    */
   async generateWithAI(params: CoverLetterGenerationParams): Promise<string> {
-    const { userProfile, opportunity, tone, additionalInfo } = params;
+    const { userProfile, opportunity, tone, additionalInfo, jobDescription, companyInfo } = params;
 
     // Construction du prompt selon le ton
     const toneInstructions = {
@@ -130,6 +130,18 @@ OPPORTUNITÉ CIBLÉE :
 ${opportunity.fullContent ? `- Détails complets : ${opportunity.fullContent}` : ''}
 ` : 'OPPORTUNITÉ : Lettre de motivation générique (aucune opportunité spécifique ciblée)'}
 
+${jobDescription ? `
+DESCRIPTION DÉTAILLÉE DE L'OFFRE :
+${jobDescription}
+` : ''}
+
+${companyInfo ? `
+INFORMATIONS SUR L'ENTREPRISE :
+${companyInfo}
+
+IMPORTANT : Utilise ces informations pour montrer que tu connais l'entreprise et que tu partages ses valeurs.
+` : ''}
+
 ${additionalInfo ? `INFORMATIONS SUPPLÉMENTAIRES DU CANDIDAT :\n${additionalInfo}\n` : ''}
 
 TON DEMANDÉ : ${toneInstructions[tone]}
@@ -139,18 +151,21 @@ INSTRUCTIONS :
 2. Structure classique : En-tête, Introduction, Corps (2-3 paragraphes), Conclusion
 3. Mets en avant les compétences et expériences pertinentes du candidat
 4. Montre la motivation et l'adéquation avec ${opportunity ? "l'opportunité" : "le poste visé"}
-5. Utilise des exemples concrets si possible
-6. Longueur : 300-400 mots
-7. Format : Texte brut avec sauts de ligne appropriés (pas de Markdown)
-8. Inclus les coordonnées en haut : Nom, Email, Téléphone, Ville
-9. Date du jour
-10. Destinataire : ${opportunity ? opportunity.organization : '[Nom de l\'entreprise]'}
+5. ${jobDescription ? 'Fais référence aux missions et compétences mentionnées dans la description de l\'offre' : 'Utilise des exemples concrets si possible'}
+6. ${companyInfo ? 'Montre que tu connais l\'entreprise en mentionnant ses valeurs, projets ou culture' : ''}
+7. Longueur : 300-400 mots
+8. Format : Texte brut avec sauts de ligne appropriés (pas de Markdown)
+9. Inclus les coordonnées en haut : Nom, Email, Téléphone, Ville
+10. Date du jour
+11. Destinataire : ${opportunity ? opportunity.organization : '[Nom de l\'entreprise]'}
 
 IMPORTANT : 
 - Ne mentionne PAS de compétences ou expériences qui ne sont pas dans le profil
 - Reste factuel et honnête
 - Adapte le contenu au niveau d'études et d'expérience du candidat
 - Si le candidat est débutant, mise sur la motivation et le potentiel
+- ${jobDescription ? 'Aligne ta lettre avec les exigences de l\'offre' : ''}
+- ${companyInfo ? 'Personnalise ta lettre en fonction de la culture et des valeurs de l\'entreprise' : ''}
 
 Génère maintenant la lettre de motivation :`;
 

@@ -8,6 +8,8 @@ interface LetterFormData {
   companyName: string;
   companyAddress: string;
   jobTitle: string;
+  jobDescription: string;
+  companyInfo: string;
   tone: CoverLetterTone;
   additionalInfo: string;
 }
@@ -73,6 +75,34 @@ const CoverLetterFormPanel: React.FC<CoverLetterFormPanelProps> = ({
             placeholder="Ex: Google, Microsoft..."
             className={inputClass}
           />
+        </div>
+
+        <div>
+          <label className={labelClass}>Description de l'Offre</label>
+          <textarea
+            value={formData.jobDescription}
+            onChange={(e) => onChange({ ...formData, jobDescription: e.target.value })}
+            placeholder="Décrivez l'offre d'emploi : missions, responsabilités, compétences requises..."
+            className={`${inputClass} min-h-[80px] resize-none`}
+            rows={3}
+          />
+          <p className="text-xs text-[var(--theme-text-tertiary)] mt-1">
+            💡 Copiez-collez la description de l'offre pour une lettre plus ciblée
+          </p>
+        </div>
+
+        <div>
+          <label className={labelClass}>Informations sur l'Entreprise</label>
+          <textarea
+            value={formData.companyInfo}
+            onChange={(e) => onChange({ ...formData, companyInfo: e.target.value })}
+            placeholder="Secteur d'activité, valeurs, projets récents, culture d'entreprise..."
+            className={`${inputClass} min-h-[80px] resize-none`}
+            rows={3}
+          />
+          <p className="text-xs text-[var(--theme-text-tertiary)] mt-1">
+            💡 Ces infos permettront de personnaliser votre motivation
+          </p>
         </div>
       </div>
 
