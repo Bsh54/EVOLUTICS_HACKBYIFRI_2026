@@ -597,10 +597,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
                   <div className="lg:col-span-1">
                     {/* PC: Reste centré et fixe au scroll dans sa colonne | Mobile: Suit le flux du texte */}
-                    <div className="lg:sticky lg:top-[25%] space-y-3 w-full max-w-xs mx-auto lg:mx-0 lg:ml-auto lg:mr-32 mt-12 lg:mt-0 z-50">
+                    <div className="lg:sticky lg:top-[25%] space-y-3 w-full max-w-sm mx-auto lg:mx-0 lg:ml-auto lg:mr-32 mt-12 lg:mt-0 z-50">
                       <button
                         onClick={(e) => toggleFavorite(e, selectedOpp.id)}
-                        className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-bold uppercase tracking-wide transition-all border-2 text-sm ${favorites.includes(selectedOpp.id) ? 'bg-red-500 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]' : 'bg-transparent border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] hover:border-red-500 hover:text-red-500'}`}
+                        className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold uppercase tracking-wide transition-all border-2 text-base ${favorites.includes(selectedOpp.id) ? 'bg-red-500 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]' : 'bg-transparent border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] hover:border-red-500 hover:text-red-500'}`}
                       >
                         <Heart className={`w-5 h-5 ${favorites.includes(selectedOpp.id) ? 'fill-current' : ''}`} />
                         {favorites.includes(selectedOpp.id) ? 'ENREGISTRÉ' : 'SAUVEGARDER'}
@@ -616,7 +616,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                             }
                           }
                         }}
-                        className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-bold py-3 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group active:scale-95 text-sm uppercase tracking-tight"
+                        className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-bold py-3.5 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group active:scale-95 text-base uppercase tracking-tight"
                       >
                         {selectedOpp.contactEmail ? 'POSTULER PAR EMAIL' : 'POSTULER MAINTENANT'} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                       </button>
@@ -720,7 +720,7 @@ RÈGLES DE COMPORTEMENT :
                             navigateToTab('chat');
                           }
                         }}
-                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-bold py-3 rounded-xl hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-2 group text-sm uppercase tracking-tight"
+                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-bold py-3.5 rounded-xl hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-2 group text-base uppercase tracking-tight"
                       >
                         PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
@@ -731,7 +731,7 @@ RÈGLES DE COMPORTEMENT :
                             setSelectedOpportunityForModal(selectedOpp);
                             setIsDocumentModalOpen(true);
                           }}
-                          className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold py-3 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group text-sm uppercase tracking-tight"
+                          className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold py-3.5 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group text-base uppercase tracking-tight"
                         >
                           GÉNÉRER DOCUMENTS <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         </button>
