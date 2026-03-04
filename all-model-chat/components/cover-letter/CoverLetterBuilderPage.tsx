@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Download, Loader2, Save } from 'lucide-react';
+import { ArrowLeft, Download, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Opportunity } from '../../types/opportunity';
 import { coverLetterService } from '../../services/coverLetterService';
@@ -280,24 +280,15 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
 
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
               {generatedContent && (
-                <>
-                  <button
-                    onClick={handleSave}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-accent)]/10 border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] rounded-xl transition-colors text-sm flex-1 sm:flex-none justify-center"
-                  >
-                    <Save className="w-4 h-4" />
-                    <span className="hidden sm:inline">Sauvegarder</span>
-                  </button>
-                  <button
-                    onClick={handleExportPDF}
-                    disabled={isExporting}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors text-sm flex-1 sm:flex-none justify-center"
-                  >
-                    {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                    <span className="hidden sm:inline">Télécharger PDF</span>
-                    <span className="sm:hidden">PDF</span>
-                  </button>
-                </>
+                <button
+                  onClick={handleExportPDF}
+                  disabled={isExporting}
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl transition-colors text-sm flex-1 sm:flex-none justify-center"
+                >
+                  {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                  <span className="hidden sm:inline">Télécharger PDF</span>
+                  <span className="sm:hidden">PDF</span>
+                </button>
               )}
             </div>
           </div>
