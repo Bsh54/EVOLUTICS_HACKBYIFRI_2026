@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, FileText, MessageSquare, Users, Briefcase } from 'lucide-react';
 import CVBuilderPage from '../cv/CVBuilderPage';
+import CoverLetterBuilderPage from '../cover-letter/CoverLetterBuilderPage';
 import { Opportunity } from '../../types/opportunity';
 import { UserProfile } from '../../types/user';
 
@@ -8,6 +9,7 @@ interface ToolsPageProps {
   themeId: string;
   onThemeChange: (themeId: string) => void;
   opportunityForCV?: Opportunity | null;
+  opportunityForLetter?: Opportunity | null;
   onClearOpportunity?: () => void;
   userProfile?: UserProfile | null;
 }
@@ -23,8 +25,15 @@ interface Tool {
   image: string;
 }
 
-const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange, opportunityForCV, onClearOpportunity, userProfile }) => {
-  const [currentView, setCurrentView] = useState<'tools-list' | 'cv-builder'>('tools-list');
+const ToolsPage: React.FC<ToolsPageProps> = ({ 
+  themeId, 
+  onThemeChange, 
+  opportunityForCV, 
+  opportunityForLetter,
+  onClearOpportunity, 
+  userProfile 
+}) => {
+  const [currentView, setCurrentView] = useState<'tools-list' | 'cv-builder' | 'cover-letter-builder'>('tools-list');
 
   // Ouvrir automatiquement le CV Builder si une opportunité est fournie
   React.useEffect(() => {
@@ -32,6 +41,13 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange, opportuni
       setCurrentView('cv-builder');
     }
   }, [opportunityForCV]);
+
+  // Ouvrir automatiquement le Cover Letter Builder si une opportunité est fournie
+  React.useEffect(() => {
+    if (opportunityForLetter) {
+      setCurrentView('cover-letter-builder');
+    }
+  }, [opportunityForLetter]);
 
   const tools: Tool[] = [
     {
@@ -47,7 +63,7 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange, opportuni
       title: 'Lettres de Motivation',
       description: 'Générez des lettres de motivation personnalisées et adaptées à chaque opportunité',
       icon: MessageSquare,
-      status: 'coming-soon',
+      status: 'active',
       image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2070'
     },
     {
@@ -71,6 +87,8 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange, opportuni
   const handleToolClick = (toolId: string) => {
     if (toolId === 'cv-builder') {
       setCurrentView('cv-builder');
+    } else if (toolId === 'cover-letter') {
+      setCurrentView('cover-letter-builder');
     } else {
       // Pour les autres outils pas encore disponibles
       console.log(`${toolId} sera bientôt disponible !`);
@@ -93,6 +111,18 @@ const ToolsPage: React.FC<ToolsPageProps> = ({ themeId, onThemeChange, opportuni
         themeId={themeId}
         onThemeChange={onThemeChange}
         opportunityForCV={opportunityForCV}
+      />
+    );
+  }
+
+  // Si on est dans le Cover Letter Builder, afficher la page dédiée
+  if (currentView === 'cover-letter-builder') {
+    return (
+      <CoverLetterBuilderPage
+        onBack={handleBackToTools}
+        themeId={themeId}
+        onThemeChange={onThemeChange}
+        opportunityForLetter={opportunityForLetter}
       />
     );
   }

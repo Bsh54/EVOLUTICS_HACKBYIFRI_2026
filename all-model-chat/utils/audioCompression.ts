@@ -48,7 +48,7 @@ export const compressAudioToMp3 = async (file: File | Blob, signal?: AbortSignal
         if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     };
 
-    // 优化：如果文件极其微小 (小于 50KB)，很有可能是极短的语音，直接返回原始文件
+    // Optimization: If file is very small (< 50KB), likely very short audio, return original
     if (file.size < 50 * 1024) {
         if (file instanceof File) return file;
         return new File([file], `recording-${Date.now()}.webm`, { type: file.type || "audio/webm" });
@@ -64,7 +64,7 @@ export const compressAudioToMp3 = async (file: File | Blob, signal?: AbortSignal
         const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
         checkAbort();
 
-        // 优化：如果时长小于 1.5 秒，没必要压缩
+        // Optimization: If duration < 1.5 seconds, no need to compress
         if (audioBuffer.duration < 1.5) {
             if (file instanceof File) return file;
             return new File([file], `recording-${Date.now()}.webm`, { type: file.type || "audio/webm" });

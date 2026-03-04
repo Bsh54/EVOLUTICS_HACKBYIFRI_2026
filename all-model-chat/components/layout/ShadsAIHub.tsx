@@ -23,6 +23,7 @@ import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
 import ProfilePage from '../auth/ProfilePage';
 import ToolsPage from '../tools/ToolsPage';
+import DocumentGeneratorModal from '../modals/DocumentGeneratorModal';
 import { useAuth } from '../../contexts/AuthContext';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { ThemeToggle } from '../ui/ThemeToggle';
@@ -65,6 +66,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [opportunityForCV, setOpportunityForCV] = useState<Opportunity | null>(null);
+  const [opportunityForLetter, setOpportunityForLetter] = useState<Opportunity | null>(null);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+  const [selectedOpportunityForModal, setSelectedOpportunityForModal] = useState<Opportunity | null>(null);
 
   // --- Initialisation du tab depuis l'URL (une seule fois) ---
   useEffect(() => {
@@ -720,18 +724,16 @@ RÈGLES DE COMPORTEMENT :
                       >
                         PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
-                      {/* Bouton GÉNÉRER CV - Uniquement pour Emploi, Stage et Bourse */}
+                      {/* Bouton GÉNÉRER DOCUMENTS - Uniquement pour Emploi, Stage et Bourse */}
                       {(selectedOpp.type === 'Emploi' || selectedOpp.type === 'Stage' || selectedOpp.type === 'Bourse') && (
                         <button
                           onClick={() => {
-                            // Stocker l'opportunité pour le CV Builder
-                            setOpportunityForCV(selectedOpp);
-                            // Naviguer vers l'onglet outils
-                            navigateToTab('tools');
+                            setSelectedOpportunityForModal(selectedOpp);
+                            setIsDocumentModalOpen(true);
                           }}
-                          className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
+                          className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
                         >
-                          GÉNÉRER CV <FileText className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
+                          GÉNÉRER DOCUMENTS <FileText className="w-5 h-5 md:w-6 h-6 group-hover:scale-110 transition-transform" />
                         </button>
                       )}
                     </div>
@@ -761,7 +763,11 @@ RÈGLES DE COMPORTEMENT :
             themeId={themeId}
             onThemeChange={onThemeChange}
             opportunityForCV={opportunityForCV}
-            onClearOpportunity={() => setOpportunityForCV(null)}
+            opportunityForLetter={opportunityForLetter}
+            onClearOpportunity={() => {
+              setOpportunityForCV(null);
+              setOpportunityForLetter(null);
+            }}
             userProfile={profile}
           />
         </div>
@@ -1112,6 +1118,24 @@ RÈGLES DE COMPORTEMENT :
         .animate-skeleton-sweep { animation: skeleton-sweep 2.5s ease-in-out infinite; }
         .animate-skeleton-border-pulse { animation: skeleton-border-pulse 3s ease-in-out infinite; }
       `}</style>
+
+      {/* Modal de sélection de document */}
+      <DocumentGeneratorModal
+        isOpen={isDocumentModalOpen}
+        onClose={() => {
+          setIsDocumentModalOpen(false);
+          setSelectedOpportunityForModal(null);
+        }}
+        onSelectCV={() => {
+          setOpportunityForCV(selectedOpportunityForModal);
+          navigateToTab('tools');
+        }}
+        onSelectCoverLetter={() => {
+          setOpportunityForLetter(selectedOpportunityForModal);
+          navigateToTab('tools');
+        }}
+        opportunityTitle={selectedOpportunityForModal?.title}
+      />
 
     </div>
   );

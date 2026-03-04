@@ -62,7 +62,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
             word-wrap: break-word;
         }
 
-        /* 规则框样式升级，支持多行列表 */
+        /* Enhanced rule box style, supports multi-line lists */
         .note-box {
             position: relative;
             border: 2px solid #5c7cfa;
@@ -217,7 +217,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
             position: relative;
         }
 
-        /* ----- 全屏模式样式 ----- */
+        /* ----- Fullscreen mode styles ----- */
         .chart-container.is-fullscreen {
             position: fixed;
             top: 0;
@@ -249,7 +249,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
             display: block;
         }
 
-        /* ----- 响应式适配 ----- */
+        /* ----- Responsive adaptation ----- */
         @media (max-width: 600px) {
             body { 
                 padding: 10px; 
@@ -390,7 +390,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
 </div>
 
 <script>
-    // 1. Viz.js 逻辑 (带 SVG-Pan-Zoom 和高对比度配置)
+    // 1. Viz.js logic (with SVG-Pan-Zoom and high contrast configuration)
     let currentLayout = 'LR';
     const viz = new Viz();
     let panZoomInstance = null;
@@ -398,13 +398,13 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
     const renderViz = (layout) => {
         const container = document.getElementById('viz-demo');
         
-        // 高对比度样式定义
+        // High contrast style definition
         const dotString = \`
             digraph G {
                 rankdir=\${layout};
                 bgcolor="transparent";
                 
-                // 节点通用样式：黑字，浅蓝背景，清晰边框
+                // Node common style: black text, light blue background, clear border
                 node [
                     fontname="Microsoft YaHei, Helvetica, Arial, sans-serif", 
                     fontsize=12,
@@ -417,7 +417,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                     margin="0.2,0.1"
                 ];
                 
-                // 连线样式：深色线条
+                // Edge style: dark lines
                 edge [
                     color="#333333", 
                     penwidth=1.2, 
@@ -425,7 +425,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                 ];
 
                 Start [
-                    label="用户请求", 
+                    label="User Request", 
                     shape=circle, 
                     fillcolor="#d94a38", 
                     fontcolor="#ffffff", 
@@ -435,14 +435,14 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                     fontname="Microsoft YaHei Bold" 
                 ];
                 
-                Check [label="复杂度判定", shape=diamond, fillcolor="#fff9db", color="#e6a23c"];
+                Check [label="Complexity Check", shape=diamond, fillcolor="#fff9db", color="#e6a23c"];
                 
-                Native [label="原生 HTML/CSS", shape=box];
-                Lib [label="引入 JS 库", shape=box, style="dashed"];
+                Native [label="Native HTML/CSS", shape=box];
+                Lib [label="Import JS Library", shape=box, style="dashed"];
                 
                 Start -> Check;
-                Check -> Native [label="简单", fontsize=10];
-                Check -> Lib [label="复杂", fontsize=10, style="dashed"];
+                Check -> Native [label="Simple", fontsize=10];
+                Check -> Lib [label="Complex", fontsize=10, style="dashed"];
             }
         \`;
         
@@ -453,7 +453,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                 element.style.height = "100%";
                 container.appendChild(element);
 
-                // 重置并初始化缩放插件
+                // Reset and initialize zoom plugin
                 if (panZoomInstance) {
                     panZoomInstance.destroy();
                     panZoomInstance = null;
@@ -475,7 +475,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
         renderViz(currentLayout);
     });
 
-    // 全屏与缩放逻辑
+    // Fullscreen and zoom logic
     const container = document.getElementById('viz-demo');
     const closeBtn = document.getElementById('viz-close-btn');
 
@@ -493,7 +493,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
     document.getElementById('viz-fullscreen-btn').addEventListener('click', toggleFullscreen);
     closeBtn.addEventListener('click', toggleFullscreen);
 
-    // 2. ECharts 逻辑
+    // 2. ECharts logic
     const renderECharts = () => {
         const chartDom = document.getElementById('echarts-demo');
         if (!chartDom) return;
