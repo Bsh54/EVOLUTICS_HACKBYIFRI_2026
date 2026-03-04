@@ -86,6 +86,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
 
   const handleGoogleLogin = async () => {
     setError(null);
+    
+    // Vérifier l'acceptation des politiques en mode inscription
+    if (mode === 'register' && !acceptedPrivacy) {
+      setError('Vous devez accepter les politiques de confidentialité pour continuer.');
+      return;
+    }
+    
     try {
       await signInWithGoogle();
     } catch (err: any) {
@@ -262,26 +269,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
                   </div>
               )}
 
-              {/* Case à cocher Politiques de confidentialité */}
-              {mode === 'register' && (
-                <div className="flex items-start gap-3 p-3 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl">
-                  <input
-                    type="checkbox"
-                    id="privacy-policy"
-                    checked={acceptedPrivacy}
-                    onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-[var(--theme-bg-accent)] bg-[var(--theme-bg-primary)] border-[var(--theme-border-primary)] rounded focus:ring-2 focus:ring-[var(--theme-bg-accent)]/30 cursor-pointer"
-                  />
-                  <label htmlFor="privacy-policy" className="text-xs text-[var(--theme-text-secondary)] leading-relaxed cursor-pointer">
-                    J'accepte les{' '}
-                    <a href="/privacy-policy" target="_blank" className="text-[var(--theme-bg-accent)] hover:underline font-semibold">
-                      politiques de confidentialité
-                    </a>
-                    {' '}et je comprends que mes données seront traitées de manière sécurisée.
-                  </label>
-                </div>
-              )}
-
               <button
                 type="submit"
                 disabled={isLoading}
@@ -297,6 +284,26 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
                 )}
               </button>
             </form>
+
+            {/* Case à cocher Politiques de confidentialité - Pour inscription uniquement */}
+            {mode === 'register' && (
+              <div className="flex items-start gap-3 p-3 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl animate-fade-in-up" style={{ animationDelay: '0.45s' }}>
+                <input
+                  type="checkbox"
+                  id="privacy-policy"
+                  checked={acceptedPrivacy}
+                  onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 text-[var(--theme-bg-accent)] bg-[var(--theme-bg-primary)] border-[var(--theme-border-primary)] rounded focus:ring-2 focus:ring-[var(--theme-bg-accent)]/30 cursor-pointer"
+                />
+                <label htmlFor="privacy-policy" className="text-xs text-[var(--theme-text-secondary)] leading-relaxed cursor-pointer">
+                  J'accepte les{' '}
+                  <a href="/privacy-policy" target="_blank" className="text-[var(--theme-bg-accent)] hover:underline font-semibold">
+                    politiques de confidentialité
+                  </a>
+                  {' '}et je comprends que mes données seront traitées de manière sécurisée.
+                </label>
+              </div>
+            )}
 
             {/* Séparateur */}
             <div className="relative flex items-center py-2 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
