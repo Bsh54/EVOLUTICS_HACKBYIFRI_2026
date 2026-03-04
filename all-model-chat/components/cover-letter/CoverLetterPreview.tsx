@@ -72,11 +72,6 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
       >
         {content}
       </div>
-      
-      {/* Indicateur d'édition */}
-      <div className="absolute top-4 right-4 bg-[var(--theme-bg-accent)]/10 backdrop-blur-sm border border-[var(--theme-bg-accent)]/30 text-[var(--theme-bg-accent)] px-3 py-1 rounded-full text-xs font-bold pointer-events-none">
-        ✏️ Cliquez pour modifier
-      </div>
     </div>
   );
 };

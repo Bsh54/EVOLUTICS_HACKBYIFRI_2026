@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Sparkles, Download, Loader2, Save, Wand2 } from 'lucide-react';
+import { ArrowLeft, Download, Loader2, Save } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Opportunity } from '../../types/opportunity';
 import { coverLetterService } from '../../services/coverLetterService';
@@ -8,13 +8,10 @@ import CoverLetterTemplateSelector from './CoverLetterTemplateSelector';
 import CoverLetterFormPanel from './CoverLetterFormPanel';
 import CoverLetterPreview from './CoverLetterPreview';
 import { toast } from 'react-toastify';
-// @ts-ignore
-import html2pdf from 'html2pdf.js';
 
 interface CoverLetterBuilderPageProps {
   onBack: () => void;
   themeId: string;
-  onThemeChange: (themeId: string) => void;
   opportunityForLetter?: Opportunity | null;
 }
 
@@ -33,12 +30,10 @@ interface LetterFormData {
 const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
   onBack,
   themeId,
-  onThemeChange,
   opportunityForLetter
 }) => {
   const { user, profile } = useAuth();
   const [currentStep, setCurrentStep] = useState<BuilderStep>('template-selection');
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [generatedContent, setGeneratedContent] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -65,7 +60,6 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
   }, [opportunityForLetter]);
 
   const handleTemplateSelect = (templateId: string) => {
-    setSelectedTemplate(templateId);
     setCurrentStep('form-filling');
   };
 
@@ -165,35 +159,60 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
     const toastId = toast.loading("Génération du PDF...");
 
     try {
-      const element = document.getElementById('letter-preview');
-      if (!element) throw new Error('Élément non trouvé');
+      // Importer jsPDF dynamiquement
+      const { jsPDF } = await import('jspdf');
+      
+      // Créer un nouveau document PDF
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
 
-      // Forcer le mode aperçu avant l'export
-      const editButton = element.parentElement?.querySelector('button');
-      if (editButton && editButton.textContent?.includes('Aperçu')) {
-        editButton.click();
-        await new Promise(resolve => setTimeout(resolve, 100));
+      // Marges et dimensions
+      const pageWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const margin = 20;
+      const maxWidth = pageWidth - (2 * margin);
+      const lineHeight = 7;
+      let yPosition = margin;
+
+      // Police et taille
+      doc.setFont('times', 'normal');
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+
+      // Diviser le contenu en lignes
+      const lines = generatedContent.split('\n');
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        // Ligne vide = saut de ligne
+        if (line.trim() === '') {
+          yPosition += lineHeight / 2;
+          continue;
+        }
+
+        // Découper le texte pour qu'il tienne dans la largeur
+        const wrappedLines = doc.splitTextToSize(line, maxWidth);
+
+        // Vérifier si on doit ajouter une nouvelle page
+        if (yPosition + (wrappedLines.length * lineHeight) > pageHeight - margin) {
+          doc.addPage();
+          yPosition = margin;
+        }
+
+        // Ajouter chaque ligne wrappée
+        wrappedLines.forEach((wrappedLine: string) => {
+          doc.text(wrappedLine, margin, yPosition);
+          yPosition += lineHeight;
+        });
       }
 
-      const opt = {
-        margin: [15, 15, 15, 15],
-        filename: `Lettre_Motivation_${formData.companyName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2,
-          useCORS: true,
-          letterRendering: true,
-          logging: false,
-          backgroundColor: '#ffffff'
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait'
-        }
-      };
-
-      await html2pdf().set(opt).from(element).save();
+      // Sauvegarder le PDF
+      const filename = `Lettre_Motivation_${formData.companyName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(filename);
 
       toast.update(toastId, {
         render: "✅ PDF téléchargé avec succès !",
@@ -216,7 +235,6 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
 
   const handleBackToTemplates = () => {
     setCurrentStep('template-selection');
-    setSelectedTemplate('');
     setGeneratedContent('');
   };
 
