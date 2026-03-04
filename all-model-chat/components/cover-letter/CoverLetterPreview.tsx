@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Edit3, Eye } from 'lucide-react';
+import React, { useRef, useEffect } from 'react';
 import { UserProfile } from '../../types/user';
 
 interface LetterFormData {
@@ -25,7 +24,20 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
   profile,
   onContentChange
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Synchroniser le contenu avec le ref
+  useEffect(() => {
+    if (contentRef.current && contentRef.current.innerText !== content) {
+      contentRef.current.innerText = content;
+    }
+  }, [content]);
+
+  const handleInput = () => {
+    if (contentRef.current) {
+      onContentChange(contentRef.current.innerText);
+    }
+  };
 
   if (!content) {
     return (
@@ -41,66 +53,29 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
     );
   }
 
-  const formatContentForDisplay = (text: string) => {
-    return text.split('\n').map((line, i) => (
-      <p key={i} className={line.trim() === '' ? 'mb-4' : 'mb-2'} style={{ textAlign: 'justify' }}>
-        {line || '\u00A0'}
-      </p>
-    ));
-  };
-
   return (
     <div className="relative w-full max-w-[700px]">
-      {/* Toggle Edit/Preview - Visible sur tous les écrans */}
-      <div className="flex justify-end mb-4">
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] rounded-xl transition-all text-sm font-medium text-[var(--theme-text-primary)]"
-        >
-          {isEditing ? (
-            <>
-              <Eye className="w-4 h-4" />
-              Aperçu
-            </>
-          ) : (
-            <>
-              <Edit3 className="w-4 h-4" />
-              Modifier
-            </>
-          )}
-        </button>
-      </div>
-
       <div
         id="letter-preview"
-        className="w-full bg-white rounded-lg shadow-2xl p-12 min-h-[297mm]"
-        style={{ fontFamily: 'Georgia, serif' }}
+        ref={contentRef}
+        contentEditable
+        suppressContentEditableWarning
+        onInput={handleInput}
+        className="w-full bg-white rounded-lg shadow-2xl p-12 min-h-[297mm] text-black outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text"
+        style={{ 
+          fontFamily: 'Georgia, serif', 
+          fontSize: '14px', 
+          lineHeight: '1.8',
+          color: '#000000',
+          whiteSpace: 'pre-wrap'
+        }}
       >
-        {isEditing ? (
-          <textarea
-            value={content}
-            onChange={(e) => onContentChange(e.target.value)}
-            className="w-full h-full min-h-[800px] border-none outline-none resize-none bg-transparent text-black leading-relaxed"
-            style={{ 
-              fontFamily: 'Georgia, serif', 
-              fontSize: '14px', 
-              lineHeight: '1.8',
-              color: '#000000'
-            }}
-          />
-        ) : (
-          <div 
-            className="text-black"
-            style={{ 
-              fontFamily: 'Georgia, serif', 
-              fontSize: '14px', 
-              lineHeight: '1.8',
-              color: '#000000'
-            }}
-          >
-            {formatContentForDisplay(content)}
-          </div>
-        )}
+        {content}
+      </div>
+      
+      {/* Indicateur d'édition */}
+      <div className="absolute top-4 right-4 bg-[var(--theme-bg-accent)]/10 backdrop-blur-sm border border-[var(--theme-bg-accent)]/30 text-[var(--theme-bg-accent)] px-3 py-1 rounded-full text-xs font-bold pointer-events-none">
+        ✏️ Cliquez pour modifier
       </div>
     </div>
   );
