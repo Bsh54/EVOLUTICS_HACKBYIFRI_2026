@@ -51,11 +51,11 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
 
   return (
     <div className="relative w-full max-w-[700px]">
-      {/* Toggle Edit/Preview */}
-      <div className="absolute -top-12 right-0 z-10">
+      {/* Toggle Edit/Preview - Visible sur tous les écrans */}
+      <div className="flex justify-end mb-4">
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] rounded-xl transition-all text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] rounded-xl transition-all text-sm font-medium text-[var(--theme-text-primary)]"
         >
           {isEditing ? (
             <>
