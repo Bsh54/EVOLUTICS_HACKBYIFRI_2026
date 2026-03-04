@@ -228,20 +228,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
 
                   {/* Barre de progression */}
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-[var(--theme-text-tertiary)] font-medium">Progression</span>
-                      <span className="text-[var(--theme-bg-accent)] font-bold">
-                        {Math.round(([
-                          profile.university,
-                          profile.field_of_study,
-                          profile.education_level,
-                          profile.graduation_year,
-                          profile.skills && profile.skills.length > 0,
-                          profile.current_position,
-                          profile.experience_years !== undefined && profile.experience_years !== null
-                        ].filter(Boolean).length / 7) * 100)}%
-                      </span>
-                    </div>
                     <div className="h-2 bg-[var(--theme-bg-tertiary)] rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-500 rounded-full"
