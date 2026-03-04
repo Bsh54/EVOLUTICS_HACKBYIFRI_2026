@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { UserProfile } from '../../types/user';
 
 interface LetterFormData {
@@ -26,20 +26,28 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const lastContentRef = useRef<string>('');
+  const [wordCount, setWordCount] = useState(0);
 
   // Mettre à jour le contenu uniquement quand il change vraiment (génération)
   useEffect(() => {
     if (contentRef.current && content !== lastContentRef.current) {
       lastContentRef.current = content;
       contentRef.current.textContent = content;
+      updateWordCount(content);
     }
   }, [content]);
+
+  const updateWordCount = (text: string) => {
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+    setWordCount(words.length);
+  };
 
   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     if (contentRef.current) {
       const newContent = contentRef.current.textContent || '';
       lastContentRef.current = newContent;
       onContentChange(newContent);
+      updateWordCount(newContent);
     }
   };
 
@@ -65,8 +73,20 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
     );
   }
 
+  const isOverLimit = wordCount > 350;
+
   return (
     <div className="relative w-full max-w-[700px]">
+      {/* Indicateur de page et compteur de mots */}
+      <div className="absolute -top-8 left-0 right-0 flex items-center justify-between text-xs">
+        <span className="text-[var(--theme-text-tertiary)]">
+          📄 Format A4 - Une seule page
+        </span>
+        <span className={`font-medium ${isOverLimit ? 'text-red-500' : wordCount > 300 ? 'text-orange-500' : 'text-green-600'}`}>
+          {wordCount} mots {isOverLimit ? '⚠️ Trop long' : wordCount > 300 ? '⚠️' : '✓'}
+        </span>
+      </div>
+      
       <div
         id="letter-preview"
         ref={contentRef}
@@ -75,7 +95,7 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
         onInput={handleInput}
         onKeyDown={handleKeyDown}
         spellCheck={false}
-        className="w-full bg-white rounded-lg shadow-2xl p-12 min-h-[297mm] text-black outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text"
+        className="w-full bg-white rounded-lg shadow-2xl p-12 text-black outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text overflow-y-auto"
         style={{ 
           fontFamily: 'Georgia, serif', 
           fontSize: '14px', 
@@ -84,9 +104,14 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
           whiteSpace: 'pre-wrap',
           wordWrap: 'break-word',
           overflowWrap: 'break-word',
-          WebkitUserModify: 'read-write-plaintext-only'
+          WebkitUserModify: 'read-write-plaintext-only',
+          height: '297mm', // Hauteur exacte d'une page A4
+          maxHeight: '297mm'
         }}
       />
+      
+      {/* Ligne de limite de page */}
+      <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-t ${isOverLimit ? 'from-red-500/40' : 'from-blue-500/20'} to-transparent pointer-events-none rounded-b-lg`} />
     </div>
   );
 };

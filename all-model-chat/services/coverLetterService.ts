@@ -153,11 +153,12 @@ INSTRUCTIONS :
 4. Montre la motivation et l'adéquation avec ${opportunity ? "l'opportunité" : "le poste visé"}
 5. ${jobDescription ? 'Fais référence aux missions et compétences mentionnées dans la description de l\'offre' : 'Utilise des exemples concrets si possible'}
 6. ${companyInfo ? 'Montre que tu connais l\'entreprise en mentionnant ses valeurs, projets ou culture' : ''}
-7. Longueur : 300-400 mots
-8. Format : Texte brut avec sauts de ligne appropriés (pas de Markdown)
-9. Inclus les coordonnées en haut : Nom, Email, Téléphone, Ville
-10. Date du jour
-11. Destinataire : ${opportunity ? opportunity.organization : '[Nom de l\'entreprise]'}
+7. LONGUEUR CRITIQUE : Maximum 250-300 mots (IMPÉRATIF - doit tenir sur une seule page A4)
+8. Sois concis et va droit au but - chaque phrase doit avoir un impact
+9. Format : Texte brut avec sauts de ligne appropriés (pas de Markdown)
+10. Inclus les coordonnées en haut : Nom, Email, Téléphone, Ville
+11. Date du jour
+12. Destinataire : ${opportunity ? opportunity.organization : '[Nom de l\'entreprise]'}
 
 IMPORTANT : 
 - Ne mentionne PAS de compétences ou expériences qui ne sont pas dans le profil
@@ -166,6 +167,8 @@ IMPORTANT :
 - Si le candidat est débutant, mise sur la motivation et le potentiel
 - ${jobDescription ? 'Aligne ta lettre avec les exigences de l\'offre' : ''}
 - ${companyInfo ? 'Personnalise ta lettre en fonction de la culture et des valeurs de l\'entreprise' : ''}
+- CRUCIAL : La lettre DOIT tenir sur une seule page A4 (maximum 300 mots)
+- Privilégie la qualité à la quantité - sois percutant et concis
 
 Génère maintenant la lettre de motivation :`;
 
