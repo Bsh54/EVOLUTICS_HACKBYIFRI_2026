@@ -26,6 +26,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState<'google' | 'email' | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,8 +46,10 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         setError('Les mots de passe ne correspondent pas.');
         return;
       }
+      // Afficher le modal pour accepter les politiques
       if (!acceptedPrivacy) {
-        setError('Vous devez accepter les politiques de confidentialité.');
+        setPendingAction('email');
+        setShowPrivacyModal(true);
         return;
       }
     }
@@ -90,6 +93,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
     
     // En mode inscription, afficher le modal de confidentialité
     if (mode === 'register' && !acceptedPrivacy) {
+      setPendingAction('google');
       setShowPrivacyModal(true);
       return;
     }
@@ -104,12 +108,34 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   const handleAcceptPrivacy = async () => {
     setAcceptedPrivacy(true);
     setShowPrivacyModal(false);
-    // Continuer avec Google après acceptation
-    try {
-      await signInWithGoogle();
-    } catch (err: any) {
-      setError(err?.message || 'Erreur de connexion Google.');
+    
+    // Continuer avec l'action en attente
+    if (pendingAction === 'google') {
+      try {
+        await signInWithGoogle();
+      } catch (err: any) {
+        setError(err?.message || 'Erreur de connexion Google.');
+      }
+    } else if (pendingAction === 'email') {
+      // Relancer la soumission du formulaire
+      setIsLoading(true);
+      try {
+        await signUp(email, password, displayName.trim());
+        onAuthSuccess();
+      } catch (err: any) {
+        const msg = err?.message || 'Une erreur est survenue.';
+        if (msg === 'EMAIL_CONFIRMATION_REQUIRED') {
+          setSuccessMessage('Inscription réussie ! Veuillez vérifier vos emails pour confirmer votre compte avant de vous connecter.');
+          setMode('login');
+        } else {
+          setError(msg);
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
+    
+    setPendingAction(null);
   };
 
   return (
@@ -296,26 +322,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
                 )}
               </button>
             </form>
-
-            {/* Case à cocher Politiques de confidentialité - Pour inscription uniquement */}
-            {mode === 'register' && (
-              <div className="flex items-start gap-3 p-3 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl animate-fade-in-up" style={{ animationDelay: '0.45s' }}>
-                <input
-                  type="checkbox"
-                  id="privacy-policy"
-                  checked={acceptedPrivacy}
-                  onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 text-[var(--theme-bg-accent)] bg-[var(--theme-bg-primary)] border-[var(--theme-border-primary)] rounded focus:ring-2 focus:ring-[var(--theme-bg-accent)]/30 cursor-pointer"
-                />
-                <label htmlFor="privacy-policy" className="text-xs text-[var(--theme-text-secondary)] leading-relaxed cursor-pointer">
-                  J'accepte les{' '}
-                  <a href="/privacy-policy" target="_blank" className="text-[var(--theme-bg-accent)] hover:underline font-semibold">
-                    politiques de confidentialité
-                  </a>
-                  {' '}et je comprends que mes données seront traitées de manière sécurisée.
-                </label>
-              </div>
-            )}
 
             {/* Séparateur */}
             <div className="relative flex items-center py-2 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
