@@ -297,9 +297,11 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 relative ${activeTab === 'profile' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
             <User className="w-4 h-4" /> PROFIL
-            {/* Pastille de notification si profil incomplet */}
+            {/* Badge de notification si profil incomplet */}
             {isProfileIncomplete && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-[var(--theme-bg-primary)] rounded-full animate-pulse"></span>
+              <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] font-black rounded-full border-2 border-[var(--theme-bg-primary)] shadow-lg animate-pulse">
+                !
+              </span>
             )}
           </button>
         </nav>
@@ -842,9 +844,11 @@ RÈGLES DE COMPORTEMENT :
         >
           <div className="p-2 rounded-xl transition-all duration-300 relative">
             <User className="w-5 h-5" />
-            {/* Pastille de notification si profil incomplet */}
+            {/* Badge de notification si profil incomplet */}
             {isProfileIncomplete && (
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 border-2 border-[var(--theme-bg-primary)] rounded-full animate-pulse"></span>
+              <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full border-2 border-[var(--theme-bg-primary)] shadow-lg animate-pulse">
+                !
+              </span>
             )}
           </div>
           <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Profil</span>
