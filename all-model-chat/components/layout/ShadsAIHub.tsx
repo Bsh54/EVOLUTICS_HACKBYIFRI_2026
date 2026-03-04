@@ -597,12 +597,12 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
                   <div className="lg:col-span-1">
                     {/* PC: Reste centré et fixe au scroll dans sa colonne | Mobile: Suit le flux du texte */}
-                    <div className="lg:sticky lg:top-[25%] space-y-4 w-full max-w-sm mx-auto lg:ml-auto mt-12 lg:mt-0 z-50">
+                    <div className="lg:sticky lg:top-[25%] space-y-3 w-full max-w-xs mx-auto lg:ml-auto lg:mr-8 mt-12 lg:mt-0 z-50">
                       <button
                         onClick={(e) => toggleFavorite(e, selectedOpp.id)}
-                        className={`w-full flex items-center justify-center gap-3 py-4 rounded-[2rem] font-black uppercase tracking-widest transition-all border-2 ${favorites.includes(selectedOpp.id) ? 'bg-red-500 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]' : 'bg-transparent border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] hover:border-red-500 hover:text-red-500'}`}
+                        className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-bold uppercase tracking-wide transition-all border-2 text-sm ${favorites.includes(selectedOpp.id) ? 'bg-red-500 border-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]' : 'bg-transparent border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] hover:border-red-500 hover:text-red-500'}`}
                       >
-                        <Heart className={`w-6 h-6 ${favorites.includes(selectedOpp.id) ? 'fill-current' : ''}`} />
+                        <Heart className={`w-5 h-5 ${favorites.includes(selectedOpp.id) ? 'fill-current' : ''}`} />
                         {favorites.includes(selectedOpp.id) ? 'ENREGISTRÉ' : 'SAUVEGARDER'}
                       </button>
                       <button
@@ -616,9 +616,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                             }
                           }
                         }}
-                        className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight"
+                        className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-bold py-3 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group active:scale-95 text-sm uppercase tracking-tight"
                       >
-                        {selectedOpp.contactEmail ? 'POSTULER PAR EMAIL' : 'POSTULER MAINTENANT'} <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                        {selectedOpp.contactEmail ? 'POSTULER PAR EMAIL' : 'POSTULER MAINTENANT'} <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                       </button>
                       <button
                         onClick={() => {
@@ -720,9 +720,9 @@ RÈGLES DE COMPORTEMENT :
                             navigateToTab('chat');
                           }
                         }}
-                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
+                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-bold py-3 rounded-xl hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-2 group text-sm uppercase tracking-tight"
                       >
-                        PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
+                        PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
                       {/* Bouton GÉNÉRER DOCUMENTS - Uniquement pour Emploi, Stage et Bourse */}
                       {(selectedOpp.type === 'Emploi' || selectedOpp.type === 'Stage' || selectedOpp.type === 'Bourse') && (
@@ -731,9 +731,9 @@ RÈGLES DE COMPORTEMENT :
                             setSelectedOpportunityForModal(selectedOpp);
                             setIsDocumentModalOpen(true);
                           }}
-                          className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
+                          className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold py-3 rounded-xl shadow-xl transition-all flex items-center justify-center gap-2 group text-sm uppercase tracking-tight"
                         >
-                          GÉNÉRER DOCUMENTS <FileText className="w-5 h-5 md:w-6 h-6 group-hover:scale-110 transition-transform" />
+                          GÉNÉRER DOCUMENTS <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         </button>
                       )}
                     </div>
