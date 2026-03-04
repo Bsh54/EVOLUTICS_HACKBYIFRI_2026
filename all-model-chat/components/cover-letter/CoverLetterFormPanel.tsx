@@ -211,14 +211,6 @@ const CoverLetterFormPanel: React.FC<CoverLetterFormPanelProps> = ({
           )}
         </button>
       </div>
-
-      {hasContent && (
-        <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-3 text-center">
-          <p className="text-sm font-medium text-green-600 dark:text-green-400">
-            ✅ Lettre générée ! Vous pouvez la modifier à droite
-          </p>
-        </div>
-      )}
     </div>
   );
 };
