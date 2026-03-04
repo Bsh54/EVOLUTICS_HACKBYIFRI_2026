@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { UserProfile } from '../../types/user';
 
 interface LetterFormData {
@@ -25,27 +25,30 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
   onContentChange
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const lastContentRef = useRef<string>('');
 
-  // Synchroniser le contenu uniquement quand il change de l'extérieur (génération)
+  // Mettre à jour le contenu uniquement quand il change vraiment (génération)
   useEffect(() => {
-    if (contentRef.current && !isEditing) {
+    if (contentRef.current && content !== lastContentRef.current) {
+      lastContentRef.current = content;
       contentRef.current.textContent = content;
     }
-  }, [content, isEditing]);
+  }, [content]);
 
-  const handleInput = () => {
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     if (contentRef.current) {
-      onContentChange(contentRef.current.textContent || '');
+      const newContent = contentRef.current.textContent || '';
+      lastContentRef.current = newContent;
+      onContentChange(newContent);
     }
   };
 
-  const handleFocus = () => {
-    setIsEditing(true);
-  };
-
-  const handleBlur = () => {
-    setIsEditing(false);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    // Permettre tous les événements clavier normaux
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.execCommand('insertText', false, '\n');
+    }
   };
 
   if (!content) {
@@ -67,11 +70,10 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
       <div
         id="letter-preview"
         ref={contentRef}
-        contentEditable
-        suppressContentEditableWarning
+        contentEditable={true}
+        suppressContentEditableWarning={true}
         onInput={handleInput}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
         spellCheck={false}
         className="w-full bg-white rounded-lg shadow-2xl p-12 min-h-[297mm] text-black outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text"
         style={{ 
@@ -81,11 +83,10 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
           color: '#000000',
           whiteSpace: 'pre-wrap',
           wordWrap: 'break-word',
-          overflowWrap: 'break-word'
+          overflowWrap: 'break-word',
+          WebkitUserModify: 'read-write-plaintext-only'
         }}
-      >
-        {content}
-      </div>
+      />
     </div>
   );
 };
