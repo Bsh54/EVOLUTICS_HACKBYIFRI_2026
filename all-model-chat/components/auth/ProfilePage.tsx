@@ -206,66 +206,29 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ profile, onBack, onSignOut, o
           !profile.skills || profile.skills.length === 0 ||
           !profile.current_position ||
           profile.experience_years === undefined || profile.experience_years === null) && (
-          <div className="relative bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-950/20 dark:to-red-950/20 border-2 border-orange-400/40 rounded-3xl p-6 overflow-hidden shadow-lg">
-            {/* Motif de fond */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-orange-400/5 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-400/5 rounded-full blur-3xl"></div>
-            
-            <div className="relative flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shrink-0 shadow-md">
-                <Sparkles className="w-5 h-5 text-white" />
+          <div className="bg-orange-50 dark:bg-orange-950/30 border-l-4 border-orange-500 p-5 rounded-lg shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <div className="flex-1 space-y-3">
-                <h3 className="text-lg font-black text-gray-900 dark:text-white">
-                  Complétez votre profil
+              <div className="flex-1">
+                <h3 className="text-base font-bold text-orange-900 dark:text-orange-100 mb-2">
+                  Profil incomplet
                 </h3>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Renseignez vos informations pour des recommandations IA personnalisées.
+                <p className="text-sm text-orange-800 dark:text-orange-200 mb-3">
+                  Complétez ces informations pour bénéficier de recommandations personnalisées.
                 </p>
-                
-                {/* Champs manquants en badges compacts */}
-                <div className="flex flex-wrap gap-2">
-                  {!profile.university && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Établissement
-                    </span>
-                  )}
-                  {!profile.field_of_study && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Domaine
-                    </span>
-                  )}
-                  {!profile.education_level && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Niveau
-                    </span>
-                  )}
-                  {!profile.graduation_year && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Année
-                    </span>
-                  )}
-                  {(!profile.skills || profile.skills.length === 0) && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Compétences
-                    </span>
-                  )}
-                  {!profile.current_position && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Poste
-                    </span>
-                  )}
-                  {(profile.experience_years === undefined || profile.experience_years === null) && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-orange-300 dark:border-orange-700 rounded-full text-xs font-semibold text-orange-700 dark:text-orange-400">
-                      <X className="w-3 h-3" /> Expérience
-                    </span>
-                  )}
+                <div className="flex flex-wrap gap-2 text-xs">
+                  {!profile.university && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Établissement</span>}
+                  {!profile.field_of_study && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Domaine</span>}
+                  {!profile.education_level && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Niveau</span>}
+                  {!profile.graduation_year && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Année</span>}
+                  {(!profile.skills || profile.skills.length === 0) && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Compétences</span>}
+                  {!profile.current_position && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Poste</span>}
+                  {(profile.experience_years === undefined || profile.experience_years === null) && <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-orange-400 dark:border-orange-600 rounded text-orange-700 dark:text-orange-300 font-medium">Expérience</span>}
                 </div>
-                
-                {/* Message sécurité */}
-                <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1.5 pt-2">
-                  <span className="text-green-600 dark:text-green-400">🔒</span>
-                  Données sécurisées et confidentielles
+                <p className="text-xs text-orange-700 dark:text-orange-300 mt-3 flex items-center gap-1">
+                  <span>🔒</span> Vos données sont sécurisées
                 </p>
               </div>
             </div>
