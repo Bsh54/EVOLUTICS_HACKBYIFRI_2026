@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, FileText, MessageSquare, ArrowRight } from 'lucide-react';
 
 interface DocumentGeneratorModalProps {
@@ -16,18 +16,57 @@ const DocumentGeneratorModal: React.FC<DocumentGeneratorModalProps> = ({
   onSelectCoverLetter,
   opportunityTitle
 }) => {
+  const [showCards, setShowCards] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Délai pour l'animation des cartes après l'ouverture du modal
+      const timer = setTimeout(() => setShowCards(true), 150);
+      return () => clearTimeout(timer);
+    } else {
+      setShowCards(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200">
-      {/* Backdrop */}
+    <>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+      `}</style>
+      
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      {/* Backdrop avec animation */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ease-out"
+        style={{ animation: 'fadeIn 0.3s ease-out' }}
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative bg-[var(--theme-bg-primary)] rounded-[2.5rem] shadow-2xl max-w-4xl w-full border border-[var(--theme-border-primary)] animate-in zoom-in-95 duration-300 overflow-hidden">
+      {/* Modal avec animation */}
+      <div 
+        className="relative bg-[var(--theme-bg-primary)] rounded-[2.5rem] shadow-2xl max-w-4xl w-full border border-[var(--theme-border-primary)] overflow-hidden"
+        style={{ animation: 'modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+      >
         {/* Close button */}
         <button
           onClick={onClose}
@@ -45,7 +84,13 @@ const DocumentGeneratorModal: React.FC<DocumentGeneratorModalProps> = ({
                 onSelectCV();
                 onClose();
               }}
-              className="group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-[var(--theme-bg-accent)]/40 transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
+              className={`group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-[var(--theme-bg-accent)]/40 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 ${
+                showCards ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ 
+                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: showCards ? '0.1s' : '0s'
+              }}
             >
               {/* Image avec dégradé */}
               <div className="h-48 relative overflow-hidden">
@@ -93,7 +138,13 @@ const DocumentGeneratorModal: React.FC<DocumentGeneratorModalProps> = ({
                 onSelectCoverLetter();
                 onClose();
               }}
-              className="group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-purple-600/40 transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
+              className={`group flex flex-col bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-secondary)] rounded-[2.5rem] overflow-hidden cursor-pointer hover:border-purple-600/40 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 ${
+                showCards ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ 
+                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: showCards ? '0.25s' : '0s'
+              }}
             >
               {/* Image avec dégradé */}
               <div className="h-48 relative overflow-hidden">
@@ -138,6 +189,7 @@ const DocumentGeneratorModal: React.FC<DocumentGeneratorModalProps> = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 
