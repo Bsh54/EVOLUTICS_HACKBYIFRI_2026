@@ -12,10 +12,9 @@ interface UseAppTitleProps {
 export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: UseAppTitleProps) => {
     const [generationTime, setGenerationTime] = useState(0);
 
-    // Determine the start time of the current generation for accurate timing across renders/tabs
+    // trouver le temps de début de génération
     const currentGenerationStartTime = useMemo(() => {
         if (!isLoading) return null;
-        // Find the loading message (usually near the end)
         for (let i = messages.length - 1; i >= 0; i--) {
             const m = messages[i];
             if ((m.role === 'model' || m.role === 'error') && m.isLoading) {
@@ -25,14 +24,14 @@ export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: Use
         return null;
     }, [messages, isLoading]);
 
-    // Update timer
+    // timer update
     useEffect(() => {
         let intervalId: number;
         if (currentGenerationStartTime) {
             const update = () => {
                 setGenerationTime(Math.max(0, Math.floor((Date.now() - currentGenerationStartTime) / 1000)));
             };
-            update(); // Initial update
+            update();
             intervalId = window.setInterval(update, 1000);
         } else {
             setGenerationTime(0);
@@ -40,7 +39,7 @@ export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: Use
         return () => clearInterval(intervalId);
     }, [currentGenerationStartTime]);
 
-    // Apply to Document Title
+    // mettre à jour le titre du document
     useEffect(() => {
         const updateTitle = () => {
             let statusPrefix = '';
@@ -49,7 +48,6 @@ export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: Use
                 statusPrefix = (language === 'zh' ? `Génération${timeDisplay}... | ` : `Generating${timeDisplay}... | `);
             }
             
-            // If the title is generic or empty, append app name for context
             const suffix = sessionTitle === 'EVOLUTICS' ? '' : ' • EVOLUTICS';
             const cleanTitle = sessionTitle || 'New Chat';
 
@@ -58,7 +56,7 @@ export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: Use
 
         updateTitle();
 
-        // Restore title when user returns to the tab (fixing issues where notifications overwrote it)
+        // restaurer le titre quand l'utilisateur revient sur l'onglet
         const handleVisibilityChange = () => {
             if (!document.hidden) {
                 updateTitle();
