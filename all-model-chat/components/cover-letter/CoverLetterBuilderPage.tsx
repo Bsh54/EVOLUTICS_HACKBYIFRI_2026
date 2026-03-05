@@ -116,6 +116,14 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
         companyInfo: formData.companyInfo
       });
 
+      console.log('🎉 [CoverLetterBuilder] Contenu généré par l\'IA:', {
+        length: content.length,
+        firstChars: content.substring(0, 100),
+        hasNewlines: content.includes('\n'),
+        startsWithSpace: content.startsWith(' '),
+        charCodeFirst: content.charCodeAt(0)
+      });
+
       setGeneratedContent(content);
 
       toast.update(toastId, {

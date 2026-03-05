@@ -27,21 +27,43 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
 
   // Synchroniser avec le contenu généré
   useEffect(() => {
+    console.log('🔍 [CoverLetterPreview] Content reçu:', {
+      contentLength: content?.length,
+      firstChars: content?.substring(0, 50),
+      hasRef: !!contentRef.current
+    });
+
     if (content && contentRef.current) {
       isUpdatingFromProp.current = true;
       
+      console.log('🧹 [CoverLetterPreview] Nettoyage du DOM...');
       // Vider d'abord le contenu
       contentRef.current.innerHTML = '';
       
       // Attendre un tick pour que le DOM soit nettoyé
       requestAnimationFrame(() => {
         if (contentRef.current) {
+          const htmlContent = content.replace(/\n/g, '<br>');
+          console.log('📝 [CoverLetterPreview] Insertion du contenu:', {
+            originalLength: content.length,
+            htmlLength: htmlContent.length,
+            firstCharsOriginal: content.substring(0, 50),
+            firstCharsHTML: htmlContent.substring(0, 50)
+          });
+          
           // Insérer le nouveau contenu avec les sauts de ligne convertis en <br>
-          contentRef.current.innerHTML = content.replace(/\n/g, '<br>');
+          contentRef.current.innerHTML = htmlContent;
+          
+          console.log('✅ [CoverLetterPreview] Contenu inséré dans le DOM:', {
+            innerHTML: contentRef.current.innerHTML.substring(0, 100),
+            innerText: contentRef.current.innerText.substring(0, 100),
+            textContent: contentRef.current.textContent?.substring(0, 100)
+          });
           
           // Remettre le flag après un court délai
           setTimeout(() => {
             isUpdatingFromProp.current = false;
+            console.log('🔓 [CoverLetterPreview] Flag de mise à jour désactivé');
           }, 50);
         }
       });
@@ -49,10 +71,17 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
   }, [content]);
 
   const handleInput = () => {
-    if (isUpdatingFromProp.current || !contentRef.current) return;
+    if (isUpdatingFromProp.current || !contentRef.current) {
+      console.log('⏸️ [CoverLetterPreview] Input ignoré (mise à jour en cours)');
+      return;
+    }
     
     // Récupérer le texte brut (innerText préserve les sauts de ligne)
     const newContent = contentRef.current.innerText || '';
+    console.log('✏️ [CoverLetterPreview] Contenu modifié par l\'utilisateur:', {
+      length: newContent.length,
+      firstChars: newContent.substring(0, 50)
+    });
     onContentChange(newContent);
   };
 
