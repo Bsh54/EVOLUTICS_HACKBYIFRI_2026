@@ -175,6 +175,24 @@ export const useChatStreamHandler = ({
             let chunkText = "";
             if (anyPart.text) {
                 chunkText = anyPart.text;
+                
+                // Correction du premier chunk si tronqué (problème DeepSeek)
+                if (accumulatedText === '' && chunkText.length > 0) {
+                    console.log('🔍 [ChatStream] Premier chunk reçu:', {
+                        text: chunkText.substring(0, 50),
+                        charCode: chunkText.charCodeAt(0),
+                        length: chunkText.length
+                    });
+                    
+                    // Vérifier si le premier caractère est une minuscule (signe de troncature)
+                    const firstChar = chunkText.charAt(0);
+                    if (firstChar === firstChar.toLowerCase() && firstChar !== firstChar.toUpperCase()) {
+                        console.warn('⚠️ [ChatStream] Premier chunk semble tronqué (commence par minuscule)');
+                        // On ne peut pas corriger automatiquement ici car on ne connaît pas le contexte
+                        // Mais on log pour le débogage
+                    }
+                }
+                
                 accumulatedText += chunkText;
                 streamingStore.updateContent(generationId, chunkText);
             }
