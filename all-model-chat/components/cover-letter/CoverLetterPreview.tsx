@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { UserProfile } from '../../types/user';
 
 interface LetterFormData {
@@ -20,48 +20,57 @@ interface CoverLetterPreviewProps {
 
 const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
   content,
-  formData,
-  profile,
   onContentChange
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const lastContentRef = useRef<string>('');
+  const isUpdatingFromProp = useRef(false);
 
-  // Mettre à jour le contenu uniquement quand il change vraiment (génération)
+  // Synchroniser avec le contenu généré
   useEffect(() => {
-    if (contentRef.current && content !== lastContentRef.current) {
-      lastContentRef.current = content;
-      // Petit délai pour s'assurer que le DOM est prêt
-      setTimeout(() => {
+    if (content && contentRef.current) {
+      isUpdatingFromProp.current = true;
+      
+      // Vider d'abord le contenu
+      contentRef.current.innerHTML = '';
+      
+      // Attendre un tick pour que le DOM soit nettoyé
+      requestAnimationFrame(() => {
         if (contentRef.current) {
-          contentRef.current.textContent = content;
-          // Forcer le curseur au début
-          const range = document.createRange();
-          const sel = window.getSelection();
-          if (contentRef.current.firstChild) {
-            range.setStart(contentRef.current.firstChild, 0);
-            range.collapse(true);
-            sel?.removeAllRanges();
-            sel?.addRange(range);
-          }
+          // Insérer le nouveau contenu avec les sauts de ligne convertis en <br>
+          contentRef.current.innerHTML = content.replace(/\n/g, '<br>');
+          
+          // Remettre le flag après un court délai
+          setTimeout(() => {
+            isUpdatingFromProp.current = false;
+          }, 50);
         }
-      }, 10);
+      });
     }
   }, [content]);
 
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    if (contentRef.current) {
-      const newContent = contentRef.current.textContent || '';
-      lastContentRef.current = newContent;
-      onContentChange(newContent);
-    }
+  const handleInput = () => {
+    if (isUpdatingFromProp.current || !contentRef.current) return;
+    
+    // Récupérer le texte brut (innerText préserve les sauts de ligne)
+    const newContent = contentRef.current.innerText || '';
+    onContentChange(newContent);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    // Permettre tous les événements clavier normaux
     if (e.key === 'Enter') {
       e.preventDefault();
-      document.execCommand('insertText', false, '\n');
+      // Insérer un saut de ligne
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        const br = document.createElement('br');
+        range.insertNode(br);
+        range.setStartAfter(br);
+        range.setEndAfter(br);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
   };
 
@@ -95,12 +104,9 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
           fontSize: '14px', 
           lineHeight: '1.8',
           color: '#000000',
-          whiteSpace: 'pre-wrap',
-          wordWrap: 'break-word',
-          overflowWrap: 'break-word',
-          WebkitUserModify: 'read-write-plaintext-only',
           height: '297mm',
           maxHeight: '297mm',
+          minHeight: '297mm',
           padding: '48px',
           boxSizing: 'border-box'
         }}
