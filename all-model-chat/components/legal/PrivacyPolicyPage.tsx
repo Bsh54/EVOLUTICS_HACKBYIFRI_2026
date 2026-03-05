@@ -422,6 +422,7 @@ const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onBack }) => {
           </div>
         </div>
 
+        </div>
       </div>
     </div>
   );
