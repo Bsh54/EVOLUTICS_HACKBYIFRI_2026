@@ -87,7 +87,7 @@ const AppContent: React.FC = () => {
     return (
       <PrivacyPolicyPage 
         onBack={() => {
-          window.history.back();
+          window.location.href = '/';
         }}
       />
     );
