@@ -146,8 +146,6 @@ export class DeepSeekService {
 
       const decoder = new TextDecoder();
       let buffer = '';
-      let isFirstChunk = true;
-      let firstChunkBuffer = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -164,49 +162,8 @@ export class DeepSeekService {
 
             try {
               const parsed = JSON.parse(data);
-              let content = parsed.choices?.[0]?.delta?.content;
-              
+              const content = parsed.choices?.[0]?.delta?.content;
               if (content) {
-                // Correction du premier chunk si tronqué
-                if (isFirstChunk) {
-                  isFirstChunk = false;
-                  firstChunkBuffer = content;
-                  
-                  // Vérifier si le premier caractère est une minuscule (signe de troncature)
-                  const firstChar = content.charAt(0);
-                  if (firstChar === firstChar.toLowerCase() && firstChar !== firstChar.toUpperCase() && /[a-z]/.test(firstChar)) {
-                    console.warn('⚠️ [DeepSeek] Premier chunk tronqué détecté:', content.substring(0, 20));
-                    
-                    // Essayer de deviner le mot complet basé sur les mots français courants
-                    const commonStarts: { [key: string]: string } = {
-                      'onjour': 'B',
-                      'erci': 'M',
-                      'alut': 'S',
-                      'ien': 'B',
-                      'our': 'Bonj',
-                      'jour': 'Bon',
-                      'onsoir': 'B',
-                      'avo': 'Br',
-                      'ravo': 'B',
-                      'xcellent': 'E',
-                      'arfait': 'P',
-                      'ertainement': 'C',
-                      'olontiers': 'V',
-                      'vec': 'A',
-                      'laisir': 'P'
-                    };
-                    
-                    // Chercher une correspondance
-                    for (const [partial, prefix] of Object.entries(commonStarts)) {
-                      if (content.startsWith(partial)) {
-                        content = prefix + content;
-                        console.log('✅ [DeepSeek] Correction appliquée:', content.substring(0, 20));
-                        break;
-                      }
-                    }
-                  }
-                }
-                
                 onChunk(content);
               }
             } catch (e) {

@@ -184,12 +184,50 @@ export const useChatStreamHandler = ({
                         length: chunkText.length
                     });
                     
-                    // Vérifier si le premier caractère est une minuscule (signe de troncature)
-                    const firstChar = chunkText.charAt(0);
-                    if (firstChar === firstChar.toLowerCase() && firstChar !== firstChar.toUpperCase()) {
-                        console.warn('⚠️ [ChatStream] Premier chunk semble tronqué (commence par minuscule)');
-                        // On ne peut pas corriger automatiquement ici car on ne connaît pas le contexte
-                        // Mais on log pour le débogage
+                    // Dictionnaire des mots tronqués courants et leurs corrections
+                    const truncationFixes: { [key: string]: string } = {
+                        'jour': 'Bonjour',
+                        'onjour': 'Bonjour',
+                        'alut': 'Salut',
+                        'ien sûr': 'Bien sûr',
+                        'ien': 'Bien',
+                        'vec plaisir': 'Avec plaisir',
+                        'olontiers': 'Volontiers',
+                        'xcellent': 'Excellent',
+                        'arfait': 'Parfait',
+                        'ntendu': 'Entendu',
+                        'accord': "D'accord",
+                        'e comprends': 'Je comprends',
+                        'e vais': 'Je vais',
+                        'e peux': 'Je peux',
+                        'e suis': 'Je suis',
+                        'oici': 'Voici',
+                        'oilà': 'Voilà',
+                        'our': 'Pour',
+                        'rès bien': 'Très bien'
+                    };
+                    
+                    // Vérifier si le chunk correspond à un mot tronqué connu
+                    let corrected = false;
+                    for (const [truncated, full] of Object.entries(truncationFixes)) {
+                        if (chunkText.toLowerCase().startsWith(truncated.toLowerCase())) {
+                            const remainder = chunkText.substring(truncated.length);
+                            chunkText = full + remainder;
+                            console.log(`🔧 [ChatStream] Correction appliquée: "${truncated}" → "${full}"`);
+                            corrected = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!corrected) {
+                        // Vérifier si le premier caractère est une minuscule (signe de troncature)
+                        const firstChar = chunkText.charAt(0);
+                        if (firstChar === firstChar.toLowerCase() && firstChar !== firstChar.toUpperCase()) {
+                            console.warn('⚠️ [ChatStream] Premier chunk semble tronqué (commence par minuscule)');
+                            // Mettre en majuscule le premier caractère comme solution de secours
+                            chunkText = firstChar.toUpperCase() + chunkText.substring(1);
+                            console.log(`🔧 [ChatStream] Majuscule appliquée: "${firstChar}" → "${firstChar.toUpperCase()}"`);
+                        }
                     }
                 }
                 
