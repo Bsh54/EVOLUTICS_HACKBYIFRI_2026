@@ -169,9 +169,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         <div className="relative z-10 p-12">
             <button
               onClick={onBackToLanding}
-              className="bg-white/10 backdrop-blur-md w-fit px-6 py-3 rounded-2xl border border-white/20 shadow-xl hover:bg-white/20 transition-all duration-300 hover:scale-105 group"
+              className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-xl hover:bg-white/20 transition-all duration-300 hover:scale-105 group"
             >
-                <EvoluticsLogo className="h-16 group-hover:scale-105 transition-transform duration-300" />
+                <svg className="w-5 h-5 text-white group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <EvoluticsLogo className="h-12" />
+                <span className="text-white font-bold text-sm uppercase tracking-wider">Retour</span>
             </button>
         </div>
 
@@ -202,9 +206,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
             <div className="lg:hidden flex items-center justify-center mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                <button
                  onClick={onBackToLanding}
-                 className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] shadow-sm px-4 py-2 rounded-2xl hover:bg-[var(--theme-bg-tertiary)] transition-all duration-300 hover:scale-105 group"
+                 className="flex items-center gap-2 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] shadow-sm px-4 py-2 rounded-2xl hover:bg-[var(--theme-bg-tertiary)] transition-all duration-300 hover:scale-105 group"
                >
-                  <EvoluticsLogo className="h-10 group-hover:scale-105 transition-transform duration-300" />
+                  <svg className="w-4 h-4 text-[var(--theme-text-secondary)] group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  <EvoluticsLogo className="h-8" />
+                  <span className="text-[var(--theme-text-secondary)] font-bold text-xs uppercase tracking-wider">Retour</span>
                </button>
             </div>
 
@@ -370,77 +378,69 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
       {/* Modal Politiques de Confidentialité */}
       {showPrivacyModal && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-[var(--theme-bg-primary)] rounded-2xl shadow-2xl max-w-md w-full border border-[var(--theme-border-primary)] animate-in zoom-in-95 duration-300">
+          <div className="bg-[var(--theme-bg-secondary)] rounded-[2.5rem] shadow-2xl max-w-lg w-full border-2 border-[var(--theme-border-primary)] animate-in zoom-in-95 duration-300">
             {/* Header */}
-            <div className="p-6 border-b border-[var(--theme-border-primary)]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-8 pb-6 border-b border-[var(--theme-border-primary)]">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center shadow-lg flex-shrink-0">
+                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-text-primary)]">
-                  Politiques de Confidentialité
-                </h3>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-black tracking-tight text-[var(--theme-text-primary)] mb-2">
+                    Politiques de Confidentialité
+                  </h3>
+                  <p className="text-sm text-[var(--theme-text-secondary)] font-medium leading-relaxed">
+                    Avant de continuer, veuillez accepter nos conditions
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-4">
-              <p className="text-sm text-[var(--theme-text-secondary)] leading-relaxed">
-                Avant de continuer, veuillez prendre connaissance de nos politiques de confidentialité et accepter les conditions suivantes :
-              </p>
-
-              <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-4 space-y-3 max-h-[200px] overflow-y-auto custom-scrollbar">
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
-                  <p className="text-xs text-[var(--theme-text-secondary)]">
-                    Vos données personnelles seront collectées et traitées de manière sécurisée
-                  </p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
-                  <p className="text-xs text-[var(--theme-text-secondary)]">
-                    Nous utilisons vos informations uniquement pour améliorer votre expérience
-                  </p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
-                  <p className="text-xs text-[var(--theme-text-secondary)]">
-                    Vos données ne seront jamais partagées avec des tiers sans votre consentement
-                  </p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0"></div>
-                  <p className="text-xs text-[var(--theme-text-secondary)]">
-                    Vous pouvez demander la suppression de vos données à tout moment
-                  </p>
-                </div>
+            <div className="p-8 space-y-6">
+              <div className="bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] rounded-2xl p-6 space-y-4 max-h-[240px] overflow-y-auto custom-scrollbar">
+                {[
+                  'Vos données personnelles seront collectées et traitées de manière sécurisée',
+                  'Nous utilisons vos informations uniquement pour améliorer votre expérience',
+                  'Vos données ne seront jamais partagées avec des tiers sans votre consentement',
+                  'Vous pouvez demander la suppression de vos données à tout moment'
+                ].map((text, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[var(--theme-bg-accent)]/10 flex items-center justify-center mt-0.5">
+                      <div className="w-2 h-2 rounded-full bg-[var(--theme-bg-accent)]" />
+                    </div>
+                    <p className="text-sm text-[var(--theme-text-primary)] font-medium leading-relaxed">
+                      {text}
+                    </p>
+                  </div>
+                ))}
               </div>
 
               <a 
                 href="/privacy-policy" 
                 target="_blank"
-                className="flex items-center gap-2 text-xs text-[var(--theme-bg-accent)] hover:underline font-semibold"
+                className="flex items-center justify-center gap-2 text-sm text-[var(--theme-bg-accent)] hover:text-[var(--theme-bg-accent-hover)] font-bold uppercase tracking-widest transition-all group"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
                 Lire les politiques complètes
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
               </a>
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-[var(--theme-border-primary)] flex gap-3">
+            <div className="p-8 pt-6 border-t border-[var(--theme-border-primary)] flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowPrivacyModal(false)}
-                className="flex-1 px-4 py-2.5 bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] rounded-xl font-semibold text-sm transition-all"
+                className="flex-1 px-6 py-3.5 bg-[var(--theme-bg-tertiary)] hover:bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] rounded-xl font-bold text-sm uppercase tracking-widest transition-all active:scale-[0.98]"
               >
                 Annuler
               </button>
               <button
                 onClick={handleAcceptPrivacy}
-                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg"
+                className="flex-1 px-6 py-3.5 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white rounded-xl font-black text-sm uppercase tracking-widest transition-all active:scale-[0.98] shadow-lg shadow-[var(--theme-bg-accent)]/25"
               >
                 Accepter et continuer
               </button>

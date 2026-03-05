@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowLeft, Shield, Lock, Eye, Database, UserCheck, FileText, AlertCircle, Mail } from 'lucide-react';
+import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 
 interface PrivacyPolicyPageProps {
   onBack: () => void;
@@ -9,418 +10,318 @@ const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onBack }) => {
   return (
     <div className="h-screen w-full flex flex-col bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden">
       {/* Header */}
-      <div className="flex-shrink-0 bg-[var(--theme-bg-secondary)] border-b border-[var(--theme-border-primary)] shadow-sm">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="flex-shrink-0 bg-[var(--theme-bg-secondary)] border-b-2 border-[var(--theme-border-primary)] shadow-sm">
+        <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] transition-all"
+            className="flex items-center gap-3 px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-widest text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-tertiary)] transition-all group"
           >
-            <ArrowLeft className="w-4 h-4" /> Retour
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Retour
           </button>
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-[var(--theme-bg-accent)]" />
-            <span className="text-sm font-bold text-[var(--theme-text-tertiary)]">Dernière mise à jour : Mars 2026</span>
+          <div className="flex items-center gap-3">
+            <EvoluticsLogo className="h-8" />
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-tertiary)] rounded-xl border border-[var(--theme-border-primary)]">
+              <Shield className="w-4 h-4 text-[var(--theme-bg-accent)]" />
+              <span className="text-xs font-bold text-[var(--theme-text-tertiary)] uppercase tracking-wider">Mars 2026</span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Content - Scrollable */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
-        <div className="max-w-4xl mx-auto px-6 py-10 space-y-8 pb-32">
+        <div className="max-w-5xl mx-auto px-6 py-12 space-y-12 pb-32">
         
-        {/* Hero */}
-        <div className="text-center space-y-4 pb-8 border-b border-[var(--theme-border-primary)]">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 mb-4">
-            <Shield className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-4xl font-black tracking-tight">
-            Politique de Confidentialité
-          </h1>
-          <p className="text-lg text-[var(--theme-text-secondary)] max-w-2xl mx-auto">
-            Chez EVOLUTICS, la protection de vos données personnelles est notre priorité absolue. 
-            Cette politique explique comment nous collectons, utilisons et protégeons vos informations.
-          </p>
-        </div>
-
-        {/* Section 1 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-blue-500" />
+          {/* Hero */}
+          <div className="text-center space-y-6 pb-10 border-b-2 border-[var(--theme-border-primary)]">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-[2rem] bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] shadow-xl shadow-[var(--theme-bg-accent)]/25">
+              <Shield className="w-10 h-10 text-white" />
             </div>
-            <h2 className="text-2xl font-bold">1. Informations que nous collectons</h2>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight">
+              Politique de Confidentialité
+            </h1>
+            <p className="text-lg text-[var(--theme-text-secondary)] font-medium max-w-3xl mx-auto leading-relaxed">
+              Chez EVOLUTICS, la protection de vos données personnelles est notre priorité absolue. 
+              Cette politique explique comment nous collectons, utilisons et protégeons vos informations.
+            </p>
           </div>
-          <div className="pl-13 space-y-4">
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5 space-y-3">
-              <h3 className="font-bold text-[var(--theme-text-primary)]">1.1 Informations fournies directement</h3>
-              <ul className="space-y-2 text-sm text-[var(--theme-text-secondary)]">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Informations de compte :</strong> Nom complet, adresse email, mot de passe (crypté)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Informations de profil :</strong> Université, domaine d'études, niveau d'études, année de diplôme, compétences, expérience professionnelle, poste actuel</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Documents :</strong> CV, lettres de motivation générés via notre plateforme</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Préférences :</strong> Types d'opportunités recherchées, localisations préférées</span>
-                </li>
+
+          {/* Section 1 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#3b82f6] to-[#2563eb] flex items-center justify-center shadow-lg">
+                <FileText className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">1. Informations que nous collectons</h2>
+            </div>
+            <div className="space-y-5">
+              <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 hover:border-[var(--theme-bg-accent)]/40 transition-all duration-300">
+                <h3 className="font-black text-xl mb-4 tracking-tight">1.1 Informations fournies directement</h3>
+                <ul className="space-y-3 text-sm text-[var(--theme-text-secondary)]">
+                  {[
+                    { label: 'Informations de compte', desc: 'Nom complet, adresse email, mot de passe (crypté)' },
+                    { label: 'Informations de profil', desc: 'Université, domaine d\'études, niveau d\'études, année de diplôme, compétences, expérience professionnelle, poste actuel' },
+                    { label: 'Documents', desc: 'CV, lettres de motivation générés via notre plateforme' },
+                    { label: 'Préférences', desc: 'Types d\'opportunités recherchées, localisations préférées' }
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[var(--theme-bg-accent)]/10 flex items-center justify-center mt-0.5">
+                        <div className="w-2 h-2 rounded-full bg-[var(--theme-bg-accent)]" />
+                      </div>
+                      <span className="font-medium"><strong className="text-[var(--theme-text-primary)]">{item.label} :</strong> {item.desc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 hover:border-[var(--theme-bg-accent)]/40 transition-all duration-300">
+                <h3 className="font-black text-xl mb-4 tracking-tight">1.2 Informations collectées automatiquement</h3>
+                <ul className="space-y-3 text-sm text-[var(--theme-text-secondary)]">
+                  {[
+                    { label: 'Données d\'utilisation', desc: 'Pages visitées, fonctionnalités utilisées, temps passé sur la plateforme' },
+                    { label: 'Données techniques', desc: 'Adresse IP, type de navigateur, système d\'exploitation, identifiant d\'appareil' },
+                    { label: 'Interactions avec l\'IA', desc: 'Conversations avec le coach carrière, requêtes de génération de documents' }
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[var(--theme-bg-accent)]/10 flex items-center justify-center mt-0.5">
+                        <div className="w-2 h-2 rounded-full bg-[var(--theme-bg-accent)]" />
+                      </div>
+                      <span className="font-medium"><strong className="text-[var(--theme-text-primary)]">{item.label} :</strong> {item.desc}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 2 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9] flex items-center justify-center shadow-lg">
+                <Eye className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">2. Comment nous utilisons vos données</h2>
+            </div>
+            <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8">
+              <ul className="space-y-5 text-sm text-[var(--theme-text-secondary)]">
+                {[
+                  { title: 'Personnalisation de l\'expérience', desc: 'Recommandations d\'opportunités adaptées à votre profil, suggestions de carrière personnalisées' },
+                  { title: 'Génération de contenu IA', desc: 'Création de CV et lettres de motivation personnalisés, coaching carrière adapté à votre situation' },
+                  { title: 'Amélioration du service', desc: 'Analyse des usages pour optimiser les fonctionnalités, correction de bugs, développement de nouvelles features' },
+                  { title: 'Communication', desc: 'Notifications sur les nouvelles opportunités, mises à jour importantes, support technique' },
+                  { title: 'Sécurité', desc: 'Prévention de la fraude, détection d\'activités suspectes, protection de votre compte' }
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-[var(--theme-bg-accent)]/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-sm font-black text-[var(--theme-bg-accent)]">{i + 1}</span>
+                    </div>
+                    <div>
+                      <strong className="text-[var(--theme-text-primary)] font-bold block mb-1">{item.title} :</strong>
+                      <p className="font-medium">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
+          </section>
 
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5 space-y-3">
-              <h3 className="font-bold text-[var(--theme-text-primary)]">1.2 Informations collectées automatiquement</h3>
-              <ul className="space-y-2 text-sm text-[var(--theme-text-secondary)]">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Données d'utilisation :</strong> Pages visitées, fonctionnalités utilisées, temps passé sur la plateforme</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Données techniques :</strong> Adresse IP, type de navigateur, système d'exploitation, identifiant d'appareil</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">•</span>
-                  <span><strong>Interactions avec l'IA :</strong> Conversations avec le coach carrière, requêtes de génération de documents</span>
-                </li>
-              </ul>
+          {/* Section 3 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center shadow-lg">
+                <Lock className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">3. Protection de vos données</h2>
             </div>
-          </div>
-        </section>
-
-        {/* Section 2 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
-              <Eye className="w-5 h-5 text-purple-500" />
-            </div>
-            <h2 className="text-2xl font-bold">2. Comment nous utilisons vos données</h2>
-          </div>
-          <div className="pl-13 space-y-3">
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5">
-              <ul className="space-y-3 text-sm text-[var(--theme-text-secondary)]">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-purple-500">1</span>
-                  </div>
-                  <div>
-                    <strong className="text-[var(--theme-text-primary)]">Personnalisation de l'expérience :</strong>
-                    <p className="mt-1">Recommandations d'opportunités adaptées à votre profil, suggestions de carrière personnalisées</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-purple-500">2</span>
-                  </div>
-                  <div>
-                    <strong className="text-[var(--theme-text-primary)]">Génération de contenu IA :</strong>
-                    <p className="mt-1">Création de CV et lettres de motivation personnalisés, coaching carrière adapté à votre situation</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-purple-500">3</span>
-                  </div>
-                  <div>
-                    <strong className="text-[var(--theme-text-primary)]">Amélioration du service :</strong>
-                    <p className="mt-1">Analyse des usages pour optimiser les fonctionnalités, correction de bugs, développement de nouvelles features</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-purple-500">4</span>
-                  </div>
-                  <div>
-                    <strong className="text-[var(--theme-text-primary)]">Communication :</strong>
-                    <p className="mt-1">Notifications sur les nouvelles opportunités, mises à jour importantes, support technique</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-purple-500">5</span>
-                  </div>
-                  <div>
-                    <strong className="text-[var(--theme-text-primary)]">Sécurité :</strong>
-                    <p className="mt-1">Prévention de la fraude, détection d'activités suspectes, protection de votre compte</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 3 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-              <Lock className="w-5 h-5 text-green-500" />
-            </div>
-            <h2 className="text-2xl font-bold">3. Protection de vos données</h2>
-          </div>
-          <div className="pl-13 space-y-3">
-            <div className="bg-gradient-to-br from-green-500/5 to-blue-500/5 border border-green-500/20 rounded-xl p-5 space-y-4">
-              <p className="text-sm text-[var(--theme-text-secondary)]">
+            <div className="bg-gradient-to-br from-[var(--theme-bg-secondary)] to-[var(--theme-bg-tertiary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-6">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles robustes :
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="flex items-start gap-2 text-sm">
-                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-green-600 dark:text-green-400">✓</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  'Cryptage SSL/TLS pour toutes les communications',
+                  'Mots de passe hashés avec bcrypt',
+                  'Hébergement sécurisé sur Supabase',
+                  'Sauvegardes régulières et automatiques',
+                  'Accès restreint aux données personnelles',
+                  'Surveillance continue des menaces'
+                ].map((text, i) => (
+                  <div key={i} className="flex items-start gap-3 text-sm">
+                    <div className="w-6 h-6 rounded-full bg-[#10b981]/20 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-[#10b981] font-bold text-xs">✓</span>
+                    </div>
+                    <span className="text-[var(--theme-text-primary)] font-medium">{text}</span>
                   </div>
-                  <span className="text-[var(--theme-text-secondary)]">Cryptage SSL/TLS pour toutes les communications</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm">
-                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-green-600 dark:text-green-400">✓</span>
-                  </div>
-                  <span className="text-[var(--theme-text-secondary)]">Mots de passe hashés avec bcrypt</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm">
-                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-green-600 dark:text-green-400">✓</span>
-                  </div>
-                  <span className="text-[var(--theme-text-secondary)]">Hébergement sécurisé sur Supabase</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm">
-                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-green-600 dark:text-green-400">✓</span>
-                  </div>
-                  <span className="text-[var(--theme-text-secondary)]">Sauvegardes régulières et automatiques</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm">
-                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-green-600 dark:text-green-400">✓</span>
-                  </div>
-                  <span className="text-[var(--theme-text-secondary)]">Accès restreint aux données personnelles</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm">
-                  <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-green-600 dark:text-green-400">✓</span>
-                  </div>
-                  <span className="text-[var(--theme-text-secondary)]">Surveillance continue des menaces</span>
-                </div>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Section 4 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
-              <Database className="w-5 h-5 text-orange-500" />
+          {/* Section 4 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center shadow-lg">
+                <Database className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">4. Partage de vos données</h2>
             </div>
-            <h2 className="text-2xl font-bold">4. Partage de vos données</h2>
-          </div>
-          <div className="pl-13 space-y-3">
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5 space-y-4">
-              <div className="flex items-start gap-3 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                <AlertCircle className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-[var(--theme-text-secondary)]">
-                  <strong className="text-orange-600 dark:text-orange-400">Principe fondamental :</strong> Nous ne vendons JAMAIS vos données personnelles à des tiers.
+            <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-6">
+              <div className="flex items-start gap-4 p-5 bg-[#f59e0b]/10 border-2 border-[#f59e0b]/30 rounded-2xl">
+                <AlertCircle className="w-6 h-6 text-[#f59e0b] shrink-0 mt-0.5" />
+                <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
+                  <strong className="text-[#f59e0b] font-black">Principe fondamental :</strong> Nous ne vendons JAMAIS vos données personnelles à des tiers.
                 </p>
               </div>
-              <p className="text-sm text-[var(--theme-text-secondary)]">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 Vos données peuvent être partagées uniquement dans les cas suivants :
               </p>
-              <ul className="space-y-2 text-sm text-[var(--theme-text-secondary)]">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">•</span>
-                  <span><strong>Avec votre consentement explicite :</strong> Lorsque vous postulez à une opportunité, nous partageons votre CV avec l'organisation concernée</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">•</span>
-                  <span><strong>Prestataires de services :</strong> Google (authentification OAuth), Gemini AI (génération de contenu), Supabase (hébergement base de données)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-500 mt-1">•</span>
-                  <span><strong>Obligations légales :</strong> Si requis par la loi ou pour protéger nos droits légaux</span>
-                </li>
+              <ul className="space-y-3 text-sm text-[var(--theme-text-secondary)]">
+                {[
+                  { label: 'Avec votre consentement explicite', desc: 'Lorsque vous postulez à une opportunité, nous partageons votre CV avec l\'organisation concernée' },
+                  { label: 'Prestataires de services', desc: 'Google (authentification OAuth), Gemini AI (génération de contenu), Supabase (hébergement base de données)' },
+                  { label: 'Obligations légales', desc: 'Si requis par la loi ou pour protéger nos droits légaux' }
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#f59e0b]/10 flex items-center justify-center mt-0.5">
+                      <div className="w-2 h-2 rounded-full bg-[#f59e0b]" />
+                    </div>
+                    <span className="font-medium"><strong className="text-[var(--theme-text-primary)]">{item.label} :</strong> {item.desc}</span>
+                  </li>
+                ))}
               </ul>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Section 5 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center">
-              <UserCheck className="w-5 h-5 text-pink-500" />
+          {/* Section 5 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ec4899] to-[#db2777] flex items-center justify-center shadow-lg">
+                <UserCheck className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">5. Vos droits</h2>
             </div>
-            <h2 className="text-2xl font-bold">5. Vos droits</h2>
-          </div>
-          <div className="pl-13 space-y-3">
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5">
-              <p className="text-sm text-[var(--theme-text-secondary)] mb-4">
+            <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-6">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 Conformément au RGPD et aux lois sur la protection des données, vous disposez des droits suivants :
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <strong className="text-sm text-[var(--theme-text-primary)]">Droit d'accès</strong>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {[
+                  { title: 'Droit d\'accès', desc: 'Consulter toutes les données que nous détenons sur vous' },
+                  { title: 'Droit de rectification', desc: 'Corriger ou mettre à jour vos informations personnelles' },
+                  { title: 'Droit à l\'effacement', desc: 'Demander la suppression de vos données personnelles' },
+                  { title: 'Droit à la portabilité', desc: 'Recevoir vos données dans un format structuré' },
+                  { title: 'Droit d\'opposition', desc: 'Vous opposer au traitement de vos données' },
+                  { title: 'Droit de limitation', desc: 'Limiter le traitement de vos données' }
+                ].map((item, i) => (
+                  <div key={i} className="space-y-2 p-4 bg-[var(--theme-bg-tertiary)] rounded-xl border border-[var(--theme-border-primary)]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-[#ec4899] rounded-full"></div>
+                      <strong className="text-sm text-[var(--theme-text-primary)] font-bold">{item.title}</strong>
+                    </div>
+                    <p className="text-xs text-[var(--theme-text-secondary)] font-medium pl-4">
+                      {item.desc}
+                    </p>
                   </div>
-                  <p className="text-xs text-[var(--theme-text-secondary)] pl-4">
-                    Consulter toutes les données que nous détenons sur vous
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <strong className="text-sm text-[var(--theme-text-primary)]">Droit de rectification</strong>
-                  </div>
-                  <p className="text-xs text-[var(--theme-text-secondary)] pl-4">
-                    Corriger ou mettre à jour vos informations personnelles
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <strong className="text-sm text-[var(--theme-text-primary)]">Droit à l'effacement</strong>
-                  </div>
-                  <p className="text-xs text-[var(--theme-text-secondary)] pl-4">
-                    Demander la suppression de vos données personnelles
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <strong className="text-sm text-[var(--theme-text-primary)]">Droit à la portabilité</strong>
-                  </div>
-                  <p className="text-xs text-[var(--theme-text-secondary)] pl-4">
-                    Recevoir vos données dans un format structuré
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <strong className="text-sm text-[var(--theme-text-primary)]">Droit d'opposition</strong>
-                  </div>
-                  <p className="text-xs text-[var(--theme-text-secondary)] pl-4">
-                    Vous opposer au traitement de vos données
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                    <strong className="text-sm text-[var(--theme-text-primary)]">Droit de limitation</strong>
-                  </div>
-                  <p className="text-xs text-[var(--theme-text-secondary)] pl-4">
-                    Limiter le traitement de vos données
-                  </p>
-                </div>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Section 6 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
-              <AlertCircle className="w-5 h-5 text-red-500" />
+          {/* Section 6 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ef4444] to-[#dc2626] flex items-center justify-center shadow-lg">
+                <AlertCircle className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">6. Cookies et technologies similaires</h2>
             </div>
-            <h2 className="text-2xl font-bold">6. Cookies et technologies similaires</h2>
-          </div>
-          <div className="pl-13 space-y-3">
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5 space-y-3">
-              <p className="text-sm text-[var(--theme-text-secondary)]">
+            <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-5">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 Nous utilisons des cookies et technologies similaires pour améliorer votre expérience :
               </p>
-              <ul className="space-y-2 text-sm text-[var(--theme-text-secondary)]">
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">•</span>
-                  <span><strong>Cookies essentiels :</strong> Nécessaires au fonctionnement de la plateforme (authentification, préférences)</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">•</span>
-                  <span><strong>Cookies analytiques :</strong> Pour comprendre comment vous utilisez notre service</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500 mt-1">•</span>
-                  <span><strong>Cookies de préférence :</strong> Pour mémoriser vos choix (thème, langue)</span>
-                </li>
+              <ul className="space-y-3 text-sm text-[var(--theme-text-secondary)]">
+                {[
+                  { label: 'Cookies essentiels', desc: 'Nécessaires au fonctionnement de la plateforme (authentification, préférences)' },
+                  { label: 'Cookies analytiques', desc: 'Pour comprendre comment vous utilisez notre service' },
+                  { label: 'Cookies de préférence', desc: 'Pour mémoriser vos choix (thème, langue)' }
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#ef4444]/10 flex items-center justify-center mt-0.5">
+                      <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
+                    </div>
+                    <span className="font-medium"><strong className="text-[var(--theme-text-primary)]">{item.label} :</strong> {item.desc}</span>
+                  </li>
+                ))}
               </ul>
-              <p className="text-xs text-[var(--theme-text-tertiary)] italic">
+              <p className="text-xs text-[var(--theme-text-tertiary)] italic font-medium pt-3 border-t border-[var(--theme-border-primary)]">
                 Vous pouvez gérer vos préférences de cookies dans les paramètres de votre navigateur.
               </p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Section 7 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-              <Mail className="w-5 h-5 text-indigo-500" />
+          {/* Section 7 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#4f46e5] flex items-center justify-center shadow-lg">
+                <Mail className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">7. Nous contacter</h2>
             </div>
-            <h2 className="text-2xl font-bold">7. Nous contacter</h2>
-          </div>
-          <div className="pl-13">
-            <div className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 border border-indigo-500/20 rounded-xl p-6 space-y-4">
-              <p className="text-sm text-[var(--theme-text-secondary)]">
+            <div className="bg-gradient-to-br from-[#6366f1]/10 to-[#8b5cf6]/10 border-2 border-[#6366f1]/30 rounded-[2rem] p-8 space-y-6">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits :
               </p>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-indigo-500" />
-                  <a href="mailto:privacy@evolutics.com" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-                    privacy@evolutics.com
-                  </a>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-indigo-500" />
-                  <a href="mailto:support@evolutics.com" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-                    support@evolutics.com
-                  </a>
-                </div>
+              <div className="space-y-4">
+                <a href="mailto:privacy@evolutics.com" className="flex items-center gap-3 p-4 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl hover:border-[#6366f1]/40 transition-all group">
+                  <Mail className="w-5 h-5 text-[#6366f1]" />
+                  <span className="text-sm font-bold text-[#6366f1] group-hover:underline">privacy@evolutics.com</span>
+                </a>
+                <a href="mailto:support@evolutics.com" className="flex items-center gap-3 p-4 bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl hover:border-[#6366f1]/40 transition-all group">
+                  <Mail className="w-5 h-5 text-[#6366f1]" />
+                  <span className="text-sm font-bold text-[#6366f1] group-hover:underline">support@evolutics.com</span>
+                </a>
               </div>
-              <p className="text-xs text-[var(--theme-text-tertiary)] pt-3 border-t border-indigo-500/20">
+              <p className="text-xs text-[var(--theme-text-tertiary)] font-medium pt-4 border-t border-[#6366f1]/20">
                 Nous nous engageons à répondre à toutes les demandes dans un délai de 30 jours maximum.
               </p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Section 8 */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-500/10 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-gray-500" />
+          {/* Section 8 */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#64748b] to-[#475569] flex items-center justify-center shadow-lg">
+                <FileText className="w-7 h-7 text-white" />
+              </div>
+              <h2 className="text-3xl font-black tracking-tight">8. Modifications de cette politique</h2>
             </div>
-            <h2 className="text-2xl font-bold">8. Modifications de cette politique</h2>
-          </div>
-          <div className="pl-13">
-            <div className="bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-xl p-5">
-              <p className="text-sm text-[var(--theme-text-secondary)]">
+            <div className="bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2rem] p-8 space-y-4">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 Nous pouvons mettre à jour cette politique de confidentialité périodiquement pour refléter les changements dans nos pratiques ou pour d'autres raisons opérationnelles, légales ou réglementaires. 
                 Nous vous informerons de tout changement significatif par email ou via une notification sur la plateforme.
               </p>
-              <p className="text-sm text-[var(--theme-text-secondary)] mt-3">
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium">
                 La date de dernière mise à jour est indiquée en haut de cette page.
               </p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Footer */}
-        <div className="pt-8 border-t border-[var(--theme-border-primary)]">
-          <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-blue-500/20 rounded-xl p-6 text-center space-y-3">
-            <Shield className="w-8 h-8 text-blue-500 mx-auto" />
-            <p className="text-sm font-semibold text-[var(--theme-text-primary)]">
-              Votre confiance est notre priorité
-            </p>
-            <p className="text-xs text-[var(--theme-text-secondary)] max-w-2xl mx-auto">
-              Nous nous engageons à protéger vos données personnelles et à respecter votre vie privée. 
-              Cette politique de confidentialité est conforme au RGPD et aux meilleures pratiques internationales.
-            </p>
+          {/* Footer */}
+          <div className="pt-10 border-t-2 border-[var(--theme-border-primary)]">
+            <div className="bg-gradient-to-br from-[var(--theme-bg-accent)]/10 to-[var(--theme-bg-accent-hover)]/10 border-2 border-[var(--theme-bg-accent)]/30 rounded-[2rem] p-10 text-center space-y-5">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] shadow-lg">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <p className="text-xl font-black text-[var(--theme-text-primary)] tracking-tight">
+                Votre confiance est notre priorité
+              </p>
+              <p className="text-sm text-[var(--theme-text-secondary)] font-medium max-w-2xl mx-auto leading-relaxed">
+                Nous nous engageons à protéger vos données personnelles et à respecter votre vie privée. 
+                Cette politique de confidentialité est conforme au RGPD et aux meilleures pratiques internationales.
+              </p>
+            </div>
           </div>
-        </div>
 
         </div>
       </div>

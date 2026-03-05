@@ -1,15 +1,15 @@
 
 export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="fr-FR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas 助手：响应式视觉指南</title>
+    <title>Assistant Canvas : Guide Visuel Responsive</title>
     
     <!-- 
-        【依赖引入策略】 
-        注意：仅在生成复杂图表（逻辑流、大数据统计）时才引入以下脚本。
-        简单列表、表格必须使用原生 HTML/CSS 实现，无需引入这些库。
+        【Stratégie d'importation des dépendances】 
+        Attention : N'importer les scripts suivants que lors de la génération de graphiques complexes (flux logiques, statistiques de données volumineuses).
+        Les listes simples et les tableaux doivent être implémentés en HTML/CSS natif, sans importer ces bibliothèques.
     -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
@@ -292,97 +292,97 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
 
 <div class="paper">
     <h1 class="main-title">
-        Canvas 助手：<span style="font-size: 0.8em; font-weight: 400; color: #555;">视觉风格强制规范</span>
+        Assistant Canvas : <span style="font-size: 0.8em; font-weight: 400; color: #555;">Normes de style visuel obligatoires</span>
     </h1>
 
     <div class="note-box">
-        <span class="note-label">CRITICAL RULES</span>
+        <span class="note-label">RÈGLES CRITIQUES</span>
         <ul class="rule-list">
-            <li><strong>输出格式：</strong> 禁止 Markdown 排版。必须返回包含 &lt;style&gt; 的完整 HTML，且必须包裹在代码块中。</li>
-            <li><strong>轻量化原则 (Zero-Dependency)：</strong> <span style="color: var(--accent-red); font-weight: 800;">默认严禁引入外部库 (Viz.js / ECharts)。</span></li>
+            <li><strong>Format de sortie :</strong> Markdown interdit. Doit retourner du HTML complet avec &lt;style&gt;, et doit être encapsulé dans un bloc de code.</li>
+            <li><strong>Principe de légèreté (Zero-Dependency) :</strong> <span style="color: var(--accent-red); font-weight: 800;">Par défaut, l'importation de bibliothèques externes (Viz.js / ECharts) est strictement interdite.</span></li>
             <li style="list-style: none;">
-                <span class="rule-sub-item">→ <strong>简单场景</strong>（键值对、表格、静态布局）：必须使用原生 HTML Table / Flexbox / Grid。</span>
-                <span class="rule-sub-item">→ <strong>复杂场景</strong>（逻辑流、大数据可视化）：仅在此类情况下才允许按需引入对应的 JS 库。</span>
+                <span class="rule-sub-item">→ <strong>Scénarios simples</strong> (paires clé-valeur, tableaux, mise en page statique) : Doit utiliser HTML Table / Flexbox / Grid natif.</span>
+                <span class="rule-sub-item">→ <strong>Scénarios complexes</strong> (flux logiques, visualisation de données volumineuses) : Uniquement dans ces cas, l'importation de bibliothèques JS correspondantes est autorisée.</span>
             </li>
         </ul>
     </div>
 
-    <div class="section-header">一、 元素映射表 (Element Mapping)</div>
+    <div class="section-header">I. Table de correspondance des éléments</div>
     
     <div class="component-grid">
         <div class="component-card">
-            <div class="header-row"><h4>容器与布局 (Native)</h4></div>
+            <div class="header-row"><h4>Conteneurs et mise en page (Natif)</h4></div>
             <ul class="styled-list">
-                <li>核心内容包裹在 <span class="blue-stamp">.paper</span> 中。</li>
-                <li><strong>响应式：</strong>使用 Flex/Grid 自适应宽度。</li>
-                <li><strong>移动端：</strong>卡片自动切换为单列堆叠。</li>
+                <li>Le contenu principal est encapsulé dans <span class="blue-stamp">.paper</span>.</li>
+                <li><strong>Responsive :</strong> Utilise Flex/Grid pour l'adaptation automatique de la largeur.</li>
+                <li><strong>Mobile :</strong> Les cartes passent automatiquement en empilement sur une seule colonne.</li>
             </ul>
         </div>
 
         <div class="component-card">
-            <div class="header-row"><h4>文本与标题 (Native)</h4></div>
+            <div class="header-row"><h4>Texte et titres (Natif)</h4></div>
             <ul class="styled-list">
-                <li>标题栏 <span class="blue-stamp">.section-header</span> 自动伸缩。</li>
-                <li>文字大小随屏幕宽度动态微调。</li>
-                <li>元数据使用样式类名进行自定义。</li>
+                <li>Barre de titre <span class="blue-stamp">.section-header</span> s'étire automatiquement.</li>
+                <li>La taille du texte s'ajuste dynamiquement selon la largeur de l'écran.</li>
+                <li>Les métadonnées utilisent des noms de classes de style personnalisés.</li>
             </ul>
         </div>
     </div>
 
-    <div class="section-header">二、 视觉调性 (Visual Tone)</div>
+    <div class="section-header">II. Tonalité visuelle</div>
 
     <div class="table-wrapper">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>色彩变量</th>
-                    <th>用途</th>
-                    <th>技术实现策略</th>
+                    <th>Variable de couleur</th>
+                    <th>Usage</th>
+                    <th>Stratégie d'implémentation technique</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><span class="red-stamp">--accent-red</span></td>
-                    <td>强调、警告</td>
-                    <td>原生 CSS border/color</td>
+                    <td>Emphase, avertissement</td>
+                    <td>CSS natif border/color</td>
                 </tr>
                 <tr>
                     <td><span class="blue-stamp">--accent-blue</span></td>
-                    <td>注释背景</td>
-                    <td>原生 CSS background</td>
+                    <td>Arrière-plan des annotations</td>
+                    <td>CSS natif background</td>
                 </tr>
                 <tr>
                     <td><span class="mobile-tag">Responsive</span></td>
-                    <td>布局逻辑</td>
-                    <td>Media Queries (No JS)</td>
+                    <td>Logique de mise en page</td>
+                    <td>Media Queries (Sans JS)</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="section-header">三、 复杂场景演示 (Strictly Complex Only)</div>
+    <div class="section-header">III. Démonstration de scénarios complexes (Strictement complexes uniquement)</div>
     <p style="font-size: 12px; color: #666; margin-top: -15px; margin-bottom: 20px;">
-        *以下组件仅用于展示复杂逻辑或数据时的效果。如能用表格展示，请勿使用以下组件。
+        *Les composants suivants ne sont utilisés que pour afficher des logiques ou des données complexes. Si un tableau peut être utilisé, n'utilisez pas ces composants.
     </p>
     
     <div class="component-grid">
         <div class="component-card">
             <div class="header-row">
-                <h4>Logic Flow (Viz.js)</h4>
+                <h4>Flux logique (Viz.js)</h4>
                 <div class="btn-group">
-                    <button id="viz-layout-btn" class="mini-btn">切换布局</button>
-                    <button id="viz-fullscreen-btn" class="mini-btn">全屏 / 缩放</button>
+                    <button id="viz-layout-btn" class="mini-btn">Changer mise en page</button>
+                    <button id="viz-fullscreen-btn" class="mini-btn">Plein écran / Zoom</button>
                 </div>
             </div>
             <div id="viz-demo" class="chart-container"></div>
-            <!-- 全屏关闭按钮 -->
-            <button id="viz-close-btn" class="fullscreen-close-btn">退出全屏</button>
+            <!-- Bouton de fermeture plein écran -->
+            <button id="viz-close-btn" class="fullscreen-close-btn">Quitter plein écran</button>
         </div>
 
         <div class="component-card">
             <div class="header-row">
-                <h4>Data Metrics (ECharts)</h4>
-                <span style="font-size:10px; color:#888;">Resize Auto-fit</span>
+                <h4>Métriques de données (ECharts)</h4>
+                <span style="font-size:10px; color:#888;">Redimensionnement automatique</span>
             </div>
             <div id="echarts-demo" class="chart-container"></div>
         </div>
@@ -390,7 +390,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
 </div>
 
 <script>
-    // 1. Viz.js logic (with SVG-Pan-Zoom and high contrast configuration)
+    // 1. Logique Viz.js (avec SVG-Pan-Zoom et configuration à contraste élevé)
     let currentLayout = 'LR';
     const viz = new Viz();
     let panZoomInstance = null;
@@ -398,13 +398,13 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
     const renderViz = (layout) => {
         const container = document.getElementById('viz-demo');
         
-        // High contrast style definition
+        // Définition du style à contraste élevé
         const dotString = \`
             digraph G {
                 rankdir=\${layout};
                 bgcolor="transparent";
                 
-                // Node common style: black text, light blue background, clear border
+                // Style commun des nœuds : texte noir, fond bleu clair, bordure claire
                 node [
                     fontname="Microsoft YaHei, Helvetica, Arial, sans-serif", 
                     fontsize=12,
@@ -417,7 +417,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                     margin="0.2,0.1"
                 ];
                 
-                // Edge style: dark lines
+                // Style des arêtes : lignes sombres
                 edge [
                     color="#333333", 
                     penwidth=1.2, 
@@ -425,7 +425,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                 ];
 
                 Start [
-                    label="User Request", 
+                    label="Requête utilisateur", 
                     shape=circle, 
                     fillcolor="#d94a38", 
                     fontcolor="#ffffff", 
@@ -435,14 +435,14 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                     fontname="Microsoft YaHei Bold" 
                 ];
                 
-                Check [label="Complexity Check", shape=diamond, fillcolor="#fff9db", color="#e6a23c"];
+                Check [label="Vérification complexité", shape=diamond, fillcolor="#fff9db", color="#e6a23c"];
                 
-                Native [label="Native HTML/CSS", shape=box];
-                Lib [label="Import JS Library", shape=box, style="dashed"];
+                Native [label="HTML/CSS natif", shape=box];
+                Lib [label="Importer bibliothèque JS", shape=box, style="dashed"];
                 
                 Start -> Check;
                 Check -> Native [label="Simple", fontsize=10];
-                Check -> Lib [label="Complex", fontsize=10, style="dashed"];
+                Check -> Lib [label="Complexe", fontsize=10, style="dashed"];
             }
         \`;
         
@@ -453,7 +453,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
                 element.style.height = "100%";
                 container.appendChild(element);
 
-                // Reset and initialize zoom plugin
+                // Réinitialiser et initialiser le plugin de zoom
                 if (panZoomInstance) {
                     panZoomInstance.destroy();
                     panZoomInstance = null;
@@ -475,7 +475,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
         renderViz(currentLayout);
     });
 
-    // Fullscreen and zoom logic
+    // Logique plein écran et zoom
     const container = document.getElementById('viz-demo');
     const closeBtn = document.getElementById('viz-close-btn');
 
@@ -493,7 +493,7 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
     document.getElementById('viz-fullscreen-btn').addEventListener('click', toggleFullscreen);
     closeBtn.addEventListener('click', toggleFullscreen);
 
-    // 2. ECharts logic
+    // 2. Logique ECharts
     const renderECharts = () => {
         const chartDom = document.getElementById('echarts-demo');
         if (!chartDom) return;
@@ -502,8 +502,8 @@ export const CANVAS_SYSTEM_PROMPT = `<!DOCTYPE html>
         const option = {
             grid: { top: 30, right: 10, bottom: 20, left: 30, containLabel: true },
             color: ['#4a7ab0', '#d94a38'],
-            xAxis: { type: 'category', data: ['Table', 'List', 'Grid', 'Viz.js', 'ECharts'] },
-            yAxis: { type: 'value', name: 'Performance Cost' },
+            xAxis: { type: 'category', data: ['Table', 'Liste', 'Grille', 'Viz.js', 'ECharts'] },
+            yAxis: { type: 'value', name: 'Coût de performance' },
             series: [{ 
                 type: 'bar', 
                 barWidth: '40%', 

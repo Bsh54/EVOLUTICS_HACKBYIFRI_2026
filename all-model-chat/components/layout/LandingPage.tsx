@@ -5,20 +5,19 @@ import {
   Bot,
   ArrowRight,
   Search,
-  Shield,
   Zap,
   GraduationCap,
   MessageSquare,
   ChevronRight,
   TrendingUp,
-  Rocket,
-  Target,
-  Users,
-  Star,
+  Clock,
+  MapPin,
 } from 'lucide-react';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { Footer } from './Footer';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { opportunityService } from '../../services/opportunityService';
+import { Opportunity } from '../../types/opportunity';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -28,27 +27,60 @@ interface LandingPageProps {
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, themeId, onThemeChange }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
+  const [latestOpportunities, setLatestOpportunities] = useState<Opportunity[]>([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoadingOpps, setIsLoadingOpps] = useState(true);
+
+  // Charger les 4 dernières opportunités
+  useEffect(() => {
+    const loadOpportunities = async () => {
+      try {
+        const opps = await opportunityService.getAll();
+        setLatestOpportunities(opps.slice(0, 4));
+      } catch (error) {
+        console.error('Erreur chargement opportunités:', error);
+      } finally {
+        setIsLoadingOpps(false);
+      }
+    };
+    loadOpportunities();
+  }, []);
+
+  // Auto-slide toutes les 5 secondes
+  useEffect(() => {
+    if (latestOpportunities.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % latestOpportunities.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [latestOpportunities.length]);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    } catch (e) {
+      return dateStr;
+    }
+  };
 
   return (
     <div className="h-screen w-full overflow-y-auto overflow-x-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] custom-scrollbar">
@@ -349,6 +381,297 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
         </div>
       </section>
 
+      {/* ═══════════ OPPORTUNITÉS RÉCENTES - SLIDER ═══════════ */}
+      <section className="relative px-6 py-20 md:py-24 bg-[var(--theme-bg-secondary)]">
+        <div className="max-w-7xl mx-auto">
+          {/* Section header */}
+          <div className="text-center mb-12">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--theme-bg-accent)] mb-4 block">
+              Opportunités du moment
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+              Dernières offres disponibles
+            </h2>
+            <p className="text-[var(--theme-text-secondary)] font-medium max-w-lg mx-auto">
+              Découvrez les opportunités les plus récentes et ne manquez aucune chance de réussir.
+            </p>
+          </div>
+
+          {/* Slider Container */}
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] shadow-xl">
+            {isLoadingOpps ? (
+              // Loading skeleton
+              <div className="h-[400px] md:h-[500px] flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 border-4 border-[var(--theme-bg-accent)] border-t-transparent rounded-full animate-spin" />
+                  <p className="text-[var(--theme-text-secondary)] font-medium">Chargement des opportunités...</p>
+                </div>
+              </div>
+            ) : latestOpportunities.length === 0 ? (
+              // Empty state
+              <div className="h-[400px] md:h-[500px] flex items-center justify-center">
+                <div className="text-center">
+                  <Briefcase className="w-16 h-16 mx-auto mb-4 text-[var(--theme-text-tertiary)]" />
+                  <p className="text-[var(--theme-text-secondary)] font-medium">Aucune opportunité disponible pour le moment</p>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Slides */}
+                <div className="relative h-[400px] md:h-[500px]">
+                  {latestOpportunities.map((opp, index) => (
+                    <div
+                      key={opp.id}
+                      className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+                        index === currentSlide
+                          ? 'opacity-100 translate-x-0 z-10'
+                          : index < currentSlide
+                          ? 'opacity-0 -translate-x-full z-0'
+                          : 'opacity-0 translate-x-full z-0'
+                      }`}
+                    >
+                      <div className="h-full grid grid-cols-1 md:grid-cols-2 gap-0">
+                        {/* Image */}
+                        <div className="relative h-48 md:h-full overflow-hidden">
+                          <img
+                            src={opp.image || 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070'}
+                            alt={opp.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          
+                          {/* Type badge */}
+                          <div className="absolute top-6 left-6">
+                            <span className="bg-[var(--theme-bg-accent)] text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">
+                              {opp.type}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex flex-col justify-center p-8 md:p-12 bg-[var(--theme-bg-primary)]">
+                          <div className="space-y-6">
+                            {/* Organization */}
+                            <p className="text-[var(--theme-bg-accent)] text-[10px] font-black uppercase tracking-[0.2em]">
+                              {opp.organization || 'Organisation'}
+                            </p>
+
+                            {/* Title */}
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-tight line-clamp-2">
+                              {opp.title || 'Opportunité sans titre'}
+                            </h3>
+
+                            {/* Description */}
+                            <p className="text-[var(--theme-text-secondary)] font-medium leading-relaxed line-clamp-3">
+                              {opp.description || 'Aucune description disponible.'}
+                            </p>
+
+                            {/* Meta info */}
+                            <div className="flex flex-wrap gap-4 pt-4 border-t border-[var(--theme-border-primary)]">
+                              {opp.location && (
+                                <div className="flex items-center gap-2 text-sm text-[var(--theme-text-secondary)]">
+                                  <MapPin className="w-4 h-4 text-[var(--theme-bg-accent)]" />
+                                  <span className="font-medium">{opp.location}</span>
+                                </div>
+                              )}
+                              {opp.deadline && (
+                                <div className="flex items-center gap-2 text-sm text-[var(--theme-text-secondary)]">
+                                  <Clock className="w-4 h-4 text-[var(--theme-bg-accent)]" />
+                                  <span className="font-medium">{formatDate(opp.deadline)}</span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* CTA Button */}
+                            <button
+                              onClick={onGetStarted}
+                              className="inline-flex items-center justify-center gap-3 bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-white font-black py-3 px-6 rounded-xl transition-all duration-300 active:scale-[0.98] text-sm uppercase tracking-widest group w-full md:w-auto"
+                            >
+                              Voir l'opportunité
+                              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Navigation dots */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                  {latestOpportunities.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`transition-all duration-300 rounded-full ${
+                        index === currentSlide
+                          ? 'w-8 h-2 bg-white'
+                          : 'w-2 h-2 bg-white/40 hover:bg-white/60'
+                      }`}
+                      aria-label={`Aller à la slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Navigation arrows - Desktop only */}
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev - 1 + latestOpportunities.length) % latestOpportunities.length)}
+                  className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-12 h-12 bg-black/20 backdrop-blur-md border border-white/10 rounded-full text-white hover:bg-black/40 transition-all group"
+                  aria-label="Slide précédente"
+                >
+                  <ChevronRight className="w-6 h-6 rotate-180 group-hover:scale-110 transition-transform" />
+                </button>
+                <button
+                  onClick={() => setCurrentSlide((prev) => (prev + 1) % latestOpportunities.length)}
+                  className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 items-center justify-center w-12 h-12 bg-black/20 backdrop-blur-md border border-white/10 rounded-full text-white hover:bg-black/40 transition-all group"
+                  aria-label="Slide suivante"
+                >
+                  <ChevronRight className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* CTA to see all opportunities */}
+          <div className="text-center mt-10">
+            <button
+              onClick={onGetStarted}
+              className="inline-flex items-center justify-center gap-2 text-[var(--theme-bg-accent)] hover:text-[var(--theme-bg-accent-hover)] font-bold text-sm uppercase tracking-widest transition-all group"
+            >
+              Voir toutes les opportunités
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ PRICING SECTION ═══════════ */}
+      <section className="relative px-6 py-24 md:py-32 bg-[var(--theme-bg-primary)] overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.03]">
+          <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-[var(--theme-bg-accent)] blur-3xl" />
+          <div className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-blue-500 blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section header */}
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--theme-bg-accent)] mb-4 block">
+              Tarification
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
+              Choisissez votre formule
+            </h2>
+            <p className="text-[var(--theme-text-secondary)] font-medium max-w-2xl mx-auto">
+              Des solutions adaptées à tous les besoins, des étudiants aux institutions.
+            </p>
+          </div>
+
+          {/* Pricing Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            {/* Freemium Card */}
+            <div className="group relative bg-[var(--theme-bg-secondary)] border-2 border-[var(--theme-border-primary)] rounded-[2.5rem] p-8 md:p-10 hover:border-[var(--theme-bg-accent)]/40 transition-all duration-300 hover:shadow-xl hover:shadow-[var(--theme-bg-accent)]/5">
+              <div className="space-y-6">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 bg-[var(--theme-bg-tertiary)] px-4 py-2 rounded-full border border-[var(--theme-border-primary)]">
+                  <Sparkles className="w-4 h-4 text-[var(--theme-bg-accent)]" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-[var(--theme-text-primary)]">Freemium</span>
+                </div>
+
+                {/* Price */}
+                <div className="space-y-2">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl md:text-6xl font-black tracking-tight">Gratuit</span>
+                  </div>
+                  <p className="text-[var(--theme-text-secondary)] font-medium text-sm">Pour commencer votre parcours</p>
+                </div>
+
+                {/* Features */}
+                <ul className="space-y-4 pt-6 border-t border-[var(--theme-border-primary)]">
+                  {[
+                    'Accès illimité aux opportunités',
+                    'Génération de 5 CV optimisés par mois',
+                    '3 simulations d\'entretiens par mois',
+                    'Recommandations de base',
+                    'Limite de tokens IA'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[var(--theme-bg-accent)]/10 flex items-center justify-center mt-0.5">
+                        <div className="w-2 h-2 rounded-full bg-[var(--theme-bg-accent)]" />
+                      </div>
+                      <span className="text-[var(--theme-text-primary)] font-medium text-sm leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button */}
+                <button
+                  onClick={onGetStarted}
+                  className="w-full flex items-center justify-center gap-3 bg-[var(--theme-bg-tertiary)] hover:bg-[var(--theme-bg-accent)] hover:text-white border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] font-black py-4 px-6 rounded-xl transition-all duration-300 active:scale-[0.98] text-sm uppercase tracking-widest group/btn mt-8"
+                >
+                  Commencer gratuitement
+                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </div>
+
+            {/* Premium Card */}
+            <div className="group relative bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-[var(--theme-bg-accent)]/20 hover:shadow-[var(--theme-bg-accent)]/30 transition-all duration-300 hover:scale-[1.02]">
+              {/* Popular badge */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <div className="bg-white text-[var(--theme-bg-accent)] px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">
+                  ⭐ Populaire
+                </div>
+              </div>
+
+              <div className="space-y-6 text-white">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+                  <Zap className="w-4 h-4 text-white" />
+                  <span className="text-[9px] font-black uppercase tracking-widest">Premium</span>
+                </div>
+
+                {/* Price */}
+                <div className="space-y-2">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl md:text-6xl font-black tracking-tight">3 000</span>
+                    <span className="text-2xl font-bold opacity-90">FCFA</span>
+                  </div>
+                  <p className="text-white/80 font-medium text-sm">Par mois • Sans engagement</p>
+                </div>
+
+                {/* Features */}
+                <ul className="space-y-4 pt-6 border-t border-white/20">
+                  {[
+                    'Génération illimitée de CV et lettres',
+                    'Simulations d\'entretiens illimitées',
+                    'Recommandations avancées par IA',
+                    'Accès prioritaire aux nouvelles opportunités',
+                    'Support prioritaire 24/7'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-white/20 flex items-center justify-center mt-0.5">
+                        <div className="w-2 h-2 rounded-full bg-white" />
+                      </div>
+                      <span className="text-white font-medium text-sm leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button */}
+                <button
+                  onClick={onGetStarted}
+                  className="w-full flex items-center justify-center gap-3 bg-white text-[var(--theme-bg-accent)] hover:bg-white/90 font-black py-4 px-6 rounded-xl transition-all duration-300 active:scale-[0.98] text-sm uppercase tracking-widest group/btn mt-8 shadow-lg"
+                >
+                  Passer à Premium
+                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ HOW IT WORKS ═══════════ */}
       <section className="relative px-6 py-24 md:py-32 bg-[var(--theme-bg-secondary)]">
         <div className="max-w-5xl mx-auto">
@@ -403,31 +726,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
                 <p className="text-[var(--theme-text-secondary)] font-medium text-sm leading-relaxed max-w-xs">
                   {item.description}
                 </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════ STATS SECTION ═══════════ */}
-      <section className="relative px-6 py-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-4">
-            {[
-              { number: '500+', label: 'Opportunités', icon: Briefcase },
-              { number: '24/7', label: 'IA Coach disponible', icon: Zap },
-              { number: '5', label: "Catégories d'offres", icon: Shield },
-            ].map((stat, i) => (
-              <div key={i} className="text-center py-6">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-[var(--theme-bg-accent)]/10 rounded-2xl mb-4">
-                  <stat.icon className="w-6 h-6 text-[var(--theme-bg-accent)]" />
-                </div>
-                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] bg-clip-text text-transparent mb-1">
-                  {stat.number}
-                </div>
-                <div className="text-xs font-bold text-[var(--theme-text-tertiary)] uppercase tracking-widest">
-                  {stat.label}
-                </div>
               </div>
             ))}
           </div>

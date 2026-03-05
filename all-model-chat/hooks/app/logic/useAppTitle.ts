@@ -46,7 +46,7 @@ export const useAppTitle = ({ isLoading, messages, language, sessionTitle }: Use
             let statusPrefix = '';
             if (isLoading) {
                 const timeDisplay = ` (${generationTime}s)`;
-                statusPrefix = (language === 'zh' ? `生成中${timeDisplay}... | ` : `Generating${timeDisplay}... | `);
+                statusPrefix = (language === 'zh' ? `Génération${timeDisplay}... | ` : `Generating${timeDisplay}... | `);
             }
             
             // If the title is generic or empty, append app name for context
