@@ -160,15 +160,26 @@ INSTRUCTIONS :
 11. Date du jour
 12. Destinataire : ${opportunity ? opportunity.organization : '[Nom de l\'entreprise]'}
 
-IMPORTANT : 
-- Ne mentionne PAS de compétences ou expériences qui ne sont pas dans le profil
-- Reste factuel et honnête
-- Adapte le contenu au niveau d'études et d'expérience du candidat
-- Si le candidat est débutant, mise sur la motivation et le potentiel
-- ${jobDescription ? 'Aligne ta lettre avec les exigences de l\'offre' : ''}
-- ${companyInfo ? 'Personnalise ta lettre en fonction de la culture et des valeurs de l\'entreprise' : ''}
-- CRUCIAL : La lettre DOIT tenir sur une seule page A4 (maximum 300 mots)
-- Privilégie la qualité à la quantité - sois percutant et concis
+RÈGLES STRICTES - INTERDICTIONS ABSOLUES :
+❌ N'INVENTE JAMAIS de compétences, expériences, projets ou réalisations qui ne sont PAS dans le profil
+❌ N'AJOUTE JAMAIS de certifications, diplômes ou formations non mentionnés
+❌ N'EXAGÈRE JAMAIS les responsabilités ou le niveau d'expertise
+❌ N'INVENTE JAMAIS de chiffres, statistiques ou résultats quantifiables
+❌ N'AJOUTE JAMAIS de langues, outils ou technologies non listés dans les compétences
+❌ Ne mentionne PAS de compétences ou expériences qui ne sont pas dans le profil
+
+OBLIGATIONS :
+✅ Utilise UNIQUEMENT les informations fournies dans le profil du candidat
+✅ Reste factuel, honnête et vérifiable à 100%
+✅ Si le profil est incomplet, travaille avec ce qui est disponible sans inventer
+✅ Adapte le contenu au niveau d'études et d'expérience réel du candidat
+✅ Si le candidat est débutant, mise sur la motivation et le potentiel (sans inventer d'expérience)
+✅ ${jobDescription ? 'Aligne ta lettre avec les exigences de l\'offre en utilisant UNIQUEMENT les compétences réelles du candidat' : ''}
+✅ ${companyInfo ? 'Personnalise ta lettre en fonction de la culture et des valeurs de l\'entreprise' : ''}
+✅ CRUCIAL : La lettre DOIT tenir sur une seule page A4 (maximum 300 mots)
+✅ Privilégie la qualité à la quantité - sois percutant et concis
+
+RAPPEL FINAL : Toute information dans la lettre DOIT être traçable dans le profil fourni. En cas de doute, ne mentionne pas.
 
 Génère maintenant la lettre de motivation :`;
 

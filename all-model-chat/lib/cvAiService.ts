@@ -14,9 +14,23 @@ export async function optimizeCVWithAI({ jobOffer, currentData }: { jobOffer: st
     Tâche : Optimise intégralement ce CV pour l'offre fournie.
     Réponds UNIQUEMENT avec un objet JSON complet commençant par { et finissant par }.
 
-    IMPORTANT : Optimise le profil (about), TOUTES les expériences (descriptions) et les compétences (skills) pour correspondre aux mots-clés de l'offre.
+    ⚠️ RÈGLES STRICTES - INTERDICTIONS ABSOLUES :
+    ❌ N'INVENTE JAMAIS de compétences, expériences, projets ou réalisations qui ne sont PAS dans les données actuelles
+    ❌ N'AJOUTE JAMAIS de certifications, diplômes, formations ou outils non mentionnés
+    ❌ N'EXAGÈRE JAMAIS les responsabilités ou le niveau d'expertise
+    ❌ N'INVENTE JAMAIS de chiffres, statistiques ou résultats quantifiables
+    ❌ N'AJOUTE JAMAIS de langues, technologies ou frameworks non listés
+    ❌ Ne modifie PAS les dates, entreprises ou postes réels
+    
+    ✅ OBLIGATIONS :
+    ✅ Utilise UNIQUEMENT les informations fournies dans les données actuelles
+    ✅ Reformule et optimise les descriptions existantes pour mieux correspondre à l'offre
+    ✅ Réorganise les compétences par pertinence pour l'offre (sans en inventer)
+    ✅ Ajuste les niveaux de compétences de manière réaliste (entre 70-95)
+    ✅ Mets en avant les mots-clés de l'offre UNIQUEMENT s'ils correspondent aux compétences réelles
+    ✅ Reste factuel, honnête et vérifiable à 100%
 
-    DONNÉES ACTUELLES :
+    DONNÉES ACTUELLES (SOURCE DE VÉRITÉ) :
     ${JSON.stringify({
       about: currentData.about,
       experiences: currentData.experiences,
@@ -31,6 +45,8 @@ export async function optimizeCVWithAI({ jobOffer, currentData }: { jobOffer: st
       "experiences": [{"role": "...", "company": "...", "startDate": "...", "endDate": "...", "isCurrent": boolean, "description": "..."}],
       "skills": [{"name": "...", "level": 90}]
     }
+    
+    RAPPEL FINAL : Toute information dans le CV optimisé DOIT être traçable dans les données actuelles. En cas de doute, ne modifie pas.
   `;
 
   try {
