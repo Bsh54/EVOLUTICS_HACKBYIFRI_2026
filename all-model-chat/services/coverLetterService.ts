@@ -156,9 +156,23 @@ INSTRUCTIONS :
 7. LONGUEUR CRITIQUE : Maximum 250-300 mots (IMPÉRATIF - doit tenir sur une seule page A4)
 8. Sois concis et va droit au but - chaque phrase doit avoir un impact
 9. Format : Texte brut avec sauts de ligne appropriés (pas de Markdown)
-10. Inclus les coordonnées en haut : Nom, Email, Téléphone, Ville
+10. IMPORTANT : Commence TOUJOURS par les coordonnées complètes en haut (NOM COMPLET, Email, Téléphone)
 11. Date du jour
 12. Destinataire : ${opportunity ? opportunity.organization : '[Nom de l\'entreprise]'}
+
+EXEMPLE DE DÉBUT (À ADAPTER) :
+${userProfile.display_name}
+${userProfile.email || 'email@exemple.com'}
+${userProfile.phone || 'Téléphone'}
+
+Le [Date du jour]
+
+À l'attention de [Destinataire]
+[Organisation]
+
+Madame, Monsieur,
+
+[Corps de la lettre...]
 
 RÈGLES STRICTES - INTERDICTIONS ABSOLUES :
 ❌ N'INVENTE JAMAIS de compétences, expériences, projets ou réalisations qui ne sont PAS dans le profil

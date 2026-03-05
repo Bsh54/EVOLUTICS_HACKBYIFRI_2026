@@ -124,7 +124,38 @@ const CoverLetterBuilderPage: React.FC<CoverLetterBuilderPageProps> = ({
         charCodeFirst: content.charCodeAt(0)
       });
 
-      setGeneratedContent(content);
+      // Vérification et correction : s'assurer que le nom complet est présent
+      let finalContent = content;
+      if (profile?.display_name) {
+        const nameParts = profile.display_name.split(' ');
+        const firstName = nameParts[0];
+        
+        // Vérifier si le contenu commence bien par le prénom complet
+        if (!content.startsWith(firstName)) {
+          console.warn('⚠️ [CoverLetterBuilder] Le nom semble tronqué, correction en cours...');
+          
+          // Chercher où commence le nom tronqué dans le contenu
+          const contentStart = content.substring(0, 50);
+          let foundPartialName = false;
+          
+          // Vérifier si on trouve une partie du prénom
+          for (let i = 1; i < firstName.length; i++) {
+            const partial = firstName.substring(i);
+            if (contentStart.startsWith(partial)) {
+              console.log(`🔧 [CoverLetterBuilder] Nom tronqué détecté: "${partial}" au lieu de "${firstName}"`);
+              finalContent = firstName + content.substring(partial.length);
+              foundPartialName = true;
+              break;
+            }
+          }
+          
+          if (foundPartialName) {
+            console.log('✅ [CoverLetterBuilder] Nom corrigé:', finalContent.substring(0, 50));
+          }
+        }
+      }
+
+      setGeneratedContent(finalContent);
 
       toast.update(toastId, {
         render: "✅ Lettre générée avec succès !",
