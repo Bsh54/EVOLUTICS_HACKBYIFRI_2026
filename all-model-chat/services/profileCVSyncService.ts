@@ -2,9 +2,9 @@ import { CVData } from '../types/cvTypes';
 import { UserProfile } from '../types/user';
 import { authService } from '../services/authService';
 
-// Mapping des champs entre UserProfile et CVData
+// mapping des champs entre UserProfile et CVData
 export interface FieldMapping {
-  cvField: keyof CVData | string; // Support des champs imbriqués avec notation dot
+  cvField: keyof CVData | string;
   profileField: keyof UserProfile;
   transform?: {
     toCV?: (profileValue: any) => any;
@@ -12,9 +12,9 @@ export interface FieldMapping {
   };
 }
 
-// Configuration du mapping bidirectionnel
+// config du mapping bidirectionnel
 export const PROFILE_CV_MAPPING: FieldMapping[] = [
-  // Identité de base
+  // identité
   {
     cvField: 'fullName',
     profileField: 'display_name'
@@ -43,7 +43,7 @@ export const PROFILE_CV_MAPPING: FieldMapping[] = [
     cvField: 'contact.linkedin',
     profileField: 'linkedin_url'
   },
-  // Compétences avec transformation
+  // compétences
   {
     cvField: 'skills',
     profileField: 'skills',
@@ -54,7 +54,7 @@ export const PROFILE_CV_MAPPING: FieldMapping[] = [
         cvSkills?.map(skill => skill.name) || []
     }
   },
-  // Formation avec transformation complexe
+  // formation
   {
     cvField: 'education',
     profileField: 'university',
@@ -70,14 +70,13 @@ export const PROFILE_CV_MAPPING: FieldMapping[] = [
         }];
       },
       toProfile: (cvEducation: any[]) => {
-        // Prendre la première formation pour mettre à jour le profil
         return cvEducation?.[0]?.school || '';
       }
     }
   }
 ];
 
-// Utilitaire pour accéder aux propriétés imbriquées
+// accès aux propriétés imbriquées
 function getNestedValue(obj: any, path: string): any {
   return path.split('.').reduce((current, key) => current?.[key], obj);
 }
@@ -93,15 +92,13 @@ function setNestedValue(obj: any, path: string, value: any): void {
 }
 
 export class ProfileCVSyncService {
-  /**
-   * Synchronise les données du profil vers le CV
-   */
+  // sync profil vers CV
   static syncProfileToCV(profile: UserProfile, existingCVData?: CVData): CVData {
-    // Données CV par défaut avec exemples pour prévisualisation
+    // données CV par défaut
     const defaultCVData: CVData = {
       fullName: "Votre Nom",
       title: "Votre Titre Professionnel",
-      color: "#3b82f6", // Bleu de la plateforme au lieu du vert
+      color: "#3b82f6",
       profileImage: "",
       contact: {
         phone: "+33 6 12 34 56 78",
