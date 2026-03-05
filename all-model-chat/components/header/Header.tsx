@@ -58,43 +58,40 @@ export const Header: React.FC<HeaderProps> = ({
   pipShortcut,
 }) => {
   
-  const headerButtonBase = "w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-200 ease-[cubic-bezier(0.19,1,0.22,1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-bg-primary)] focus-visible:ring-[var(--theme-border-focus)] hover:scale-105 active:scale-95";
-  const headerButtonInactive = "bg-transparent text-[var(--theme-icon-settings)] hover:bg-[var(--theme-bg-tertiary)] hover:text-[var(--theme-text-primary)] active:bg-[var(--theme-bg-tertiary)] active:text-[var(--theme-text-primary)]";
-  const headerButtonActive = "text-[var(--theme-text-link)] bg-[var(--theme-bg-accent)]/10 hover:bg-[var(--theme-bg-accent)]/20";
+  const btnBase = "w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl transition-all duration-200 ease-[cubic-bezier(0.19,1,0.22,1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-bg-primary)] focus-visible:ring-[var(--theme-border-focus)] hover:scale-105 active:scale-95";
+  const btnInactive = "bg-transparent text-[var(--theme-icon-settings)] hover:bg-[var(--theme-bg-tertiary)] hover:text-[var(--theme-text-primary)] active:bg-[var(--theme-bg-tertiary)] active:text-[var(--theme-text-primary)]";
+  const btnActive = "text-[var(--theme-text-link)] bg-[var(--theme-bg-accent)]/10 hover:bg-[var(--theme-bg-accent)]/20";
 
-  const canvasPromptAriaLabel = isCanvasPromptActive 
+  const canvasLabel = isCanvasPromptActive 
     ? t('canvasHelperActive_aria')
     : t('canvasHelperInactive_aria');
-  const canvasPromptTitle = isCanvasPromptActive 
+  const canvasTitle = isCanvasPromptActive 
     ? t('canvasHelperActive_title')
     : t('canvasHelperInactive_title');
 
   const iconSize = 20; 
   const strokeWidth = 2; 
 
-  const lowerModelId = selectedModelId?.toLowerCase() || '';
-  const isNativeAudioModel = lowerModelId.includes('native-audio');
-  const isImageModel = lowerModelId.includes('image') || lowerModelId.includes('imagen');
-  const isTtsModel = lowerModelId.includes('tts');
+  const modelId = selectedModelId?.toLowerCase() || '';
+  const isAudio = modelId.includes('native-audio');
+  const isImage = modelId.includes('image') || modelId.includes('imagen');
+  const isTts = modelId.includes('tts');
   
-  // Only show Canvas button for standard chat models (not specialized audio/image models)
-  const showTextTools = !isNativeAudioModel && !isImageModel && !isTtsModel;
+  const showTextTools = !isAudio && !isImage && !isTts;
 
   return (
     <header className={`${themeId === 'pearl' ? 'bg-[var(--theme-bg-primary)]/85' : 'bg-[var(--theme-bg-secondary)]/85'} backdrop-blur-xl p-3 sm:p-4 flex items-center justify-between gap-2 sm:gap-3 flex-shrink-0 relative z-20 shadow-sm border-b border-[var(--theme-border-secondary)]/40`}>
 
-      {/* Left Section: Navigation & Model Selector */}
       <div className="flex items-center gap-2 min-w-0">
         <button
             onClick={onToggleHistorySidebar}
-            className={`${headerButtonBase} ${headerButtonInactive} md:hidden`}
+            className={`${btnBase} ${btnInactive} md:hidden`}
             aria-label={isHistorySidebarOpen ? t('historySidebarClose') : t('historySidebarOpen')}
             title={isHistorySidebarOpen ? t('historySidebarClose_short') : t('historySidebarOpen_short')}
         >
             <IconSidebarToggle size={iconSize} strokeWidth={strokeWidth} />
         </button>
         
-        {/* HeaderModelSelector masqué */}
         {/* <HeaderModelSelector
             currentModelName={currentModelName}
             availableModels={availableModels}
@@ -108,37 +105,33 @@ export const Header: React.FC<HeaderProps> = ({
         /> */}
       </div>
 
-      {/* Right Section: Action Buttons (Redesigned) */}
       <div className="flex items-center gap-1 sm:gap-2.5 justify-end flex-shrink-0">
 
-        {/* 1. Canvas Helper Button (Arc/Wand) - MASQUÉ */}
         {/* {showTextTools && (
             <button
             onClick={onLoadCanvasPrompt}
             disabled={isLoading}
-            className={`${headerButtonBase} ${isCanvasPromptActive ? headerButtonActive : headerButtonInactive}`}
-            aria-label={canvasPromptAriaLabel}
-            title={canvasPromptTitle}
+            className={`${btnBase} ${isCanvasPromptActive ? btnActive : btnInactive}`}
+            aria-label={canvasLabel}
+            title={canvasTitle}
             >
             <Wand2 size={iconSize} strokeWidth={strokeWidth} />
             </button>
         )} */}
 
-        {/* 2. Scenarios Button (Cards/Book) - MASQUÉ */}
         {/* <button
           onClick={onOpenScenariosModal}
-          className={`${headerButtonBase} ${headerButtonInactive}`}
+          className={`${btnBase} ${btnInactive}`}
           aria-label={t('scenariosManage_aria')}
           title={t('scenariosManage_title')}
         >
           <IconScenarios size={iconSize} strokeWidth={strokeWidth} />
         </button> */}
 
-        {/* 3. PiP Button (Expand) */}
         {isPipSupported && (
             <button
               onClick={onTogglePip}
-              className={`${headerButtonBase} ${headerButtonInactive}`}
+              className={`${btnBase} ${btnInactive}`}
               aria-label={isPipActive ? 'Exit Picture-in-Picture' : 'Enter Picture-in-Picture'}
               title={`${isPipActive ? 'Exit Picture-in-Picture' : 'Enter Picture-in-Picture'} ${pipShortcut ? `(${pipShortcut})` : ''}`}
             >
@@ -146,10 +139,9 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
         )}
 
-        {/* 4. New Chat Button (formerly Settings) */}
         <button
           onClick={onNewChat}
-          className={`${headerButtonBase} ${headerButtonInactive} md:hidden`}
+          className={`${btnBase} ${btnInactive} md:hidden`}
           aria-label={t('headerNewChat_aria')}
           title={`${t('newChat')} ${newChatShortcut ? `(${newChatShortcut})` : ''}`}
         >

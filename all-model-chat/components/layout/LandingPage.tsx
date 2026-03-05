@@ -33,7 +33,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoadingOpps, setIsLoadingOpps] = useState(true);
 
-  // Charger les 4 dernières opportunités
   useEffect(() => {
     const loadOpportunities = async () => {
       try {
@@ -48,7 +47,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
     loadOpportunities();
   }, []);
 
-  // Auto-slide toutes les 5 secondes
+  // auto slide
   useEffect(() => {
     if (latestOpportunities.length === 0) return;
     
@@ -85,7 +84,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
   return (
     <div className="h-screen w-full overflow-y-auto overflow-x-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] custom-scrollbar">
 
-      {/* Toggle de thème fixe en haut à droite */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle
           currentThemeId={themeId}
@@ -95,7 +93,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
         />
       </div>
 
-      {/* ═══════════ HERO SECTION - ULTRA MODERNE ═══════════ */}
       <section 
         ref={heroRef}
         className="relative min-h-screen flex flex-col items-center justify-center px-6 py-20 overflow-hidden"
@@ -103,29 +100,25 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
           transform: `translateY(${scrollY * 0.5}px)`,
         }}
       >
-        {/* Background photo — career/tech ambiance */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
             alt="Étudiants travaillant ensemble"
             className="w-full h-full object-cover object-center opacity-80"
           />
-          {/* Multi-layer overlay for readability - Darkened significantly for contrast */}
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-secondary)] via-[var(--theme-bg-secondary)]/95 to-[var(--theme-bg-accent)]/30 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-[#09090b]/40" /> {/* Darkening for contrast */}
+          <div className="absolute inset-0 bg-[#09090b]/40" />
         </div>
 
-        {/* Decorative blurs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-[#3b82f6]/20 blur-3xl landing-float" />
           <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-[#2563eb]/15 blur-3xl landing-float-slow" />
           <div className="absolute top-1/3 right-1/4 w-64 h-64 rounded-full bg-[#8b5cf6]/15 blur-3xl landing-float-delayed" />
         </div>
 
-        {/* Elaborate SVG illustration overlay */}
+        {/* bg illustration */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.08]">
           <svg className="absolute bottom-0 left-0 w-full h-full" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
-            {/* Grid pattern — tech feel */}
             <defs>
               <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
                 <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3" />
@@ -133,7 +126,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
             </defs>
             <rect width="1440" height="800" fill="url(#grid)" />
 
-            {/* Cityscape / career growth — more detailed */}
             <rect x="50" y="450" width="50" height="350" rx="4" fill="currentColor" opacity="0.6" />
             <rect x="55" y="460" width="15" height="15" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
             <rect x="80" y="460" width="15" height="15" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
@@ -157,7 +149,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
             <rect x="470" y="280" width="65" height="520" rx="4" fill="currentColor" opacity="0.55" />
             <rect x="560" y="350" width="55" height="450" rx="4" fill="currentColor" opacity="0.4" />
 
-            {/* Right side buildings */}
             <rect x="900" y="420" width="50" height="380" rx="4" fill="currentColor" opacity="0.45" />
             <rect x="970" y="320" width="70" height="480" rx="4" fill="currentColor" opacity="0.6" />
             <rect x="980" y="335" width="20" height="20" rx="3" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
@@ -174,9 +165,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
             <rect x="1310" y="420" width="60" height="380" rx="4" fill="currentColor" opacity="0.5" />
             <rect x="1390" y="350" width="50" height="450" rx="4" fill="currentColor" opacity="0.45" />
 
-            {/* Rising trend line — career growth */}
+            {/* trend line */}
             <path d="M0 650 Q 150 640, 300 580 T 650 450 T 1000 320 T 1440 180" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeDasharray="12 6" />
-            {/* Trend nodes with glow */}
             <circle cx="300" cy="580" r="6" fill="currentColor" opacity="0.6" />
             <circle cx="300" cy="580" r="12" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2" />
             <circle cx="650" cy="450" r="8" fill="currentColor" opacity="0.7" />
@@ -186,7 +176,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
             <circle cx="1350" cy="200" r="10" fill="currentColor" opacity="0.8" />
             <circle cx="1350" cy="200" r="20" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.2" />
 
-            {/* Floating CV / Document — top left */}
             <g transform="translate(200, 100) rotate(-8)">
               <rect width="70" height="90" rx="8" fill="currentColor" opacity="0.5" />
               <circle cx="35" cy="22" r="10" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.4" />
@@ -196,7 +185,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
               <line x1="15" y1="72" x2="50" y2="72" stroke="currentColor" strokeWidth="2" opacity="0.3" />
             </g>
 
-            {/* Floating CV — top right */}
             <g transform="translate(1100, 80) rotate(5)">
               <rect width="70" height="90" rx="8" fill="currentColor" opacity="0.5" />
               <circle cx="35" cy="22" r="10" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.4" />
@@ -206,7 +194,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
               <line x1="15" y1="72" x2="50" y2="72" stroke="currentColor" strokeWidth="2" opacity="0.3" />
             </g>
 
-            {/* Graduation cap — center top */}
             <g transform="translate(700, 60)">
               <polygon points="0,30 40,10 80,30 40,50" fill="currentColor" opacity="0.6" />
               <rect x="37" y="50" width="6" height="20" fill="currentColor" opacity="0.6" />
@@ -214,7 +201,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
               <circle cx="80" cy="58" r="3" fill="currentColor" opacity="0.5" />
             </g>
 
-            {/* AI Brain / neural network — center */}
             <g transform="translate(680, 350)" opacity="0.4">
               <circle cx="40" cy="40" r="35" fill="none" stroke="currentColor" strokeWidth="2" />
               <circle cx="25" cy="30" r="4" fill="currentColor" />
@@ -231,17 +217,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
               <line x1="20" y1="50" x2="60" y2="50" stroke="currentColor" strokeWidth="1" />
             </g>
 
-            {/* Rocket — ambition */}
             <g transform="translate(1350, 120) rotate(25)">
               <path d="M15,50 L15,25 Q15,0 25,0 Q35,0 35,25 L35,50 Z" fill="currentColor" opacity="0.5" />
               <polygon points="10,45 15,35 15,50" fill="currentColor" opacity="0.4" />
               <polygon points="40,45 35,35 35,50" fill="currentColor" opacity="0.4" />
               <circle cx="25" cy="18" r="4" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-              {/* Flame */}
               <path d="M20,50 Q25,65 30,50" fill="currentColor" opacity="0.3" />
             </g>
 
-            {/* Connection dots — scattered */}
             <circle cx="800" cy="180" r="3" fill="currentColor" opacity="0.3" />
             <circle cx="830" cy="200" r="2" fill="currentColor" opacity="0.2" />
             <circle cx="780" cy="210" r="2" fill="currentColor" opacity="0.2" />
@@ -256,15 +239,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
           </svg>
         </div>
 
-        {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto -mt-8 md:-mt-12 lg:-mt-14">
-          {/* Logo */}
           <div className="flex items-center gap-4 mb-8 bg-white/5 backdrop-blur-md px-6 py-3 rounded-2xl border-2 border-white/20 shadow-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <EvoluticsLogo className="h-20 w-auto drop-shadow-sm border-2 border-white/30 rounded-xl p-1" />
             <span className="font-black text-2xl tracking-widest text-white drop-shadow-sm">EVOLUTICS</span>
           </div>
 
-          {/* Title */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1] mb-6 text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             Votre avenir professionnel,<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
@@ -272,18 +252,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
             </span>
           </h1>
 
-          {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium max-w-2xl leading-relaxed mb-10 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
             Explorez des centaines d'opportunités, préparez vos candidatures avec un coach IA et décrochez le poste de vos rêves — le tout sur une seule plateforme.
           </p>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
             <button
               onClick={onGetStarted}
               className="relative flex items-center justify-center gap-3 bg-white text-[var(--theme-bg-accent)] hover:bg-gray-50 font-black py-3.5 px-8 rounded-2xl shadow-[0_8px_30px_rgb(255,255,255,0.2)] transition-all duration-300 active:scale-[0.98] text-sm uppercase tracking-widest group overflow-hidden hover:shadow-[0_12px_40px_rgb(255,255,255,0.3)] hover:scale-105"
             >
-              {/* Animation de fond au hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
               <span className="relative z-10">Commencer gratuitement</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 group-hover:scale-110 transition-all duration-300 relative z-10" />
@@ -292,9 +269,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
               onClick={onSignIn}
               className="relative flex items-center justify-center gap-3 bg-black/20 backdrop-blur-md border border-white/20 hover:bg-black/40 hover:border-white/40 text-white font-bold py-3.5 px-8 rounded-2xl transition-all duration-300 active:scale-[0.98] text-sm uppercase tracking-widest group overflow-hidden hover:shadow-[0_8px_25px_rgba(255,255,255,0.1)] hover:scale-105"
             >
-              {/* Animation de bordure au hover */}
               <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/30 rounded-2xl transition-all duration-300" />
-              {/* Effet de glow */}
               <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
               <span className="relative z-10 group-hover:text-blue-100 transition-colors duration-300">Se connecter</span>
             </button>

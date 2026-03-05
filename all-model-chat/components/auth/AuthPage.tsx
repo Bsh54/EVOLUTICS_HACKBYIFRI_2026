@@ -46,7 +46,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         setError('Les mots de passe ne correspondent pas.');
         return;
       }
-      // Afficher le modal pour accepter les politiques
       if (!acceptedPrivacy) {
         setPendingAction('email');
         setShowPrivacyModal(true);
@@ -91,7 +90,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   const handleGoogleLogin = async () => {
     setError(null);
     
-    // En mode inscription, afficher le modal de confidentialité
     if (mode === 'register' && !acceptedPrivacy) {
       setPendingAction('google');
       setShowPrivacyModal(true);
@@ -109,7 +107,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
     setAcceptedPrivacy(true);
     setShowPrivacyModal(false);
     
-    // Continuer avec l'action en attente
     if (pendingAction === 'google') {
       try {
         await signInWithGoogle();
@@ -117,7 +114,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         setError(err?.message || 'Erreur de connexion Google.');
       }
     } else if (pendingAction === 'email') {
-      // Relancer la soumission du formulaire
       setIsLoading(true);
       try {
         await signUp(email, password, displayName.trim());
@@ -141,7 +137,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   return (
     <div className="h-screen w-full flex bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden font-sans">
 
-      {/* Toggle de thème fixe en haut à droite */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle
           currentThemeId={themeId}
@@ -151,10 +146,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         />
       </div>
 
-      {/* Panneau gauche - Image représentative et Branding */}
       <div className="hidden lg:flex lg:w-[50%] relative overflow-hidden bg-[var(--theme-bg-secondary)] flex-col justify-between">
 
-        {/* Image de fond avec Overlay Gradient pour lisibilité */}
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop"
@@ -162,10 +155,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
             className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-secondary)] via-[var(--theme-bg-secondary)]/80 to-[var(--theme-bg-accent)]/40 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-[#09090b]/60" /> {/* Darkening for contrast */}
+          <div className="absolute inset-0 bg-[#09090b]/60" />
         </div>
 
-        {/* Header - Logo */}
         <div className="relative z-10 p-12">
             <button
               onClick={onBackToLanding}
@@ -179,7 +171,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
             </button>
         </div>
 
-        {/* Content - Hero Text & Features */}
         <div className="relative z-10 p-12 pb-48 mt-auto">
           <div className="space-y-6 max-w-2xl">
             <h1 className="text-5xl font-black text-white tracking-tight leading-[1.1]">
@@ -193,16 +184,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         </div>
       </div>
 
-      {/* Panneau droit - Formulaire avec Glassmorphism */}
       <div className="flex-1 overflow-y-auto relative custom-scrollbar">
-        {/* Decorative background elements for form side */}
         <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-[var(--theme-bg-accent)]/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="min-h-full flex items-center justify-center p-3 sm:p-4 md:p-6 relative z-10">
           <div className="w-full max-w-[400px] space-y-5">
 
-            {/* Logo mobile */}
             <div className="lg:hidden flex items-center justify-center mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                <button
                  onClick={onBackToLanding}
@@ -222,7 +210,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               </h2>
             </div>
 
-            {/* Messages d'alerte */}
             {error && (
               <div className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 dark:text-red-400 text-sm font-medium animate-in fade-in slide-in-from-top-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -236,7 +223,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               </div>
             )}
 
-            {/* Formulaire */}
             <form onSubmit={handleSubmit} className="space-y-3.5 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               {mode === 'register' && (
                 <div className="space-y-1">
@@ -331,7 +317,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               </button>
             </form>
 
-            {/* Séparateur */}
             <div className="relative flex items-center py-2 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
               <div className="flex-grow border-t border-[var(--theme-border-primary)]"></div>
               <span className="flex-shrink-0 mx-3 text-[10px] font-bold text-[var(--theme-text-tertiary)] uppercase tracking-widest">
@@ -340,7 +325,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               <div className="flex-grow border-t border-[var(--theme-border-primary)]"></div>
             </div>
 
-            {/* Google OAuth */}
             <button
               onClick={handleGoogleLogin}
               className="w-full bg-[var(--theme-bg-secondary)] hover:bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] text-[var(--theme-text-primary)] font-semibold py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-3 active:scale-[0.98] text-[14px] animate-fade-in-up" style={{ animationDelay: '0.6s' }}
@@ -354,7 +338,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               Continuer avec Google
             </button>
 
-            {/* Switch mode */}
             <div className="text-center pt-3 mt-3 border-t border-[var(--theme-border-primary)]/50 animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
               <span className="text-[13px] text-[var(--theme-text-secondary)] font-medium block mb-2">
                 {mode === 'login' ? "Nouveau sur EVOLUTICS ? " : "Vous avez déjà un compte ? "}
@@ -375,11 +358,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         </div>
       </div>
 
-      {/* Modal Politiques de Confidentialité */}
       {showPrivacyModal && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-[var(--theme-bg-secondary)] rounded-[2.5rem] shadow-2xl max-w-lg w-full border-2 border-[var(--theme-border-primary)] animate-in zoom-in-95 duration-300">
-            {/* Header */}
             <div className="p-8 pb-6 border-b border-[var(--theme-border-primary)]">
               <div className="flex items-start gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--theme-bg-accent)] to-[var(--theme-bg-accent-hover)] flex items-center justify-center shadow-lg flex-shrink-0">
@@ -398,7 +379,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               </div>
             </div>
 
-            {/* Content */}
             <div className="p-8 space-y-6">
               <div className="bg-[var(--theme-bg-primary)] border border-[var(--theme-border-primary)] rounded-2xl p-6 space-y-4 max-h-[240px] overflow-y-auto custom-scrollbar">
                 {[
@@ -430,7 +410,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
               </a>
             </div>
 
-            {/* Footer */}
             <div className="p-8 pt-6 border-t border-[var(--theme-border-primary)] flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowPrivacyModal(false)}
@@ -449,7 +428,6 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
         </div>
       )}
 
-      {/* Styles CSS pour les animations */}
       <style>{`
         @keyframes fade-in-up {
           0% {
