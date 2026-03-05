@@ -31,7 +31,21 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
   useEffect(() => {
     if (contentRef.current && content !== lastContentRef.current) {
       lastContentRef.current = content;
-      contentRef.current.textContent = content;
+      // Petit délai pour s'assurer que le DOM est prêt
+      setTimeout(() => {
+        if (contentRef.current) {
+          contentRef.current.textContent = content;
+          // Forcer le curseur au début
+          const range = document.createRange();
+          const sel = window.getSelection();
+          if (contentRef.current.firstChild) {
+            range.setStart(contentRef.current.firstChild, 0);
+            range.collapse(true);
+            sel?.removeAllRanges();
+            sel?.addRange(range);
+          }
+        }
+      }, 10);
     }
   }, [content]);
 
@@ -75,7 +89,7 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
         onInput={handleInput}
         onKeyDown={handleKeyDown}
         spellCheck={false}
-        className="w-full bg-white rounded-lg shadow-2xl p-12 text-black outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text overflow-y-auto"
+        className="w-full bg-white rounded-lg shadow-2xl outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/20 transition-all cursor-text overflow-y-auto"
         style={{ 
           fontFamily: 'Georgia, serif', 
           fontSize: '14px', 
@@ -86,7 +100,9 @@ const CoverLetterPreview: React.FC<CoverLetterPreviewProps> = ({
           overflowWrap: 'break-word',
           WebkitUserModify: 'read-write-plaintext-only',
           height: '297mm',
-          maxHeight: '297mm'
+          maxHeight: '297mm',
+          padding: '48px',
+          boxSizing: 'border-box'
         }}
       />
     </div>
