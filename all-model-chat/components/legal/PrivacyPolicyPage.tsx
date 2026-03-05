@@ -7,9 +7,9 @@ interface PrivacyPolicyPageProps {
 
 const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onBack }) => {
   return (
-    <div className="min-h-screen bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)]">
+    <div className="h-screen w-full flex flex-col bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[var(--theme-bg-secondary)] border-b border-[var(--theme-border-primary)] shadow-sm">
+      <div className="flex-shrink-0 bg-[var(--theme-bg-secondary)] border-b border-[var(--theme-border-primary)] shadow-sm">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <button
             onClick={onBack}
@@ -24,8 +24,9 @@ const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-6 py-10 space-y-8 pb-32">
+      {/* Content - Scrollable */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <div className="max-w-4xl mx-auto px-6 py-10 space-y-8 pb-32">
         
         {/* Hero */}
         <div className="text-center space-y-4 pb-8 border-b border-[var(--theme-border-primary)]">
