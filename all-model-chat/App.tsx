@@ -11,6 +11,7 @@ import AuthPage from './components/auth/AuthPage';
 import { AdminLoginForm } from './components/auth/AdminLoginForm';
 import OnboardingForm from './components/auth/OnboardingForm';
 import LandingPage from './components/layout/LandingPage';
+import PrivacyPolicyPage from './components/legal/PrivacyPolicyPage';
 import { EvoluticsLoader } from './components/icons/EvoluticsLoader';
 import { EvoluticsLogo } from './components/icons/EvoluticsLogo';
 import './utils/diagnostics'; // Import pour exposer les diagnostics dans la console
@@ -79,8 +80,20 @@ const AppContent: React.FC = () => {
 
   // Système de routage avec priorité admin
   const isAdmin = window.location.pathname === '/admin-portal';
+  const isPrivacyPolicy = window.location.pathname === '/privacy-policy';
 
-  // PRIORITÉ 1: Gestion de la route admin
+  // PRIORITÉ 1: Gestion de la route privacy-policy
+  if (isPrivacyPolicy) {
+    return (
+      <PrivacyPolicyPage 
+        onBack={() => {
+          window.history.back();
+        }}
+      />
+    );
+  }
+
+  // PRIORITÉ 2: Gestion de la route admin
   if (isAdmin) {
     // Écran de chargement admin
     if (isAdminLoading) {
@@ -163,7 +176,7 @@ const AppContent: React.FC = () => {
       </div>
     );
   }
-  // PRIORITÉ 2: Flux utilisateur normal - Écran de chargement initial
+  // PRIORITÉ 3: Flux utilisateur normal - Écran de chargement initial
   if (isAuthLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
