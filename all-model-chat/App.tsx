@@ -14,9 +14,9 @@ import LandingPage from './components/layout/LandingPage';
 import PrivacyPolicyPage from './components/legal/PrivacyPolicyPage';
 import { EvoluticsLoader } from './components/icons/EvoluticsLoader';
 import { EvoluticsLogo } from './components/icons/EvoluticsLogo';
-import './utils/diagnostics'; // Import pour exposer les diagnostics dans la console
+import './utils/diagnostics';
 
-// Composant interne qui utilise les contextes Auth et AdminAuth
+// composant interne qui utilise les contextes Auth et AdminAuth
 const AppContent: React.FC = () => {
   const {
     isLoading: isAuthLoading,
@@ -36,11 +36,11 @@ const AppContent: React.FC = () => {
     logoutAdmin,
   } = useAdminAuth();
 
-  // Landing page s'affiche par défaut pour les visiteurs non connectés
+  // landing page par défaut pour les visiteurs
   const [showLanding, setShowLanding] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Réinitialiser showLanding quand l'utilisateur se connecte
+  // reset showLanding quand l'utilisateur se connecte
   useEffect(() => {
     if (isAuthenticated) {
       setShowLanding(false);
@@ -70,7 +70,7 @@ const AppContent: React.FC = () => {
 
   const { sidebarProps, chatAreaProps, appModalsProps } = useAppProps(logic);
 
-  // Fonction de changement de thème
+  // changement de thème
   const handleThemeChange = (themeId: string) => {
     setAppSettings(prev => ({
       ...prev,
@@ -78,11 +78,11 @@ const AppContent: React.FC = () => {
     }));
   };
 
-  // Système de routage avec priorité admin
+  // routage avec priorité admin
   const isAdmin = window.location.pathname === '/admin-portal';
   const isPrivacyPolicy = window.location.pathname === '/privacy-policy';
 
-  // PRIORITÉ 1: Gestion de la route privacy-policy
+  // route privacy-policy
   if (isPrivacyPolicy) {
     return (
       <PrivacyPolicyPage 
@@ -93,9 +93,9 @@ const AppContent: React.FC = () => {
     );
   }
 
-  // PRIORITÉ 2: Gestion de la route admin
+  // route admin
   if (isAdmin) {
-    // Écran de chargement admin
+    // loading admin
     if (isAdminLoading) {
       return (
         <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">

@@ -2,12 +2,11 @@
 import { supabase } from './supabaseClient';
 import { Opportunity } from '../types/opportunity';
 
-// Mapping Frontend (camelCase) -> DB (snake_case)
+// mapping Frontend (camelCase) -> DB (snake_case)
 const toDbFormat = (opp: Opportunity) => {
-  // Nettoyer le champ schedule si invalide (doit être au format HH:mm ou null)
+  // nettoyer le champ schedule si invalide
   let cleanSchedule = opp.schedule;
   if (cleanSchedule) {
-    // Vérifier si c'est au format HH:mm
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(cleanSchedule)) {
       console.log(`Format schedule invalide pour ${opp.id}: "${cleanSchedule}" - conversion en null`);
@@ -43,7 +42,7 @@ const toDbFormat = (opp: Opportunity) => {
   };
 };
 
-// Mapping DB (snake_case) -> Frontend (camelCase)
+// mapping DB (snake_case) -> Frontend (camelCase)
 const fromDbFormat = (dbRow: any): Opportunity => ({
   id: dbRow.id,
   type: dbRow.type,
@@ -72,14 +71,14 @@ const fromDbFormat = (dbRow: any): Opportunity => ({
 });
 
 export const opportunityService = {
-  // Récupérer toutes les opportunités (filtre automatiquement les expirées)
+  // récupérer toutes les opportunités
   async getAll(): Promise<Opportunity[]> {
-    const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
 
     const { data, error } = await supabase
       .from('opportunities')
       .select('*')
-      .or(`deadline.is.null,deadline.gte.${today}`) // Inclut les opportunités sans deadline OU avec deadline >= aujourd'hui
+      .or(`deadline.is.null,deadline.gte.${today}`)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -90,7 +89,7 @@ export const opportunityService = {
     return (data || []).map(fromDbFormat);
   },
 
-  // Créer une nouvelle opportunité
+  // créer une nouvelle opportunité
   async create(opp: Opportunity): Promise<void> {
     const { error } = await supabase
       .from('opportunities')
@@ -102,7 +101,7 @@ export const opportunityService = {
     }
   },
 
-  // Mettre à jour une opportunité existante
+  // mettre à jour une opportunité
   async update(opp: Opportunity): Promise<void> {
     const { error } = await supabase
       .from('opportunities')
@@ -115,7 +114,7 @@ export const opportunityService = {
     }
   },
 
-  // Supprimer une opportunité
+  // supprimer une opportunité
   async delete(id: string): Promise<void> {
     const { error } = await supabase
       .from('opportunities')

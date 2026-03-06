@@ -2,7 +2,7 @@ import { supabase } from './supabaseClient';
 import { UserProfile } from '../types/user';
 
 export const authService = {
-  // Inscription avec email et mot de passe
+  // inscription avec email et mot de passe
   async signUp(email: string, password: string, displayName: string) {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -14,8 +14,7 @@ export const authService = {
 
     if (error) throw error;
 
-    // Créer le profil dans la table profiles (Peut échouer à cause du RLS si confirmation email requise)
-    // Nous le tentons, mais ignorons l'erreur si c'est le cas (ensureProfile le fera plus tard)
+    // créer le profil dans la table profiles
     if (data.user && data.session) {
       const { error: profileError } = await supabase
         .from('profiles')
@@ -28,7 +27,6 @@ export const authService = {
         }]);
 
       if (profileError) {
-        // Log en warn et non en error, car c'est attendu si la confirmation email est active
         console.warn('Création profil différée (RLS ou Email non confirmé) :', profileError.message);
       }
     }
@@ -36,7 +34,7 @@ export const authService = {
     return data;
   },
 
-  // Connexion avec email et mot de passe
+  // connexion avec email et mot de passe
   async signIn(email: string, password: string) {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -45,7 +43,7 @@ export const authService = {
 
     if (error) throw error;
 
-    // Mettre à jour last_login_at
+    // update last_login_at
     if (data.user) {
       await supabase
         .from('profiles')
@@ -56,7 +54,7 @@ export const authService = {
     return data;
   },
 
-  // Connexion avec Google OAuth
+  // connexion avec Google OAuth
   async signInWithGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -69,20 +67,20 @@ export const authService = {
     return data;
   },
 
-  // Déconnexion
+  // déconnexion
   async signOut() {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   },
 
-  // Récupérer la session actuelle
+  // récupérer la session actuelle
   async getSession() {
     const { data, error } = await supabase.auth.getSession();
     if (error) throw error;
     return data.session;
   },
 
-  // Récupérer le profil complet depuis la table profiles
+  // récupérer le profil complet
   async getProfile(userId: string): Promise<UserProfile | null> {
     const { data, error } = await supabase
       .from('profiles')
