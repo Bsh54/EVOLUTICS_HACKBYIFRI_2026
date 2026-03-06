@@ -27,7 +27,7 @@ const CVGeneratorModal: React.FC<CVGeneratorModalProps> = ({ isOpen, onClose, op
   const [jobOffer, setJobOffer] = useState('');
   const [companyInfo, setCompanyInfo] = useState('');
 
-  // Fonction pour obtenir les données par défaut à partir du profil EVOLUTICS
+  // données par défaut à partir du profil
   const getDefaultCVData = (): CVData => ({
     fullName: profile?.fullName || "Votre Nom",
     title: profile?.title || "Votre Titre Professionnel",
@@ -58,14 +58,14 @@ const CVGeneratorModal: React.FC<CVGeneratorModalProps> = ({ isOpen, onClose, op
     }
   });
 
-  // Initialisation des données CV
+  // init des données CV
   useEffect(() => {
     if (isOpen && profile) {
-      // Pré-remplir l'offre d'emploi avec la description de l'opportunité
+      // pré-remplir l'offre d'emploi
       setJobOffer(opportunity.fullContent || opportunity.description || '');
       setCompanyInfo(`${opportunity.organization} - ${opportunity.type}`);
 
-      // Récupérer ou créer les données CV
+      // récupérer ou créer les données CV
       let existingData = getCVData();
       if (!existingData) {
         existingData = getDefaultCVData();
@@ -75,13 +75,13 @@ const CVGeneratorModal: React.FC<CVGeneratorModalProps> = ({ isOpen, onClose, op
     }
   }, [isOpen, profile, opportunity]);
 
-  // Fonction pour mettre à jour les données CV
+  // mettre à jour les données CV
   const handleCVDataChange = (newData: CVData) => {
     setCvDataState(newData);
     setCVData(newData);
   };
 
-  // Fonction d'optimisation IA (exactement comme CV-AI)
+  // optimisation IA
   const handleOptimize = async () => {
     if (!cvData || !jobOffer.trim()) {
       toast.warn("Veuillez vérifier l'offre d'emploi.");
