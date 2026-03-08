@@ -3,6 +3,8 @@ import { Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle, Gr
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { LanguageSelector } from '../common/LanguageSelector';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -137,7 +139,8 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, onBackToLanding, sig
   return (
     <div className="h-screen w-full flex bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] overflow-hidden font-sans">
 
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+        <LanguageSelector />
         <ThemeToggle
           currentThemeId={themeId}
           onThemeChange={onThemeChange}

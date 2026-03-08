@@ -6,6 +6,8 @@ import {
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { EvoluticsLoader } from '../icons/EvoluticsLoader';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { LanguageSelector } from '../common/LanguageSelector';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { UserProfile, EducationLevel } from '../../types/user';
 import { OpportunityType } from '../../types/opportunity';
 
@@ -463,8 +465,9 @@ const OnboardingForm: React.FC<OnboardingFormProps> = ({ profile, onComplete, th
   return (
     <div className="h-full w-full overflow-y-auto bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] p-4 md:p-8">
 
-      {/* Toggle de thème fixe en haut à droite */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Sélecteurs de langue et thème fixe en haut à droite */}
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+        <LanguageSelector />
         <ThemeToggle
           currentThemeId={themeId}
           onThemeChange={onThemeChange}

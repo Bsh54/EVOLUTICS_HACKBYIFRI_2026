@@ -16,6 +16,8 @@ import {
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { Footer } from './Footer';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { LanguageSelector } from '../common/LanguageSelector';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { opportunityService } from '../../services/opportunityService';
 import { Opportunity } from '../../types/opportunity';
 
@@ -84,7 +86,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn, theme
   return (
     <div className="h-screen w-full overflow-y-auto overflow-x-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] custom-scrollbar">
 
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+        <LanguageSelector />
         <ThemeToggle
           currentThemeId={themeId}
           onThemeChange={onThemeChange}
