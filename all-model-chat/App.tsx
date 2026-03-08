@@ -5,6 +5,7 @@ import { useAppProps } from './hooks/app/useAppProps';
 import { WindowProvider } from './contexts/WindowContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AdminAuthProvider, useAdminAuth } from './contexts/AdminAuthContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import ShadsAIHub from './components/layout/ShadsAIHub';
 import { AddOpportunityForm } from './components/layout/AddOpportunityForm';
 import AuthPage from './components/auth/AuthPage';
@@ -374,11 +375,13 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <WindowProvider>
-      <AdminAuthProvider>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-      </AdminAuthProvider>
+      <LanguageProvider>
+        <AdminAuthProvider>
+          <AuthProvider>
+            <AppContent />
+          </AuthProvider>
+        </AdminAuthProvider>
+      </LanguageProvider>
     </WindowProvider>
   );
 };

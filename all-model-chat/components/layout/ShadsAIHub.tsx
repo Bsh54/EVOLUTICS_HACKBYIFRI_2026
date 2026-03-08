@@ -27,6 +27,8 @@ import DocumentGeneratorModal from '../modals/DocumentGeneratorModal';
 import { useAuth } from '../../contexts/AuthContext';
 import { EvoluticsLogo } from '../icons/EvoluticsLogo';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { LanguageSelector } from '../common/LanguageSelector';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 // Types et Données externalisés
 import { Opportunity } from '../../types/opportunity';
@@ -59,6 +61,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   } = props;
 
   const { profile, signOut, updateProfile } = useAuth();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'chat' | 'opportunities' | 'tools' | 'profile'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
   const [filterType, setFilterType] = useState<string>('Tous');
@@ -257,13 +260,16 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           <span className="font-black text-sm uppercase tracking-tighter">EVOLUTICS</span>
         </div>
 
-        {/* Toggle de thème mobile */}
-        <ThemeToggle
-          currentThemeId={themeId}
-          onThemeChange={onThemeChange}
-          size="sm"
-          className="flex-shrink-0"
-        />
+        {/* Sélecteurs de langue et thème mobile */}
+        <div className="flex items-center gap-2">
+          <LanguageSelector />
+          <ThemeToggle
+            currentThemeId={themeId}
+            onThemeChange={onThemeChange}
+            size="sm"
+            className="flex-shrink-0"
+          />
+        </div>
       </header>
 
       {/* HEADER DESKTOP */}
@@ -278,25 +284,25 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             onClick={() => navigateToTab('opportunities')}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'opportunities' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
-            <Lightbulb className="w-4 h-4" /> EXPLORER
+            <Lightbulb className="w-4 h-4" /> {t('nav.explore')}
           </button>
           <button
             onClick={() => navigateToTab('chat')}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'chat' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
-            <MessageSquare className="w-4 h-4" /> ASSISTANT
+            <MessageSquare className="w-4 h-4" /> {t('nav.assistant')}
           </button>
           <button
             onClick={() => navigateToTab('tools')}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'tools' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
-            <Palette className="w-4 h-4" /> OUTILS
+            <Palette className="w-4 h-4" /> {t('nav.tools')}
           </button>
           <button
             onClick={() => navigateToTab('profile')}
             className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 relative ${activeTab === 'profile' ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-xl' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}
           >
-            <User className="w-4 h-4" /> PROFIL
+            <User className="w-4 h-4" /> {t('nav.profile')}
             {/* Badge de notification si profil incomplet */}
             {isProfileIncomplete && (
               <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-[10px] font-black rounded-full border-2 border-[var(--theme-bg-primary)] shadow-lg animate-pulse">
@@ -306,13 +312,16 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           </button>
         </nav>
 
-        {/* Toggle de thème desktop */}
-        <ThemeToggle
-          currentThemeId={themeId}
-          onThemeChange={onThemeChange}
-          size="md"
-          className="flex-shrink-0"
-        />
+        {/* Sélecteurs de langue et thème desktop */}
+        <div className="flex items-center gap-3">
+          <LanguageSelector />
+          <ThemeToggle
+            currentThemeId={themeId}
+            onThemeChange={onThemeChange}
+            size="md"
+            className="flex-shrink-0"
+          />
+        </div>
       </header>
 
       <div className="flex-1 relative overflow-hidden">
@@ -803,7 +812,7 @@ RÈGLES DE COMPORTEMENT :
           <div className="p-2 rounded-xl transition-all duration-300">
             <Lightbulb className="w-5 h-5" />
           </div>
-          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Explorer</span>
+          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">{t('nav.explore')}</span>
         </button>
 
         <button
@@ -817,7 +826,7 @@ RÈGLES DE COMPORTEMENT :
           <div className="p-2 rounded-xl transition-all duration-300">
             <MessageSquare className="w-5 h-5" />
           </div>
-          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Assistant</span>
+          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">{t('nav.assistant')}</span>
         </button>
 
         <button
@@ -831,7 +840,7 @@ RÈGLES DE COMPORTEMENT :
           <div className="p-2 rounded-xl transition-all duration-300">
             <Palette className="w-5 h-5" />
           </div>
-          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Outils</span>
+          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">{t('nav.tools')}</span>
         </button>
 
         <button
@@ -851,7 +860,7 @@ RÈGLES DE COMPORTEMENT :
               </span>
             )}
           </div>
-          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">Profil</span>
+          <span className="text-[9px] font-black mt-1 uppercase tracking-wider">{t('nav.profile')}</span>
         </button>
       </nav>
 
