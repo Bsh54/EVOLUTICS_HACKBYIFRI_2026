@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const isAuthenticated = !!user;
-  const needsOnboarding = isAuthenticated && profile !== null && !profile.onboarding_completed;
+  const needsOnboarding = isAuthenticated && profile !== null && profile.onboarding_completed === false;
 
   // Charger le profil (avec timeout de sécurité)
   // IMPORTANT: ne jamais écraser un profil existant avec null
@@ -214,10 +214,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const updatedProfile = await authService.updateProfile(user.id, updates);
       if (updatedProfile) {
+        // Forcer la mise à jour immédiate du profil
         setProfile(updatedProfile);
         // Mettre à jour le service de prompt personnalisé
         PersonalizedPromptService.updateUserProfile(updatedProfile);
+        
+        // Si onboarding_completed est true, forcer un refresh pour être sûr
+        if (updates.onboarding_completed === true) {
+          console.log('✅ Onboarding complété, profil mis à jour:', updatedProfile);
+        }
       } else {
+        // Fallback: recharger le profil depuis la DB
         const freshProfile = await authService.getProfile(user.id);
         if (freshProfile) {
           setProfile(freshProfile);

@@ -1,0 +1,91 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        npm install -g http-server
+        npm install -g html-validate
+
+    - name: Validate HTML
+      run: |
+        html-validate index.html
+
+    - name: Check JavaScript syntax
+      run: |
+        node -c script.js
+
+    - name: Test local server
+      run: |
+        http-server . -p 8080 &
+        sleep 5
+        curl -f http://localhost:8080/ || exit 1
+        curl -f http://localhost:8080/speakers.json || exit 1
+
+    - name: Security scan
+      run: |
+        # Check for hardcoded secrets
+        if grep -r "sk-" . --exclude-dir=.git; then
+          echo "Potential API key found!"
+          exit 1
+        fi
+
+        # Check for console.log in production
+        if grep -r "console.log" script.js; then
+          echo "Console.log found in production code"
+          exit 1
+        fi
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        exclude_assets: '.github,README.md,CONTRIBUTING.md,CHANGELOG.md,SECURITY.md'
+
+  lighthouse:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Lighthouse CI
+      run: npm install -g @lhci/cli@0.12.x
+
+    - name: Run Lighthouse CI
+      run: |
+        http-server . -p 8080 &
+        sleep 5
+        lhci autorun --upload.target=temporary-public-storage
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

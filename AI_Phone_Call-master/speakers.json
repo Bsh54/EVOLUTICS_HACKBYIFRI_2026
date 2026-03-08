@@ -1,0 +1,42 @@
+{
+    "edge-api": {
+        "speakers": {
+            "en-AU-NatashaNeural": "Natasha - Anglais (Australie)",
+            "en-AU-WilliamNeural": "William - Anglais (Australie)",
+            "en-CA-ClaraNeural": "Clara - Anglais (Canada)",
+            "en-CA-LiamNeural": "Liam - Anglais (Canada)",
+            "en-GB-SoniaNeural": "Sonia - Anglais (Royaume-Uni)",
+            "en-GB-RyanNeural": "Ryan - Anglais (Royaume-Uni)",
+            "en-HK-YanNeural": "Yan - Anglais (Hong Kong)",
+            "en-HK-SamNeural": "Sam - Anglais (Hong Kong)",
+            "en-IE-EmilyNeural": "Emily - Anglais (Irlande)",
+            "en-IE-ConnorNeural": "Connor - Anglais (Irlande)",
+            "en-IN-NeerjaNeural": "Neerja - Anglais (Inde)",
+            "en-IN-PrabhatNeural": "Prabhat - Anglais (Inde)",
+            "en-KE-AsiliaNeural": "Asilia - Anglais (Kenya)",
+            "en-KE-ChilembaNeural": "Chilemba - Anglais (Kenya)",
+            "en-NG-EzinneNeural": "Ezinne - Anglais (Nigeria)",
+            "en-NG-AbeoNeural": "Abeo - Anglais (Nigeria)",
+            "en-NZ-MollyNeural": "Molly - Anglais (Nouvelle-Zélande)",
+            "en-NZ-MitchellNeural": "Mitchell - Anglais (Nouvelle-Zélande)",
+            "en-PH-RosaNeural": "Rosa - Anglais (Philippines)",
+            "en-PH-JamesNeural": "James - Anglais (Philippines)",
+            "en-SG-LunaNeural": "Luna - Anglais (Singapour)",
+            "en-SG-WayneNeural": "Wayne - Anglais (Singapour)",
+            "en-TZ-ImaniNeural": "Imani - Anglais (Tanzanie)",
+            "en-TZ-ElimuNeural": "Elimu - Anglais (Tanzanie)",
+            "en-US-JennyNeural": "Jenny - Anglais (États-Unis)",
+            "en-US-GuyNeural": "Guy - Anglais (États-Unis)",
+            "en-ZA-LeahNeural": "Leah - Anglais (Afrique du Sud)",
+            "en-ZA-LukeNeural": "Luke - Anglais (Afrique du Sud)",
+            "fr-BE-CharlineNeural": "Charline - Français (Belgique)",
+            "fr-BE-GerardNeural": "Gerard - Français (Belgique)",
+            "fr-CA-SylvieNeural": "Sylvie - Français (Canada)",
+            "fr-CA-JeanNeural": "Jean - Français (Canada)",
+            "fr-CH-ArianeNeural": "Ariane - Français (Suisse)",
+            "fr-CH-FabriceNeural": "Fabrice - Français (Suisse)",
+            "fr-FR-DeniseNeural": "Denise - Français (France)",
+            "fr-FR-HenriNeural": "Henri - Français (France)"
+        }
+    }
+}

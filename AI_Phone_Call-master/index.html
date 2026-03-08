@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Balises SEO principales -->
+    <title>Conversation Vocale IA | Interface de Chat Vocal Intelligent - VoiceChat AI</title>
+    <meta name="description" content="Conversez naturellement avec l'IA grâce à la reconnaissance vocale. Interface épurée pour des conversations fluides avec intelligence artificielle en français et anglais.">
+    <meta name="keywords" content="conversation vocale IA,chat vocal,reconnaissance vocale,synthèse vocale,IA conversationnelle,assistant vocal,DeepSeek,interface vocale">
+    <meta name="author" content="Bsh54">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bsh54.github.io/AI_Phone_Call/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Conversation Vocale IA | Interface de Chat Vocal Intelligent">
+    <meta property="og:description" content="Conversez naturellement avec l'IA grâce à la reconnaissance vocale et synthèse vocale en temps réel.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bsh54.github.io/AI_Phone_Call/">
+    <meta property="og:image" content="https://bsh54.github.io/AI_Phone_Call/image/TTS.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Conversation Vocale IA | Interface de Chat Vocal Intelligent">
+    <meta name="twitter:description" content="Conversez naturellement avec l'IA grâce à la reconnaissance vocale en temps réel.">
+    <meta name="twitter:image" content="https://bsh54.github.io/AI_Phone_Call/image/TTS.png">
+
+    <!-- Styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icônes -->
+    <link rel="icon" type="image/png" href="image/TTS.png">
+    <link rel="apple-touch-icon" href="image/TTS.png">
+
+    <!-- Préchargement -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+
+    <!-- Analytics -->
+    <script defer src="https://umami.zwei.de.eu.org/script.js" data-website-id="70106ca4-d1e5-4563-b574-ba09c3b5db16"></script>
+</head>
+<body>
+    <!-- Interface de conversation vocale -->
+    <div class="voice-container">
+        <!-- Section de configuration initiale -->
+        <div class="setup-section" id="setupSection">
+            <div class="setup-header">
+                <h1>🎙️ Conversation Vocale IA</h1>
+                <p>Parlez naturellement avec l'intelligence artificielle</p>
+            </div>
+
+            <div class="setup-controls">
+                <div class="control-group">
+                    <label>Voix de l'IA :</label>
+                    <select class="form-control" id="voiceSelect">
+                        <option value="">Chargement des voix...</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Vitesse de parole : <span id="speedValue">1.0x</span></label>
+                    <input type="range" class="form-control-range" id="speedControl" min="0.5" max="2.0" step="0.1" value="1.0">
+                </div>
+
+                <div class="control-group">
+                    <label>Volume : <span id="volumeValue">100%</span></label>
+                    <input type="range" class="form-control-range" id="volumeControl" min="0" max="100" step="5" value="100">
+                </div>
+
+                <button class="start-conversation-btn" id="startConversationBtn">
+                    <i class="fas fa-comments"></i>
+                    Converser avec l'IA
+                </button>
+            </div>
+        </div>
+
+        <!-- Section de conversation active -->
+        <div class="conversation-section" id="conversationSection" style="display: none;">
+            <!-- En-tête de conversation -->
+            <div class="conversation-header">
+                <div class="ai-status">
+                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-info">
+                        <h3>Assistant IA</h3>
+                        <span class="status-text" id="statusText">Prêt à vous écouter</span>
+                    </div>
+                </div>
+                <button class="end-conversation-btn" id="endConversationBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Zone de contrôles vocaux -->
+            <div class="voice-controls">
+                <!-- Indicateur d'état principal -->
+                <div class="main-status-indicator" id="mainStatusIndicator">
+                    <div class="status-icon" id="statusIcon">
+                        <i class="fas fa-microphone-slash"></i>
+                    </div>
+                    <div class="status-message" id="statusMessage">Cliquez sur le micro pour parler</div>
+                </div>
+
+                <!-- Boutons de contrôle -->
+                <div class="control-buttons">
+                    <button class="voice-btn mic-btn" id="micBtn" disabled>
+                        <i class="fas fa-microphone"></i>
+                        <span>Parler</span>
+                    </button>
+
+                    <button class="voice-btn pause-btn" id="pauseBtn" style="display: none;">
+                        <i class="fas fa-pause"></i>
+                        <span>Pause</span>
+                    </button>
+
+                    <button class="voice-btn send-btn" id="sendBtn" style="display: none;">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Envoyer</span>
+                    </button>
+
+                    <button class="voice-btn continue-btn" id="continueBtn" style="display: none;">
+                        <i class="fas fa-play"></i>
+                        <span>Continuer</span>
+                    </button>
+                </div>
+
+                <!-- Indicateurs de processus -->
+                <div class="process-indicators">
+                    <div class="process-step" id="listeningStep">
+                        <div class="step-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <span>Écoute</span>
+                    </div>
+
+                    <div class="process-step" id="processingStep">
+                        <div class="step-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span>Traitement</span>
+                    </div>
+
+                    <div class="process-step" id="speakingStep">
+                        <div class="step-icon">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <span>IA parle</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio caché pour la lecture -->
+    <audio id="responseAudio" style="display: none;"></audio>
+
+    <!-- Overlay de chargement -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Initialisation...</div>
+        </div>
+    </div>
+
+    <!-- Toast pour les notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

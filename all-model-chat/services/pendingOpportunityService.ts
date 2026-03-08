@@ -116,6 +116,38 @@ export const pendingOpportunityService = {
     }, 'getAll pending');
   },
 
+  // Récupérer les opportunités avec pagination
+  async getPaginated(status?: string, page: number = 0, pageSize: number = 10): Promise<{ data: PendingOpportunity[], hasMore: boolean, total: number }> {
+    return withSupabaseRetry(async () => {
+      const today = new Date().toISOString().split('T')[0];
+      const from = page * pageSize;
+      const to = from + pageSize - 1;
+
+      let query = supabaseAdmin
+        .from('pending_opportunities')
+        .select('*', { count: 'exact' })
+        .or(`deadline.is.null,deadline.gte.${today}`)
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      if (status) {
+        query = query.eq('status', status);
+      }
+
+      const { data, error, count } = await query;
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        data: (data || []).map(fromDbFormat),
+        hasMore: count ? (from + pageSize) < count : false,
+        total: count || 0
+      };
+    }, 'getPaginated pending');
+  },
+
   // Récupérer une opportunité spécifique
   async getById(id: string): Promise<PendingOpportunity | null> {
     const { data, error } = await supabaseAdmin

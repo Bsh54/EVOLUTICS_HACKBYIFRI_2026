@@ -56,10 +56,14 @@ export const authService = {
 
   // connexion avec Google OAuth
   async signInWithGoogle() {
+    // Sauvegarder l'intention de connexion pour éviter de retourner à la landing
+    localStorage.setItem('auth_in_progress', 'true');
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: `${window.location.origin}`,
+        skipBrowserRedirect: false,
       },
     });
 

@@ -31,6 +31,7 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
   const { profile } = useAuth();
   const [pendingOpps, setPendingOpps] = useState<PendingOpportunity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -39,16 +40,23 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
   const [showBulkActions, setShowBulkActions] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [editingOpp, setEditingOpp] = useState<PendingOpportunity | null>(null);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
-  // Charger les opportunités en attente
+  // Charger les opportunités en attente (première page)
   const loadPendingOpportunities = async () => {
     setIsLoading(true);
+    setPage(0);
     try {
-      const [opps, queueStats] = await Promise.all([
-        pendingOpportunityService.getAll(statusFilter === 'all' ? undefined : statusFilter),
+      const [result, queueStats] = await Promise.all([
+        pendingOpportunityService.getPaginated(statusFilter === 'all' ? undefined : statusFilter, 0, 10),
         pendingOpportunityService.getStats()
       ]);
-      setPendingOpps(opps);
+      setPendingOpps(result.data);
+      setHasMore(result.hasMore);
+      setTotalCount(result.total);
       setStats(queueStats);
     } catch (error) {
       console.error('Erreur chargement file d\'attente:', error);
@@ -57,9 +65,50 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
     }
   };
 
+  // Charger plus d'opportunités (pagination)
+  const loadMoreOpportunities = async () => {
+    if (isLoadingMore || !hasMore) return;
+    
+    setIsLoadingMore(true);
+    try {
+      const nextPage = page + 1;
+      const result = await pendingOpportunityService.getPaginated(
+        statusFilter === 'all' ? undefined : statusFilter,
+        nextPage,
+        10
+      );
+      setPendingOpps(prev => [...prev, ...result.data]);
+      setHasMore(result.hasMore);
+      setPage(nextPage);
+    } catch (error) {
+      console.error('Erreur chargement plus d\'opportunités:', error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  // Détecter le scroll pour charger plus
+  const handleScroll = React.useCallback(() => {
+    if (!scrollContainerRef.current || isLoadingMore || !hasMore) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    // Charger plus quand on est à 80% du scroll
+    if (scrollTop + clientHeight >= scrollHeight * 0.8) {
+      loadMoreOpportunities();
+    }
+  }, [isLoadingMore, hasMore, page, statusFilter]);
+
   useEffect(() => {
     loadPendingOpportunities();
   }, [statusFilter]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
 
   // Filtrer les opportunités
   const filteredOpps = useMemo(() => {
@@ -170,6 +219,10 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
             <X className="w-4 h-4 text-red-600" />
             <span className="text-sm font-medium text-gray-600">Rejetées</span>
             <span className="text-lg font-bold text-red-900">{stats.rejected}</span>
+          </div>
+          
+          <div className="flex items-center gap-2 ml-4 text-xs text-gray-500">
+            <span>Affichées: {filteredOpps.length} / {totalCount}</span>
           </div>
         </div>
       </div>
@@ -289,8 +342,8 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
         {renderStats()}
       </div>
 
-      {/* Liste des opportunités - Affichage direct sur la page */}
-      <div className="p-6">
+      {/* Liste des opportunités - Affichage direct sur la page avec scroll infini */}
+      <div ref={scrollContainerRef} className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
@@ -307,9 +360,28 @@ export const PendingOpportunitiesQueue: React.FC<PendingOpportunitiesQueueProps>
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {filteredOpps.map(renderOpportunityCard)}
-          </div>
+          <>
+            <div className="space-y-3">
+              {filteredOpps.map(renderOpportunityCard)}
+            </div>
+            
+            {/* Indicateur de chargement pour plus d'opportunités */}
+            {isLoadingMore && (
+              <div className="flex items-center justify-center py-6">
+                <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mr-2" />
+                <span className="text-sm text-gray-600">Chargement de plus d'opportunités...</span>
+              </div>
+            )}
+            
+            {/* Message de fin */}
+            {!hasMore && filteredOpps.length > 0 && (
+              <div className="text-center py-6">
+                <p className="text-sm text-gray-500">
+                  ✓ Toutes les opportunités chargées ({totalCount} au total)
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
 

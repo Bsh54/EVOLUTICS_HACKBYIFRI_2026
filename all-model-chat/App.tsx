@@ -37,15 +37,30 @@ const AppContent: React.FC = () => {
   } = useAdminAuth();
 
   // landing page par défaut pour les visiteurs
-  const [showLanding, setShowLanding] = useState(true);
+  const [showLanding, setShowLanding] = useState(() => {
+    // Si une authentification est en cours (Google OAuth), ne pas afficher la landing
+    const authInProgress = localStorage.getItem('auth_in_progress');
+    return authInProgress !== 'true';
+  });
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // reset showLanding quand l'utilisateur se connecte
   useEffect(() => {
     if (isAuthenticated) {
       setShowLanding(false);
+      // Nettoyer le flag d'authentification en cours
+      localStorage.removeItem('auth_in_progress');
     }
   }, [isAuthenticated]);
+
+  // Vérifier si on revient d'une authentification Google
+  useEffect(() => {
+    const authInProgress = localStorage.getItem('auth_in_progress');
+    if (authInProgress === 'true' && !isAuthLoading) {
+      // On est de retour après Google OAuth, ne pas afficher la landing
+      setShowLanding(false);
+    }
+  }, [isAuthLoading]);
 
   const handleTransitionToAuth = () => {
     setIsTransitioning(true);

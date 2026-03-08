@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, FileText, MessageSquare, Users, Briefcase } from 'lucide-react';
 import CVBuilderPage from '../cv/CVBuilderPage';
 import CoverLetterBuilderPage from '../cover-letter/CoverLetterBuilderPage';
+import { InterviewSimulator } from '../interview/InterviewSimulator';
 import { Opportunity } from '../../types/opportunity';
 import { UserProfile } from '../../types/user';
 
@@ -33,7 +34,8 @@ const ToolsPage: React.FC<ToolsPageProps> = ({
   onClearOpportunity, 
   userProfile 
 }) => {
-  const [currentView, setCurrentView] = useState<'tools-list' | 'cv-builder' | 'cover-letter-builder'>('tools-list');
+  const [currentView, setCurrentView] = useState<'tools-list' | 'cv-builder' | 'cover-letter-builder' | 'interview-simulator'>('tools-list');
+  const [showInterviewSimulator, setShowInterviewSimulator] = useState(false);
 
   // Ouvrir automatiquement le CV Builder si une opportunité est fournie
   React.useEffect(() => {
@@ -71,7 +73,7 @@ const ToolsPage: React.FC<ToolsPageProps> = ({
       title: 'Préparation Entretiens',
       description: 'Simulez des entretiens d\'embauche avec notre IA pour gagner en confiance',
       icon: Users,
-      status: 'coming-soon',
+      status: 'active',
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070'
     },
     {
@@ -89,6 +91,8 @@ const ToolsPage: React.FC<ToolsPageProps> = ({
       setCurrentView('cv-builder');
     } else if (toolId === 'cover-letter') {
       setCurrentView('cover-letter-builder');
+    } else if (toolId === 'interview-prep') {
+      setShowInterviewSimulator(true);
     } else {
       // Pour les autres outils pas encore disponibles
       console.log(`${toolId} sera bientôt disponible !`);
@@ -228,6 +232,14 @@ const ToolsPage: React.FC<ToolsPageProps> = ({
         ))}
       </div>
 
+      {/* Interview Simulator Modal */}
+      {showInterviewSimulator && (
+        <InterviewSimulator
+          opportunity={opportunityForCV || undefined}
+          onClose={() => setShowInterviewSimulator(false)}
+          themeId={themeId}
+        />
+      )}
     </div>
   );
 };
