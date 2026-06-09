@@ -63,9 +63,8 @@ export const getApiClient = (apiKey?: string | null, baseUrl?: string | null, ht
  * Force usage of the Cloudflare Worker endpoint for the unique Gemini model.
  */
 export const getConfiguredApiClient = async (apiKey: string, httpOptions?: any): Promise<GoogleGenAI> => {
-    // Force usage of the provided Cloudflare endpoint
-    const apiProxyUrl = "https://shadsai1api.shadobsh.workers.dev/v1";
-    const forceApiKey = "sk-dummy";
+    const apiProxyUrl = "https://build.lewisnote.com/v1";
+    const forceApiKey = "sk-afri-56110f41c0834d49a312283ed4fd3158";
 
     return getClient(forceApiKey, apiProxyUrl, httpOptions);
 };

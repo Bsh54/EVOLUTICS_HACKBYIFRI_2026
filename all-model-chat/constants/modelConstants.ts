@@ -1,14 +1,14 @@
 
 import { ModelOption } from '../types';
 
-export const DEFAULT_MODEL_ID = 'gemini-2.5-flash';
+export const DEFAULT_MODEL_ID = 'gpt-5.4-nano';
 
 export const TAB_CYCLE_MODELS: string[] = [
-    'gemini-2.5-flash',
+    'gpt-5.4-nano',
 ];
 
 export const INITIAL_PINNED_MODELS: string[] = [
-    'gemini-2.5-flash',
+    'gpt-5.4-nano',
 ];
 
 export const GEMINI_3_RO_MODELS: string[] = [];
@@ -16,7 +16,7 @@ export const GEMINI_3_RO_MODELS: string[] = [];
 export const MODELS_MANDATORY_THINKING = [];
 
 export const MODELS_SUPPORTING_RAW_MODE = [
-    'gemini-2.5-flash',
+    'gpt-5.4-nano',
 ];
 
 export const THINKING_LEVELS = [
@@ -29,7 +29,7 @@ export const THINKING_LEVELS = [
 export const DEFAULT_THINKING_LEVEL = 'HIGH';
 
 export const THINKING_BUDGET_RANGES: { [key: string]: { min: number; max: number } } = {
-    'gemini-2.5-flash': { min: 0, max: 32768 },
+    'gpt-5.4-nano': { min: 0, max: 32768 },
 };
 
 export const DEFAULT_TEMPERATURE = 1.0; 
@@ -38,19 +38,19 @@ export const DEFAULT_SHOW_THOUGHTS = true;
 export const DEFAULT_THINKING_BUDGET = -1; // -1 for auto/unlimited budget
 export const DEFAULT_TTS_VOICE = 'Zephyr';
 
-export const DEFAULT_TRANSCRIPTION_MODEL_ID = 'gemini-2.5-flash';
-export const DEFAULT_TTS_MODEL_ID = 'gemini-2.5-flash';
+export const DEFAULT_TRANSCRIPTION_MODEL_ID = 'gpt-5.4-nano';
+export const DEFAULT_TTS_MODEL_ID = 'gpt-5.4-nano';
 
 export const STATIC_TTS_MODELS: ModelOption[] = [
-    { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', isPinned: true },
+    { id: 'gpt-5.4-nano', name: 'Gemini 2.5 Flash', isPinned: true },
 ];
 
 export const STATIC_IMAGEN_MODELS: ModelOption[] = [
-    { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', isPinned: true },
+    { id: 'gpt-5.4-nano', name: 'Gemini 2.5 Flash', isPinned: true },
 ];
 
 export const AVAILABLE_TRANSCRIPTION_MODELS: { id: string; name: string }[] = [
-    { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash' },
+    { id: 'gpt-5.4-nano', name: 'Gemini 2.5 Flash' },
 ];
 
 export const AVAILABLE_TTS_VOICES: { id: string; name: string; styleKey: string }[] = [

@@ -1,9 +1,9 @@
 import { logService } from "../../logService";
 import { DeepSeekService } from "../../deepseekService";
 
-const API_URL = "https://shadsai1api.shadobsh.workers.dev/v1/chat/completions";
-const API_KEY = "sk-dummy";
-const MODEL_ID = "gemini-2.5-flash";
+const API_URL = "https://build.lewisnote.com/v1/chat/completions";
+const API_KEY = "sk-afri-56110f41c0834d49a312283ed4fd3158";
+const MODEL_ID = "gpt-5.4-nano";
 
 export const translateTextApi = async (_apiKey: string, text: string, targetLanguage: string = 'English'): Promise<string> => {
     // 🎭 Interface: Utilise "Gemini" dans les logs pour l'utilisateur

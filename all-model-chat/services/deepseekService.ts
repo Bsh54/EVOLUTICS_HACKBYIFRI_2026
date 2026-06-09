@@ -27,9 +27,9 @@ export interface DeepSeekResponse {
 }
 
 export class DeepSeekService {
-  private static readonly API_URL = 'https://shads229-personnal-aiv2.hf.space/v1/chat/completions';
-  private static readonly API_KEY = 'Shadobsh';
-  private static readonly MODEL = 'deepseek-chat';
+  private static readonly API_URL = 'https://build.lewisnote.com/v1/chat/completions';
+  private static readonly API_KEY = 'sk-afri-56110f41c0834d49a312283ed4fd3158';
+  private static readonly MODEL = 'gpt-5.4-nano';
 
   /**
    * Appel API DeepSeek générique pour le chat
