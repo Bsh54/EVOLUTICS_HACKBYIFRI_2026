@@ -1,0 +1,70 @@
+sk-afri-56110f41c0834d49a312283ed4fd3158
+
+A
+Build with AFRI
+Plateforme IA pour apprendre, tester et produire avec les meilleurs modèles.
+Accueil
+Dashboard
+Docs
+Formation
+FR
+EN
+Déconnexion
+Retour à la documentation
+Aperçu
+Idéal pour
+Paramètres
+Exemples
+text
+GPT-5.4 Nano
+Modèle rapide et économique pour réponses simples, résumé, traduction basique et tâches courtes.
+
+Endpoint
+POST /v1/chat/completions
+Prix
+$0.20 / $1.25 par M tokens
+Tags
+thinking
+vision
+fast
+Idéal pour
+Chatbot à fort volume
+Classification et résumé court
+Tâches simples avec faible coût
+Endpoint
+https://build.lewisnote.com/v1/chat/completions
+Paramètres
+Nom	Type	Requis	Description
+model	string	Requis	Nom du modèle à utiliser.
+messages	array	Requis	Historique de conversation compatible OpenAI.
+stream	boolean	Optionnel	Active le streaming SSE.
+reasoning_effort	string	Optionnel	none, low, medium, high ou xhigh selon le modèle.
+tools	array	Optionnel	Définitions de fonctions pour tool calling.
+web_search	boolean	Optionnel	Active la recherche web quand disponible.
+cURL
+Copier
+curl https://build.lewisnote.com/v1/chat/completions \
+  -H "Authorization: Bearer sk-afri-..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-5.4-nano",
+    "messages": [{"role": "user", "content": "Explique ce concept simplement"}],
+    "stream": true
+  }'
+Python
+Copier
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-afri-...",
+    base_url="https://build.lewisnote.com/v1"
+)
+
+response = client.chat.completions.create(
+    model="gpt-5.4-nano",
+    messages=[{"role": "user", "content": "Explique ce concept simplement"}]
+)
+
+print(response.choices[0].message.content)
+Build with AFRI
+GPT-5.4 Nano - Build with AFRI

@@ -1,0 +1,8 @@
+{
+  "name": "My AI Front",
+  "description": "",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
