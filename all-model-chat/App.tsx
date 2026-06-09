@@ -40,17 +40,33 @@ const AppContent: React.FC = () => {
 
   // landing page par défaut pour les visiteurs
   const [showLanding, setShowLanding] = useState(() => {
-    // Si une authentification est en cours (Google OAuth), ne pas afficher la landing
     const authInProgress = localStorage.getItem('auth_in_progress');
     return authInProgress !== 'true';
   });
   const [isTransitioning, setIsTransitioning] = useState(false);
+  // true pendant le délai de résolution OAuth (max 10s)
+  const [isOAuthResolving, setIsOAuthResolving] = useState(() => {
+    const authInProgress = localStorage.getItem('auth_in_progress') === 'true';
+    const hasOauthParams = window.location.hash.includes('access_token') || window.location.search.includes('code=');
+    return authInProgress || hasOauthParams;
+  });
+
+  // Timeout de sécurité : si après 10s l'OAuth n'a pas résolu, on abandonne
+  useEffect(() => {
+    if (!isOAuthResolving) return;
+    const timer = setTimeout(() => {
+      localStorage.removeItem('auth_in_progress');
+      setIsOAuthResolving(false);
+      setShowLanding(false);
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // reset showLanding quand l'utilisateur se connecte
   useEffect(() => {
     if (isAuthenticated) {
       setShowLanding(false);
-      // Nettoyer le flag d'authentification en cours
+      setIsOAuthResolving(false);
       localStorage.removeItem('auth_in_progress');
     }
   }, [isAuthenticated]);
@@ -59,7 +75,6 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     const authInProgress = localStorage.getItem('auth_in_progress');
     if (authInProgress === 'true' && !isAuthLoading) {
-      // On est de retour après Google OAuth, ne pas afficher la landing
       setShowLanding(false);
     }
   }, [isAuthLoading]);
@@ -281,11 +296,8 @@ const AppContent: React.FC = () => {
 
   // Visiteur non connecté : Landing Page ou AuthPage
   if (!isAuthenticated) {
-    // Retour d'un OAuth Google : Supabase n'a pas encore résolu la session
-    // → on affiche l'écran de chargement au lieu de l'AuthPage
-    const oauthInProgress = localStorage.getItem('auth_in_progress') === 'true';
-    const hasOauthParams = window.location.hash.includes('access_token') || window.location.search.includes('code=');
-    if (oauthInProgress || hasOauthParams) {
+    // Retour d'un OAuth Google : Supabase n'a pas encore résolu la session (max 10s)
+    if (isOAuthResolving) {
       return (
         <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
           <div className="relative flex items-center justify-center">
