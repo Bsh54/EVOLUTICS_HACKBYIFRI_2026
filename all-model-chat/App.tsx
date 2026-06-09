@@ -281,6 +281,38 @@ const AppContent: React.FC = () => {
 
   // Visiteur non connecté : Landing Page ou AuthPage
   if (!isAuthenticated) {
+    // Retour d'un OAuth Google : Supabase n'a pas encore résolu la session
+    // → on affiche l'écran de chargement au lieu de l'AuthPage
+    const oauthInProgress = localStorage.getItem('auth_in_progress') === 'true';
+    const hasOauthParams = window.location.hash.includes('access_token') || window.location.search.includes('code=');
+    if (oauthInProgress || hasOauthParams) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full bg-[var(--theme-bg-secondary)] text-[var(--theme-text-primary)] px-4">
+          <div className="relative flex items-center justify-center">
+            <img src="/assets/EVOLUTICS.png" alt="EVOLUTICS" className="h-24 w-auto sm:h-28 md:h-32 z-10 object-contain" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="evolutics-loader"
+                style={{
+                  width: 'clamp(150px, 40vw, 200px)',
+                  height: 'clamp(150px, 40vw, 200px)',
+                  aspectRatio: '1',
+                  borderRadius: '50%',
+                  background: 'var(--theme-bg-accent)',
+                  WebkitMask: `repeating-conic-gradient(transparent 0deg,black 2deg 65deg,transparent 66deg 90deg),radial-gradient(farthest-side,transparent calc(100% - 12px - 1px),black calc(100% - 12px))`,
+                  mask: `repeating-conic-gradient(transparent 0deg,black 2deg 65deg,transparent 66deg 90deg),radial-gradient(farthest-side,transparent calc(100% - 12px - 1px),black calc(100% - 12px))`,
+                  WebkitMaskComposite: 'destination-in',
+                  maskComposite: 'intersect',
+                  animation: 'evoluticsLoader 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite'
+                }}
+              />
+            </div>
+          </div>
+          <style>{`@keyframes evoluticsLoader { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      );
+    }
+
     if (showLanding) {
       return (
         <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
